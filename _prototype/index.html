@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UGC NET Prep</title>
+<style>
+:root {
+  --primary: #2c3e8c;
+  --primary-l: #4f6ef7;
+  --primary-bg: #eef1ff;
+  --bg: #f4f5fb;
+  --card: #ffffff;
+  --text: #1a1a2e;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --success: #16a34a;
+  --danger: #dc2626;
+  --warn: #d97706;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 14px rgba(0,0,0,.05);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* ── Header ── */
+.header{position:fixed;top:0;left:0;right:0;height:56px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 18px;gap:14px;z-index:200}
+.burger{cursor:pointer;display:flex;flex-direction:column;gap:5px;padding:7px;border-radius:8px;border:none;background:transparent;transition:background .15s}
+.burger:hover{background:var(--bg)}
+.burger span{display:block;width:20px;height:2px;background:var(--text);border-radius:2px;transition:all .25s}
+.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.logo{font-size:17px;font-weight:800;color:var(--primary);letter-spacing:-.3px}
+.logo em{color:var(--primary-l);font-style:normal}
+
+/* ── Sidebar ── */
+.sidebar{position:fixed;top:56px;left:-264px;width:264px;bottom:0;background:#fff;border-right:1px solid var(--border);z-index:150;transition:left .28s cubic-bezier(.4,0,.2,1);padding:10px 0;display:flex;flex-direction:column}
+.sidebar.open{left:0}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.22);z-index:140;opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay.show{opacity:1;pointer-events:all}
+.nav-sec{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:14px 18px 5px}
+.nav-link{display:flex;align-items:center;gap:11px;padding:11px 18px;cursor:pointer;border:none;background:transparent;width:100%;text-align:left;font-size:13.5px;color:var(--muted);font-weight:500;transition:all .15s;position:relative}
+.nav-link:hover{background:var(--bg);color:var(--text)}
+.nav-link.active{background:var(--primary-bg);color:var(--primary);font-weight:700}
+.nav-link.active::after{content:'';position:absolute;right:0;top:6px;bottom:6px;width:3px;background:var(--primary);border-radius:2px 0 0 2px}
+.nav-icon{font-size:17px;width:22px;text-align:center}
+.nav-footer{margin-top:auto;padding:14px 18px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);line-height:1.6}
+
+/* ── Main ── */
+.main{margin-top:56px;padding:22px 18px;max-width:800px}
+.page{display:none}.page.active{display:block}
+.hidden{display:none!important}
+
+/* ── Shared ── */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border)}
+.page-hd{margin-bottom:20px}
+.page-hd h2{font-size:20px;font-weight:800}
+.page-hd p{font-size:13px;color:var(--muted);margin-top:3px}
+.sec-lbl{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:11px}
+.btn{border:none;border-radius:8px;font-weight:700;cursor:pointer;transition:all .15s}
+.btn-primary{padding:10px 20px;background:var(--primary);color:#fff;font-size:13px}
+.btn-primary:hover{background:var(--primary-l)}
+.btn-outline{padding:8px 16px;background:transparent;color:var(--primary);border:1.5px solid var(--primary);font-size:12px;border-radius:8px;font-weight:700;cursor:pointer;transition:all .15s}
+.btn-outline:hover{background:var(--primary-bg)}
+.btn-sm{padding:6px 13px;background:transparent;color:var(--primary);border:1.5px solid #d1d5db;font-size:11.5px;border-radius:7px;font-weight:600;cursor:pointer;transition:all .15s}
+.btn-sm:hover{border-color:var(--primary-l);color:var(--primary)}
+.btn-fill{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn-fill:hover{background:var(--primary-l)!important;border-color:var(--primary-l)!important}
+
+/* ── Qno / Topic badges ── */
+.qno{background:var(--primary-bg);color:var(--primary);font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:5px;flex-shrink:0;margin-top:1px}
+.qtopic{background:#fef3c7;color:#92400e;font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;flex-shrink:0;margin-top:1px}
+
+/* ──────────── HOME ──────────── */
+.banner{background:linear-gradient(135deg,#2c3e8c 0%,#4f6ef7 100%);border-radius:var(--radius);padding:26px 22px;color:#fff;margin-bottom:20px}
+.banner h1{font-size:20px;font-weight:800;margin-bottom:5px}
+.banner p{font-size:13px;opacity:.85;max-width:420px;line-height:1.55}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.stat-box{background:var(--card);border-radius:var(--radius);padding:15px 12px;text-align:center;box-shadow:var(--shadow)}
+.stat-box .num{font-size:26px;font-weight:800;color:var(--primary)}
+.stat-box .lbl{font-size:11px;color:var(--muted);margin-top:2px}
+.action-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:22px}
+.action-card{background:var(--card);border-radius:var(--radius);padding:18px 16px;display:flex;align-items:center;gap:13px;box-shadow:var(--shadow);cursor:pointer;border:1.5px solid var(--border);transition:all .18s}
+.action-card:hover{border-color:var(--primary-l);transform:translateY(-2px);box-shadow:0 6px 20px rgba(79,110,247,.12)}
+.action-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.action-card h3{font-size:13px;font-weight:700;margin-bottom:2px}
+.action-card p{font-size:11px;color:var(--muted)}
+.info-card{background:var(--card);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);border-left:3px solid var(--primary)}
+.info-card .title{font-size:13px;font-weight:700;margin-bottom:10px}
+.info-card .body{font-size:12.5px;color:var(--muted);line-height:1.7}
+.info-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;font-size:12px}
+.info-meta div{color:var(--muted)}
+.info-meta strong{color:var(--text)}
+
+/* ──────────── PYQ ──────────── */
+.year-tabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
+.ytab{padding:7px 16px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .15s}
+.ytab:hover{border-color:var(--primary-l);color:var(--primary)}
+.ytab.active{background:var(--primary);border-color:var(--primary);color:#fff}
+.pyq-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.pyq-count{font-size:12.5px;color:var(--muted)}
+
+.qcard{background:var(--card);border-radius:var(--radius);padding:17px 18px;margin-bottom:12px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.qcard-head{display:flex;gap:8px;margin-bottom:11px;align-items:flex-start;flex-wrap:wrap}
+.qtext{font-size:13.5px;font-weight:500;line-height:1.65;flex:1;min-width:180px}
+.opts{display:grid;gap:7px;margin-bottom:11px}
+.opt{display:flex;align-items:flex-start;gap:9px;padding:9px 13px;border-radius:7px;border:1.5px solid var(--border);font-size:13px}
+.opt-lbl{font-weight:800;color:var(--primary);flex-shrink:0;font-size:11.5px;margin-top:1px}
+.toggle-ans{background:transparent;border:1.5px solid #d1d5db;border-radius:6px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .15s}
+.toggle-ans:hover{border-color:var(--success);color:var(--success);background:#f0fdf4}
+.ans-reveal{background:#f0fdf4;border:1.5px solid #86efac;border-radius:8px;padding:11px 14px;font-size:12.5px;display:none;margin-top:10px}
+.ans-reveal.show{display:block}
+.ans-reveal .ans-lbl{color:var(--success);font-weight:700}
+.ans-reveal .exp{color:#374151;margin-top:5px;line-height:1.55}
+
+/* ──────────── MOCK TEST ──────────── */
+.mock-wrap{max-width:460px;margin:0 auto}
+.mock-card{background:var(--card);border-radius:var(--radius);padding:30px 26px;text-align:center;box-shadow:var(--shadow)}
+.mock-icon{font-size:46px;margin-bottom:14px}
+.mock-card h2{font-size:22px;font-weight:800;margin-bottom:6px}
+.mock-card>p{font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.55;max-width:320px;margin-left:auto;margin-right:auto}
+.mock-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:26px}
+.mock-meta-item{background:var(--bg);border-radius:8px;padding:12px 8px}
+.mock-meta-item .v{font-size:20px;font-weight:800;color:var(--primary)}
+.mock-meta-item .l{font-size:10px;color:var(--muted);margin-top:2px}
+.btn-lg{display:block;width:100%;padding:13px;background:var(--primary);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:800;cursor:pointer;transition:background .15s}
+.btn-lg:hover{background:var(--primary-l)}
+
+/* ── Active test ── */
+.test-bar{background:var(--card);border-radius:var(--radius);padding:13px 16px;display:flex;align-items:center;gap:14px;margin-bottom:14px;box-shadow:var(--shadow)}
+.timer{font-size:20px;font-weight:800;color:var(--primary);font-variant-numeric:tabular-nums;min-width:68px}
+.timer.warn{color:var(--warn)}.timer.alert{color:var(--danger)}
+.prog-track{flex:1;height:5px;background:var(--bg);border-radius:10px;overflow:hidden}
+.prog-fill{height:100%;background:var(--primary-l);border-radius:10px;transition:width .4s}
+.q-ctr{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap}
+
+.palette-wrap{background:var(--card);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.palette-lbl{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:10px}
+.palette{display:flex;flex-wrap:wrap;gap:5px}
+.pdot{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);transition:all .1s}
+.pdot:hover{border-color:var(--primary-l)}
+.pdot.answered{background:var(--primary);border-color:var(--primary);color:#fff}
+.pdot.current{border-color:var(--primary);color:var(--primary);background:#fff}
+.pdot.answered.current{background:var(--primary);color:#fff;outline:2px solid var(--primary-l);outline-offset:2px}
+
+.test-qcard{background:var(--card);border-radius:var(--radius);padding:22px 20px 18px;box-shadow:var(--shadow);margin-bottom:14px}
+.test-q-meta{display:flex;gap:8px;margin-bottom:13px;flex-wrap:wrap}
+.test-q-text{font-size:14px;font-weight:500;line-height:1.7;margin-bottom:16px}
+.test-opts{display:grid;gap:8px}
+.test-opt{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-radius:8px;border:1.5px solid var(--border);font-size:13px;cursor:pointer;transition:all .15s;user-select:none}
+.test-opt:hover:not(.no-hover){border-color:var(--primary-l);background:var(--primary-bg)}
+.test-opt.selected{border-color:var(--primary);background:var(--primary-bg)}
+.test-opt-lbl{font-weight:800;color:var(--primary);flex-shrink:0;font-size:11.5px;margin-top:1px}
+.test-nav{display:flex;justify-content:space-between;align-items:center;gap:12px}
+
+/* ── Results ── */
+.result-wrap{max-width:500px;margin:0 auto}
+.result-card{background:var(--card);border-radius:var(--radius);padding:28px 24px;text-align:center;box-shadow:var(--shadow);margin-bottom:14px}
+.score-ring{position:relative;width:120px;height:120px;margin:0 auto 16px}
+.score-ring svg{transform:rotate(-90deg)}
+.score-ring .track{fill:none;stroke:var(--bg);stroke-width:10}
+.score-ring .fill{fill:none;stroke:var(--primary);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 1.1s ease}
+.score-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.score-pct{font-size:22px;font-weight:800;color:var(--primary)}
+.score-lbl{font-size:10px;color:var(--muted)}
+.result-grade{font-size:18px;font-weight:800;margin-bottom:4px}
+.result-sub{font-size:12.5px;color:var(--muted);margin-bottom:18px;line-height:1.5}
+.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.rstat{background:var(--bg);border-radius:8px;padding:12px 8px;text-align:center}
+.rstat .v{font-size:20px;font-weight:800}.rstat .l{font-size:10px;color:var(--muted);margin-top:2px}
+.c-ok{color:var(--success)}.c-err{color:var(--danger)}.c-skip{color:var(--muted)}
+.result-btns{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
+
+/* ── Review ── */
+.review-banner{background:#fffbeb;border:1.5px solid #fcd34d;border-radius:9px;padding:10px 14px;font-size:12px;font-weight:700;color:#92400e;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.opt.v-correct{border-color:#86efac!important;background:#f0fdf4!important}
+.opt.v-wrong{border-color:#fca5a5!important;background:#fff1f1!important}
+.opt-lbl.lbl-ok{color:var(--success)!important}
+.opt-lbl.lbl-err{color:var(--danger)!important}
+.mark{margin-left:auto;font-size:11px;font-weight:700;flex-shrink:0}
+.mark.ok{color:var(--success)}.mark.err{color:var(--danger)}
+.status-badge{font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:5px;flex-shrink:0;margin-top:1px}
+.badge-ok{background:#dcfce7;color:#15803d}
+.badge-err{background:#fee2e2;color:#dc2626}
+.badge-skip{background:#f3f4f6;color:#6b7280}
+
+@media(max-width:480px){
+  .main{padding:16px 13px}
+  .action-grid{grid-template-columns:1fr}
+  .banner h1{font-size:18px}
+  .mock-wrap{max-width:100%}
+  .result-wrap{max-width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header class="header">
+  <button class="burger" id="burgerBtn" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="logo">UGC<em>NET</em> Prep</div>
+</header>
+
+<!-- ── Overlay ── -->
+<div class="overlay" id="overlay"></div>
+
+<!-- ── Sidebar ── -->
+<nav class="sidebar" id="sidebar">
+  <div class="nav-sec">Menu</div>
+  <button class="nav-link active" data-page="home">
+    <span class="nav-icon">🏠</span> Home
+  </button>
+  <button class="nav-link" data-page="pyq">
+    <span class="nav-icon">📚</span> Previous Year Questions
+  </button>
+  <button class="nav-link" data-page="mock">
+    <span class="nav-icon">✍️</span> Mock Test
+  </button>
+  <div class="nav-footer">
+    UGC NET Paper I<br>Teaching &amp; Research Aptitude
+  </div>
+</nav>
+
+<!-- ── Main ── -->
+<main class="main" id="mainContent">
+
+  <!-- ══════════ HOME ══════════ -->
+  <section class="page active" id="page-home">
+    <div class="banner">
+      <h1>Welcome to UGC NET Prep</h1>
+      <p>Practice previous year questions, attempt timed mock tests, and ace UGC NET Paper I.</p>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box"><div class="num">50+</div><div class="lbl">PYQs</div></div>
+      <div class="stat-box"><div class="num">5</div><div class="lbl">Years</div></div>
+      <div class="stat-box"><div class="num">20</div><div class="lbl">Mock Qs</div></div>
+    </div>
+
+    <div class="sec-lbl">Quick Access</div>
+    <div class="action-grid">
+      <div class="action-card" onclick="navigate('pyq')">
+        <div class="action-icon" style="background:#eef1ff">📖</div>
+        <div>
+          <h3>Previous Year Questions</h3>
+          <p>Year-wise PYQs with answer key</p>
+        </div>
+      </div>
+      <div class="action-card" onclick="navigate('mock')">
+        <div class="action-icon" style="background:#fff7ed">✍️</div>
+        <div>
+          <h3>Mock Test</h3>
+          <p>30-min timed practice test</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-lbl">About UGC NET Paper I</div>
+    <div class="info-card">
+      <div class="title">Topics Covered</div>
+      <div class="body">Teaching Aptitude · Research Aptitude · Reading Comprehension · Communication · Mathematical Reasoning · Logical Reasoning · Data Interpretation · ICT · People &amp; Environment · Higher Education System</div>
+      <div class="info-meta">
+        <div>📋 <strong>Questions:</strong> 50 (MCQ)</div>
+        <div>⏱️ <strong>Duration:</strong> 3 hours</div>
+        <div>🏆 <strong>Marks:</strong> 100</div>
+        <div>❌ <strong>Negative:</strong> None</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ PYQ ══════════ -->
+  <section class="page" id="page-pyq">
+    <div class="page-hd">
+      <h2>Previous Year Questions</h2>
+      <p>UGC NET Paper I — Select a year to browse questions with answer key</p>
+    </div>
+    <div class="year-tabs" id="yearTabs"></div>
+    <div class="pyq-toolbar">
+      <span class="pyq-count" id="pyqCount"></span>
+      <button class="btn-sm" id="toggleAllBtn" onclick="toggleAllAnswers()">Show All Answers</button>
+    </div>
+    <div id="pyqList"></div>
+  </section>
+
+  <!-- ══════════ MOCK TEST ══════════ -->
+  <section class="page" id="page-mock">
+
+    <!-- Intro -->
+    <div id="mock-intro">
+      <div class="mock-wrap">
+        <div class="mock-card">
+          <div class="mock-icon">📝</div>
+          <h2>Mock Test</h2>
+          <p>Simulate UGC NET Paper I. Answer 20 questions in 30 minutes. No negative marking.</p>
+          <div class="mock-meta">
+            <div class="mock-meta-item"><div class="v">20</div><div class="l">Questions</div></div>
+            <div class="mock-meta-item"><div class="v">30</div><div class="l">Minutes</div></div>
+            <div class="mock-meta-item"><div class="v">40</div><div class="l">Max Marks</div></div>
+          </div>
+          <button class="btn-lg" onclick="startTest()">Start Test</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active test -->
+    <div id="mock-test" class="hidden">
+      <div class="test-bar">
+        <div class="timer" id="timerDisplay">30:00</div>
+        <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+        <div class="q-ctr" id="qCounter">Q 1 / 20</div>
+        <button class="btn-sm btn-fill" onclick="confirmSubmit()">Submit</button>
+      </div>
+      <div class="palette-wrap">
+        <div class="palette-lbl">Question Palette</div>
+        <div class="palette" id="palette"></div>
+      </div>
+      <div class="test-qcard" id="testQCard"></div>
+      <div class="test-nav">
+        <button class="btn-outline" onclick="prevQ()">← Previous</button>
+        <button class="btn-sm btn-fill" onclick="nextQ()">Next →</button>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="mock-result" class="hidden">
+      <div class="result-wrap">
+        <div class="result-card">
+          <div class="score-ring">
+            <svg width="120" height="120" viewBox="0 0 120 120">
+              <circle class="track" cx="60" cy="60" r="52"/>
+              <circle class="fill" id="scoreArc" cx="60" cy="60" r="52"
+                stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+            </svg>
+            <div class="score-center">
+              <div class="score-pct" id="scorePct">0%</div>
+              <div class="score-lbl">Score</div>
+            </div>
+          </div>
+          <div class="result-grade" id="resultGrade"></div>
+          <div class="result-sub" id="resultSub"></div>
+          <div class="result-stats">
+            <div class="rstat"><div class="v c-ok" id="resCorrect">0</div><div class="l">Correct</div></div>
+            <div class="rstat"><div class="v c-err" id="resWrong">0</div><div class="l">Wrong</div></div>
+            <div class="rstat"><div class="v c-skip" id="resSkip">0</div><div class="l">Skipped</div></div>
+          </div>
+          <div class="result-btns">
+            <button class="btn-outline" onclick="reviewTest()">Review Answers</button>
+            <button class="btn-lg" onclick="resetTest()" style="border-radius:8px">Retake Test</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review -->
+    <div id="mock-review" class="hidden">
+      <div class="review-banner">
+        📋 Review Mode — green = correct &nbsp;|&nbsp; red = your wrong answer
+        <button class="btn-sm btn-fill" style="margin-left:auto" onclick="resetTest()">New Test</button>
+      </div>
+      <div id="reviewList"></div>
+    </div>
+
+  </section>
+</main>
+
+<script>
+// ═══════════════════════════════════════════
+// DATA — PYQ
+// ═══════════════════════════════════════════
+const pyqData = {
+  "June 2023": [
+    { q:"Which of the following is NOT a characteristic of effective teaching?",
+      opts:["Clarity of content presentation","Emphasis on rote memorization","Active learner engagement","Use of relevant examples"],
+      ans:1, topic:"Teaching", exp:"Effective teaching promotes understanding and critical thinking, not rote memorization." },
+    { q:"The term 'pedagogy' refers to:",
+      opts:["The science of adult learning","The art and science of teaching","The study of child development","The philosophy of education"],
+      ans:1, topic:"Teaching", exp:"Pedagogy is the art and science of teaching, particularly strategies and methods used to impart knowledge." },
+    { q:"A researcher formulates a hypothesis before conducting an experiment. This is best described as:",
+      opts:["A proven fact derived from data","A testable prediction or assumption","A conclusion drawn from findings","A statistical analysis result"],
+      ans:1, topic:"Research", exp:"A hypothesis is a tentative, testable statement or prediction that guides research inquiry." },
+    { q:"Which type of research is aimed at solving specific practical problems?",
+      opts:["Pure / Fundamental research","Applied research","Historical research","Philosophical research"],
+      ans:1, topic:"Research", exp:"Applied research is conducted to solve specific, real-world problems." },
+    { q:"In the communication process, 'noise' refers to:",
+      opts:["The loudness of the message","Any disturbance that interferes with communication","The feedback from the receiver","The encoding of the message"],
+      ans:1, topic:"Communication", exp:"Noise is any internal or external interference that disrupts or distorts the communication process." },
+    { q:"If TEACHER is coded as VGCEJGT, how is STUDENT coded?",
+      opts:["UVWFGPV","UVWEGPV","UVWFGOV","UUWFGPV"],
+      ans:0, topic:"Reasoning", exp:"Each letter shifts +2: S→U, T→V, U→W, D→F, E→G, N→P, T→V → UVWFGPV." },
+    { q:"The National Education Policy 2020 recommends the medium of instruction up to Grade 5 should preferably be:",
+      opts:["English","Hindi","Home language / mother tongue","Regional official language"],
+      ans:2, topic:"Education", exp:"NEP 2020 recommends mother tongue or home language as the medium of instruction up to at least Grade 5." },
+    { q:"Which of the following is a renewable source of energy?",
+      opts:["Coal","Petroleum","Solar energy","Natural gas"],
+      ans:2, topic:"Environment", exp:"Solar energy is renewable — it comes from the Sun, an inexhaustible source." },
+    { q:"A pie chart is best used to show:",
+      opts:["Trends over time","Frequency distribution","Proportion of parts to the whole","Correlation between variables"],
+      ans:2, topic:"Data Interpretation", exp:"A pie chart shows how parts contribute proportionally to a whole." },
+    { q:"Which of the following is an example of a secondary source of information?",
+      opts:["Original research articles","Laboratory experiment reports","Review articles and textbooks","First-hand field observations"],
+      ans:2, topic:"Research", exp:"Secondary sources summarise or analyse primary data — textbooks and review articles are classic examples." }
+  ],
+  "December 2022": [
+    { q:"The teaching method that best promotes critical thinking and problem-solving is:",
+      opts:["Lecture method","Demonstration method","Problem-based learning","Drill and practice"],
+      ans:2, topic:"Teaching", exp:"Problem-based learning engages students in solving real-world problems, developing critical thinking." },
+    { q:"Which of the following is NOT a method of data collection?",
+      opts:["Observation","Interview","Hypothesis testing","Questionnaire"],
+      ans:2, topic:"Research", exp:"Hypothesis testing is analysis, not collection. Observation, interview, and questionnaire are collection methods." },
+    { q:"'Bloom's Taxonomy' classifies:",
+      opts:["Classroom management strategies","Levels of cognitive learning objectives","Educational psychology disorders","Curriculum planning frameworks"],
+      ans:1, topic:"Teaching", exp:"Bloom's Taxonomy (1956) classifies educational objectives into six cognitive levels: Remember, Understand, Apply, Analyse, Evaluate, Create." },
+    { q:"Which greenhouse gas has the highest global warming potential (100-year)?",
+      opts:["Carbon dioxide (CO₂)","Methane (CH₄)","Nitrous oxide (N₂O)","Water vapour"],
+      ans:1, topic:"Environment", exp:"Methane's global warming potential is about 25× that of CO₂ over a 100-year period." },
+    { q:"In a code, 'MIND' is written as 'NKPF'. How is 'BOOK' written?",
+      opts:["DQQM","CPQL","BPPK","CQQL"],
+      ans:0, topic:"Reasoning", exp:"Each letter shifts +2: B→D, O→Q, O→Q, K→M → DQQM." },
+    { q:"Which correctly describes formative assessment?",
+      opts:["Assessment at the end of a unit","Ongoing assessment during learning to guide instruction","A standardised national exam","Assessment for certification only"],
+      ans:1, topic:"Teaching", exp:"Formative assessment is continuous, used during the learning process to monitor progress and provide feedback." },
+    { q:"The full form of 'ICT' in education is:",
+      opts:["International Communication Technology","Information and Communication Technology","Integrated Classroom Teaching","Instructional Content Transfer"],
+      ans:1, topic:"ICT", exp:"ICT stands for Information and Communication Technology." },
+    { q:"Which organisation accredits higher education institutions in India?",
+      opts:["UGC","NAAC","AICTE","NCERT"],
+      ans:1, topic:"Education", exp:"NAAC (National Assessment and Accreditation Council), established in 1994, accredits Higher Education Institutions in India." },
+    { q:"Deductive reasoning proceeds from:",
+      opts:["Specific observations to general conclusions","General principles to specific conclusions","Data to hypothesis","Experiment to theory"],
+      ans:1, topic:"Reasoning", exp:"Deductive reasoning moves from general principles (premises) to specific conclusions." },
+    { q:"Which chart type is most suitable for showing a variable's trend over time?",
+      opts:["Bar chart","Pie chart","Line chart","Histogram"],
+      ans:2, topic:"Data Interpretation", exp:"Line charts are best for displaying how a variable changes over continuous time." }
+  ],
+  "June 2022": [
+    { q:"Which is a key feature of distance education?",
+      opts:["Mandatory face-to-face interaction","Fixed classroom schedule","Self-paced learning with flexible timing","Limited to rural areas"],
+      ans:2, topic:"Education", exp:"Distance education allows learners to study at their own pace without mandatory physical attendance." },
+    { q:"A longitudinal research study:",
+      opts:["Studies multiple variables at one point in time","Follows the same subjects over an extended period","Compares two different groups simultaneously","Uses historical data only"],
+      ans:1, topic:"Research", exp:"Longitudinal research tracks the same subjects over time to observe changes and developments." },
+    { q:"The 'grapevine' in communication refers to:",
+      opts:["Formal organisational channels","Official written correspondence","Informal, unofficial communication network","Communication via electronic media"],
+      ans:2, topic:"Communication", exp:"Grapevine refers to the informal communication network within an organisation, spreading through unofficial channels." },
+    { q:"In which year was the UGC established?",
+      opts:["1948","1953","1956","1961"],
+      ans:1, topic:"Education", exp:"The UGC was established in 1953 by the Government of India to coordinate and maintain standards of higher education." },
+    { q:"All roses are flowers. Some flowers fade quickly. What is a valid conclusion?",
+      opts:["All roses fade quickly","Some roses fade quickly","No roses fade quickly","None of the above can be definitely concluded"],
+      ans:3, topic:"Reasoning", exp:"We know all roses are flowers but only some flowers fade quickly — we cannot determine which flowers fade quickly, so none of A, B, or C can be definitively concluded." },
+    { q:"The 'digital divide' refers to:",
+      opts:["Gap between hardware and software","Inequality in access to digital technology","Difference between analog and digital signals","Space between digital characters"],
+      ans:1, topic:"ICT", exp:"The digital divide is the gap between those who have access to modern information technology and those who do not." },
+    { q:"Which is a primary source of data?",
+      opts:["Published research reports","Encyclopaedias","Questionnaire survey by the researcher","Newspaper articles"],
+      ans:2, topic:"Research", exp:"A questionnaire survey conducted by the researcher collects first-hand (primary) data directly from respondents." },
+    { q:"The Montreal Protocol (1987) was designed to address:",
+      opts:["Global warming due to CO₂","Depletion of the ozone layer by CFCs","Ocean acidification","Deforestation and land degradation"],
+      ans:1, topic:"Environment", exp:"The Montreal Protocol is an international treaty designed to phase out ozone-depleting substances (CFCs)." },
+    { q:"Which computer memory loses data when power is switched off?",
+      opts:["ROM","Hard disk","RAM","Flash memory"],
+      ans:2, topic:"ICT", exp:"RAM (Random Access Memory) is volatile — its contents are lost when power is cut off." },
+    { q:"'Scaffolding' in education refers to:",
+      opts:["Physical construction in school premises","Temporary support to help learners achieve a task","A rigid curriculum structure","Evaluating student performance"],
+      ans:1, topic:"Teaching", exp:"Scaffolding (Vygotsky) involves structured support gradually withdrawn as the learner becomes more competent." }
+  ],
+  "December 2021": [
+    { q:"The 'Zone of Proximal Development' (ZPD) is associated with:",
+      opts:["Jean Piaget","B.F. Skinner","Lev Vygotsky","John Dewey"],
+      ans:2, topic:"Teaching", exp:"ZPD is Vygotsky's concept describing the gap between what a learner can do alone vs. with guidance." },
+    { q:"A 'Type I error' in research occurs when:",
+      opts:["A true null hypothesis is incorrectly rejected","A false null hypothesis is accepted","Insufficient data is collected","An invalid measurement tool is used"],
+      ans:0, topic:"Research", exp:"Type I error (false positive) occurs when a true null hypothesis is incorrectly rejected." },
+    { q:"The Sustainable Development Goals (SDGs) were adopted by the UN in:",
+      opts:["2012","2013","2015","2017"],
+      ans:2, topic:"Environment", exp:"The 17 SDGs were adopted by all UN member states in September 2015 as part of the 2030 Agenda for Sustainable Development." },
+    { q:"A computer virus is:",
+      opts:["A hardware malfunction","A malicious program that can replicate and harm computer systems","A type of antivirus software","A networking protocol"],
+      ans:1, topic:"ICT", exp:"A computer virus is malicious software that can self-replicate, spread, and cause damage to systems." },
+    { q:"'Reliability' of a research instrument means:",
+      opts:["It measures what it is supposed to measure","It gives consistent results across repeated measurements","It is easy to administer","It is approved by experts"],
+      ans:1, topic:"Research", exp:"Reliability refers to the consistency and repeatability of a measurement instrument." },
+    { q:"The word 'curriculum' is literally derived from a Latin word meaning:",
+      opts:["Course of study","A running track / race course","Knowledge and skills","Educational programme"],
+      ans:1, topic:"Teaching", exp:"'Curriculum' derives from the Latin 'currere' meaning 'to run' or 'a running track'." },
+    { q:"In a class of 40 students, 60% failed in English. How many passed?",
+      opts:["10","16","24","25"],
+      ans:1, topic:"Maths", exp:"60% failed → 40% passed. 40% of 40 = 16 students." },
+    { q:"Which is a characteristic of good research?",
+      opts:["Based on unverified assumptions","Relies on authority rather than evidence","Systematic, empirical, and objective","Focuses on confirming existing beliefs"],
+      ans:2, topic:"Research", exp:"Good research is systematic (follows a plan), empirical (based on observable evidence), and objective (free from personal bias)." },
+    { q:"'Lateral thinking' as a problem-solving approach is associated with:",
+      opts:["Abraham Maslow","Edward de Bono","Albert Bandura","Carl Rogers"],
+      ans:1, topic:"Reasoning", exp:"Edward de Bono introduced 'lateral thinking' — solving problems through indirect and creative approaches." },
+    { q:"Which of the following is NOT an air pollutant?",
+      opts:["Sulphur dioxide (SO₂)","Nitrogen dioxide (NO₂)","Oxygen (O₂)","Carbon monoxide (CO)"],
+      ans:2, topic:"Environment", exp:"Oxygen is essential for life and is not a pollutant. SO₂, NO₂, and CO are harmful air pollutants." }
+  ],
+  "June 2021": [
+    { q:"The teaching principle of proceeding from known to unknown means:",
+      opts:["Use correlation across subjects","Build on students' existing knowledge to introduce new concepts","Revise frequently","Generate student interest first"],
+      ans:1, topic:"Teaching", exp:"This principle suggests using what students already know as a foundation to introduce new concepts effectively." },
+    { q:"Which research design is used to establish cause-and-effect relationships?",
+      opts:["Descriptive research","Correlational research","Experimental research","Historical research"],
+      ans:2, topic:"Research", exp:"Experimental research manipulates independent variables to determine their causal effect on dependent variables." },
+    { q:"The 'butterfly effect' is related to which theory?",
+      opts:["Quantum theory","Chaos theory","Relativity theory","String theory"],
+      ans:1, topic:"Reasoning", exp:"The butterfly effect is a concept in chaos theory suggesting small changes can have large, unpredictable consequences." },
+    { q:"Which is NOT a function of the UGC?",
+      opts:["Allocating grants to universities","Setting standards of higher education","Directly running government schools","Advising Central and State Governments on higher education"],
+      ans:2, topic:"Education", exp:"UGC deals with higher education (universities/colleges), not government schools, which are managed by state departments." },
+    { q:"The decimal equivalent of binary number 1011 is:",
+      opts:["9","10","11","13"],
+      ans:2, topic:"ICT", exp:"1011 in binary = 1×8 + 0×4 + 1×2 + 1×1 = 8+0+2+1 = 11." },
+    { q:"Which sampling technique gives every member of the population an equal chance of selection?",
+      opts:["Purposive sampling","Snowball sampling","Simple random sampling","Convenience sampling"],
+      ans:2, topic:"Research", exp:"Simple random sampling ensures each member has an equal and independent chance of being selected." },
+    { q:"The most significant ozone hole is predominantly located over:",
+      opts:["The Arctic region","The Antarctic region","The equatorial region","The temperate zones"],
+      ans:1, topic:"Environment", exp:"The most significant ozone hole has been observed over Antarctica, primarily during spring months." },
+    { q:"When students brainstorm solutions to a problem, which level of Bloom's Taxonomy is addressed?",
+      opts:["Remembering","Understanding","Applying","Creating"],
+      ans:3, topic:"Teaching", exp:"Brainstorming to generate new solutions falls under 'Creating' — the highest level in Bloom's revised taxonomy." },
+    { q:"Which statement about correlation is correct?",
+      opts:["Correlation always implies causation","Correlation measures the direction and strength of a linear relationship","A correlation of 0 means absolutely no relationship","Correlation can only be positive"],
+      ans:1, topic:"Research", exp:"Correlation measures strength and direction of a linear relationship between two variables — it does NOT imply causation." },
+    { q:"Which type of communication flows from employees to management?",
+      opts:["Downward communication","Upward communication","Lateral communication","Diagonal communication"],
+      ans:1, topic:"Communication", exp:"Upward communication flows from subordinates to superiors — e.g., feedback, reports, grievances." }
+  ]
+};
+
+// ═══════════════════════════════════════════
+// DATA — MOCK TEST
+// ═══════════════════════════════════════════
+const mockQ = [
+  { q:"Which teaching method is most suitable for a large class with limited time?",
+    opts:["Project method","Lecture method","Discussion method","Seminar method"],
+    ans:1, topic:"Teaching", exp:"The lecture method allows the teacher to cover content efficiently with a large group in limited time." },
+  { q:"A research variable that the researcher manipulates is called:",
+    opts:["Dependent variable","Controlled variable","Independent variable","Intervening variable"],
+    ans:2, topic:"Research", exp:"The independent variable is the one the researcher changes to observe its effect on the dependent variable." },
+  { q:"The process by which a receiver interprets a message is called:",
+    opts:["Encoding","Decoding","Feedback","Transmission"],
+    ans:1, topic:"Communication", exp:"Decoding is the process by which the receiver interprets and makes sense of the encoded message." },
+  { q:"Which number is both a perfect square and a perfect cube?",
+    opts:["8","16","27","64"],
+    ans:3, topic:"Maths", exp:"64 = 8² (perfect square) and 64 = 4³ (perfect cube). Hence 64 satisfies both." },
+  { q:"E-learning is primarily associated with:",
+    opts:["Traditional classroom teaching","Learning using electronic technology and internet","Experimental learning in labs","Exchange learning between countries"],
+    ans:1, topic:"ICT", exp:"E-learning refers to learning facilitated by electronic technologies, particularly the internet." },
+  { q:"The MOST serious environmental problem associated with burning fossil fuels is:",
+    opts:["Noise pollution","Water contamination","Climate change due to greenhouse gas emissions","Soil erosion"],
+    ans:2, topic:"Environment", exp:"Burning fossil fuels releases CO₂ and other greenhouse gases — the primary driver of climate change." },
+  { q:"A student who learns by watching others is demonstrating:",
+    opts:["Operant conditioning","Classical conditioning","Observational / social learning","Insight learning"],
+    ans:2, topic:"Teaching", exp:"Observational learning (Bandura's Social Learning Theory) occurs when individuals learn by watching and imitating others." },
+  { q:"In the sequence 2, 6, 12, 20, 30, ? — the next number is:",
+    opts:["40","42","44","48"],
+    ans:1, topic:"Maths", exp:"Differences: 4, 6, 8, 10, 12 → next difference is 12, so 30+12=42." },
+  { q:"'Validity' of a test best means:",
+    opts:["The test produces consistent results","The test measures exactly what it is intended to measure","The test is easy to score","The test is widely used"],
+    ans:1, topic:"Research", exp:"Validity refers to whether a test actually measures what it claims to measure." },
+  { q:"'Digital literacy' includes the ability to:",
+    opts:["Only type fast on a keyboard","Only repair computers","Effectively use digital tools and critically evaluate online information","Only use social media"],
+    ans:2, topic:"ICT", exp:"Digital literacy encompasses finding, evaluating, using, and creating information using digital technologies." },
+  { q:"Which Article of the Indian Constitution provides free and compulsory education for children aged 6–14?",
+    opts:["Article 21","Article 21A","Article 45","Article 51"],
+    ans:1, topic:"Education", exp:"Article 21A (86th Constitutional Amendment, 2002) makes free and compulsory education for children 6–14 a fundamental right." },
+  { q:"A 'literature review' in research serves to:",
+    opts:["Prove the researcher has read many books","Identify gaps in existing knowledge and contextualise the study","List all books published in the field","Replace data collection"],
+    ans:1, topic:"Research", exp:"A literature review surveys existing research to identify what is known and establish the rationale for a new study." },
+  { q:"Which is an example of verbal communication?",
+    opts:["Body language","Facial expressions","Gesture","Written report"],
+    ans:3, topic:"Communication", exp:"Verbal communication involves words — spoken or written. A written report uses words, hence it is verbal." },
+  { q:"Sarva Shiksha Abhiyan (SSA) is focused on:",
+      opts:["Higher education reform","Universalisation of elementary education","Vocational training programs","Teacher education at university level"],
+      ans:1, topic:"Education", exp:"SSA is a flagship programme by the Government of India for Universalisation of Elementary Education." },
+  { q:"The number of times an event occurs in a dataset is called its:",
+    opts:["Mean","Median","Frequency","Range"],
+    ans:2, topic:"Maths", exp:"Frequency is the count of how many times a particular value or event occurs in a dataset." },
+  { q:"Which protocol is used to send emails over the internet?",
+    opts:["HTTP","FTP","SMTP","TCP"],
+    ans:2, topic:"ICT", exp:"SMTP (Simple Mail Transfer Protocol) is the standard protocol for sending email messages between servers." },
+  { q:"Which is a non-parametric statistical test?",
+    opts:["t-test","ANOVA","Chi-square test","Pearson correlation"],
+    ans:2, topic:"Research", exp:"The Chi-square test is a non-parametric test that does not assume a specific data distribution." },
+  { q:"The 'Hidden Curriculum' refers to:",
+    opts:["Secret subjects taught in schools","Unofficial norms and values transmitted through schooling","Online course materials not published","Extra-curricular activities only"],
+    ans:1, topic:"Teaching", exp:"Hidden curriculum refers to implicit lessons and values students learn in school beyond the official curriculum." },
+  { q:"'Acid rain' is primarily caused by atmospheric pollution from:",
+    opts:["CO₂ and CO","SO₂ and NOx","O₃ and H₂O","CH₄ and N₂"],
+    ans:1, topic:"Environment", exp:"Acid rain is caused by SO₂ and NOx emissions that react with atmospheric moisture to form acids." },
+  { q:"Which is an example of inductive reasoning?",
+    opts:["All men are mortal; Socrates is a man; therefore Socrates is mortal","This crow is black; that crow is black; therefore all crows are black","If it rains, the ground gets wet; the ground is wet; therefore it has rained","No conclusion can be drawn without further data"],
+    ans:1, topic:"Reasoning", exp:"Inductive reasoning draws general conclusions from specific observations — generalising from observed crows to all crows." }
+];
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+const burgerBtn = document.getElementById('burgerBtn');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+
+burgerBtn.addEventListener('click', () => {
+  const open = sidebar.classList.toggle('open');
+  burgerBtn.classList.toggle('open', open);
+  overlay.classList.toggle('show', open);
+});
+overlay.addEventListener('click', closeSidebar);
+
+function closeSidebar() {
+  sidebar.classList.remove('open');
+  burgerBtn.classList.remove('open');
+  overlay.classList.remove('show');
+}
+
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', () => { navigate(link.dataset.page); closeSidebar(); });
+});
+
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.dataset.page === page));
+  window.scrollTo(0, 0);
+  if (page === 'pyq' && !pyqInited) initPYQ();
+}
+
+// ═══════════════════════════════════════════
+// PYQ
+// ═══════════════════════════════════════════
+let currentYear = null, allShown = false, pyqInited = false;
+const LABELS = ['A','B','C','D'];
+
+function initPYQ() {
+  pyqInited = true;
+  const years = Object.keys(pyqData);
+  const tabs = document.getElementById('yearTabs');
+  years.forEach((yr, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'ytab' + (i === 0 ? ' active' : '');
+    btn.textContent = yr;
+    btn.addEventListener('click', () => selectYear(yr));
+    tabs.appendChild(btn);
+  });
+  selectYear(years[0]);
+}
+
+function selectYear(year) {
+  currentYear = year;
+  allShown = false;
+  document.getElementById('toggleAllBtn').textContent = 'Show All Answers';
+  document.querySelectorAll('.ytab').forEach(t => t.classList.toggle('active', t.textContent === year));
+
+  const qs = pyqData[year];
+  document.getElementById('pyqCount').textContent = qs.length + ' questions';
+
+  const list = document.getElementById('pyqList');
+  list.innerHTML = '';
+  qs.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'qcard';
+    card.innerHTML =
+      `<div class="qcard-head">
+        <span class="qno">Q${i+1}</span>
+        <span class="qtopic">${q.topic}</span>
+        <span class="qtext">${q.q}</span>
+      </div>
+      <div class="opts">
+        ${q.opts.map((o, oi) => `<div class="opt"><span class="opt-lbl">${LABELS[oi]}.</span><span>${o}</span></div>`).join('')}
+      </div>
+      <button class="toggle-ans" data-idx="${i}" onclick="toggleAns(${i})">Show Answer</button>
+      <div class="ans-reveal" id="ans-${i}">
+        <span class="ans-lbl">✓ Correct Answer: ${LABELS[q.ans]}. ${q.opts[q.ans]}</span>
+        <div class="exp">${q.exp}</div>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+function toggleAns(idx) {
+  const el = document.getElementById('ans-' + idx);
+  const btn = document.querySelector(`button[data-idx="${idx}"]`);
+  const shown = el.classList.toggle('show');
+  btn.textContent = shown ? 'Hide Answer' : 'Show Answer';
+}
+
+function toggleAllAnswers() {
+  allShown = !allShown;
+  pyqData[currentYear].forEach((_, i) => {
+    document.getElementById('ans-' + i).classList.toggle('show', allShown);
+    document.querySelector(`button[data-idx="${i}"]`).textContent = allShown ? 'Hide Answer' : 'Show Answer';
+  });
+  document.getElementById('toggleAllBtn').textContent = allShown ? 'Hide All Answers' : 'Show All Answers';
+}
+
+// ═══════════════════════════════════════════
+// MOCK TEST
+// ═══════════════════════════════════════════
+let ts = { currentQ:0, answers:{}, timer:null, timeLeft:1800, done:false };
+
+function startTest() {
+  ts = { currentQ:0, answers:{}, timer:null, timeLeft:1800, done:false };
+  show('mock-test'); hide('mock-intro'); hide('mock-result'); hide('mock-review');
+  buildPalette();
+  renderQ();
+  runTimer();
+}
+
+function show(id){ document.getElementById(id).classList.remove('hidden') }
+function hide(id){ document.getElementById(id).classList.add('hidden') }
+
+function buildPalette() {
+  const pal = document.getElementById('palette');
+  pal.innerHTML = '';
+  mockQ.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'pdot' + (i === 0 ? ' current' : '');
+    d.id = 'pd-' + i;
+    d.textContent = i + 1;
+    d.addEventListener('click', () => goTo(i));
+    pal.appendChild(d);
+  });
+}
+
+function updatePalette() {
+  mockQ.forEach((_, i) => {
+    const d = document.getElementById('pd-' + i);
+    if (!d) return;
+    d.className = 'pdot';
+    if (ts.answers[i] !== undefined) d.classList.add('answered');
+    if (i === ts.currentQ) d.classList.add('current');
+  });
+}
+
+function renderQ() {
+  const i = ts.currentQ, q = mockQ[i];
+  document.getElementById('qCounter').textContent = `Q ${i+1} / ${mockQ.length}`;
+  const answered = Object.keys(ts.answers).length;
+  document.getElementById('progFill').style.width = (answered / mockQ.length * 100) + '%';
+
+  document.getElementById('testQCard').innerHTML =
+    `<div class="test-q-meta"><span class="qno">Q${i+1}</span><span class="qtopic">${q.topic}</span></div>
+    <div class="test-q-text">${q.q}</div>
+    <div class="test-opts">
+      ${q.opts.map((o, oi) =>
+        `<div class="test-opt${ts.answers[i] === oi ? ' selected' : ''}" onclick="pick(${i},${oi})">
+          <span class="test-opt-lbl">${LABELS[oi]}.</span><span>${o}</span>
+        </div>`
+      ).join('')}
+    </div>`;
+  updatePalette();
+}
+
+function pick(qi, oi) {
+  if (ts.done) return;
+  ts.answers[qi] === oi ? delete ts.answers[qi] : (ts.answers[qi] = oi);
+  renderQ();
+  document.getElementById('progFill').style.width = (Object.keys(ts.answers).length / mockQ.length * 100) + '%';
+}
+
+function goTo(i)  { ts.currentQ = i; renderQ(); }
+function nextQ()  { if (ts.currentQ < mockQ.length-1) { ts.currentQ++; renderQ(); } }
+function prevQ()  { if (ts.currentQ > 0) { ts.currentQ--; renderQ(); } }
+
+function runTimer() {
+  const el = document.getElementById('timerDisplay');
+  ts.timer = setInterval(() => {
+    ts.timeLeft--;
+    const m = Math.floor(ts.timeLeft/60), s = ts.timeLeft%60;
+    el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    el.className = 'timer';
+    if (ts.timeLeft <= 300) el.classList.add('warn');
+    if (ts.timeLeft <=  60) el.classList.add('alert');
+    if (ts.timeLeft <= 0)  { clearInterval(ts.timer); submitTest(); }
+  }, 1000);
+}
+
+function confirmSubmit() {
+  const unanswered = mockQ.length - Object.keys(ts.answers).length;
+  if (unanswered > 0 && !confirm(`You have ${unanswered} unanswered question(s). Submit anyway?`)) return;
+  submitTest();
+}
+
+function submitTest() {
+  clearInterval(ts.timer);
+  ts.done = true;
+  let correct=0, wrong=0, skip=0;
+  mockQ.forEach((q, i) => {
+    if (ts.answers[i] === undefined) skip++;
+    else if (ts.answers[i] === q.ans) correct++;
+    else wrong++;
+  });
+  const pct = Math.round(correct / mockQ.length * 100);
+
+  hide('mock-test');
+  show('mock-result');
+  setTimeout(() => {
+    document.getElementById('scoreArc').style.strokeDashoffset = 326.7 - (pct/100)*326.7;
+  }, 80);
+  document.getElementById('scorePct').textContent = pct + '%';
+  document.getElementById('resCorrect').textContent = correct;
+  document.getElementById('resWrong').textContent = wrong;
+  document.getElementById('resSkip').textContent = skip;
+
+  const grades = [
+    [80, 'Outstanding! 🏆', 'Excellent performance. You are well-prepared for UGC NET!'],
+    [60, 'Good Job! 👍', 'Solid performance. Keep practicing to improve further.'],
+    [40, 'Average 📚', 'Good effort! Focus on weaker areas and practice more mock tests.'],
+    [0,  'Needs More Practice 💪', 'Keep going! Review your concepts and attempt more tests.']
+  ];
+  const [, grade, sub] = grades.find(([thr]) => pct >= thr);
+  document.getElementById('resultGrade').textContent = grade;
+  document.getElementById('resultSub').textContent = sub;
+}
+
+function reviewTest() {
+  hide('mock-result');
+  show('mock-review');
+  const list = document.getElementById('reviewList');
+  list.innerHTML = '';
+
+  mockQ.forEach((q, i) => {
+    const sel = ts.answers[i], cor = q.ans;
+    const isOk = sel === cor, isSkip = sel === undefined;
+    const badge = isSkip
+      ? `<span class="status-badge badge-skip">Skipped</span>`
+      : isOk
+        ? `<span class="status-badge badge-ok">Correct ✓</span>`
+        : `<span class="status-badge badge-err">Wrong ✗</span>`;
+
+    const card = document.createElement('div');
+    card.className = 'qcard';
+    card.innerHTML =
+      `<div class="qcard-head">
+        <span class="qno">Q${i+1}</span>
+        <span class="qtopic">${q.topic}</span>
+        ${badge}
+        <span class="qtext">${q.q}</span>
+      </div>
+      <div class="opts">
+        ${q.opts.map((o, oi) => {
+          const isCorrectOpt = oi === cor;
+          const isWrongSel   = oi === sel && oi !== cor;
+          return `<div class="opt${isCorrectOpt?' v-correct':''}${isWrongSel?' v-wrong':''}">
+            <span class="opt-lbl${isCorrectOpt?' lbl-ok':''}${isWrongSel?' lbl-err':''}">${LABELS[oi]}.</span>
+            <span>${o}</span>
+            ${isCorrectOpt ? '<span class="mark ok">✓ Correct</span>' : ''}
+            ${isWrongSel   ? '<span class="mark err">✗ Your answer</span>' : ''}
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="ans-reveal show">
+        <span class="ans-lbl">✓ ${LABELS[cor]}. ${q.opts[cor]}</span>
+        <div class="exp">${q.exp}</div>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+function resetTest() {
+  clearInterval(ts.timer);
+  ts = { currentQ:0, answers:{}, timer:null, timeLeft:1800, done:false };
+  document.getElementById('timerDisplay').textContent = '30:00';
+  document.getElementById('timerDisplay').className = 'timer';
+  document.getElementById('scoreArc').style.strokeDashoffset = '326.7';
+  show('mock-intro'); hide('mock-test'); hide('mock-result'); hide('mock-review');
+}
+</script>
+</body>
+</html>
