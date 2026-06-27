@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
   Home,
+  GraduationCap,
+  BookOpen,
   Library,
   PencilLine,
   Trophy,
@@ -17,6 +19,8 @@ import ThemeToggle from "@/components/ThemeToggle";
 
 const NAV: { href: string; label: string; Icon: LucideIcon }[] = [
   { href: "/", label: "Home", Icon: Home },
+  { href: "/study", label: "Study Mode", Icon: GraduationCap },
+  { href: "/syllabus", label: "Syllabus", Icon: BookOpen },
   { href: "/pyq", label: "Previous Year Questions", Icon: Library },
   { href: "/mock", label: "Mock Test", Icon: PencilLine },
   { href: "/leaderboard", label: "Leaderboard", Icon: Trophy },

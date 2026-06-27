@@ -2,7 +2,9 @@ import Link from "next/link";
 import {
   Target,
   Check,
+  GraduationCap,
   BookOpen,
+  Library,
   PencilLine,
   Trophy,
   BarChart3,
@@ -116,7 +118,9 @@ export default async function HomePage() {
         Quick Access
       </div>
       <div className="reveal mb-6 grid gap-3 sm:grid-cols-2" style={{ animationDelay: "240ms" }}>
-        <QuickCard href="/pyq" Icon={BookOpen} title="Previous Year Questions" sub="Year-wise PYQs with answer key" />
+        <QuickCard href="/study" Icon={GraduationCap} title="Study Mode" sub="Full 087 syllabus with notes & diagrams" />
+        <QuickCard href="/syllabus" Icon={BookOpen} title="Syllabus" sub="Paper 2 (087) subject-wise topics" />
+        <QuickCard href="/pyq" Icon={Library} title="Previous Year Questions" sub="Year-wise PYQs with answer key" />
         <QuickCard href="/mock" Icon={PencilLine} title="Mock Test" sub="Timed practice tests" />
         <QuickCard href="/leaderboard" Icon={Trophy} title="Leaderboard" sub="See how you rank" />
         <QuickCard href="/profile" Icon={BarChart3} title="My Progress" sub="Scores, accuracy & bookmarks" />
