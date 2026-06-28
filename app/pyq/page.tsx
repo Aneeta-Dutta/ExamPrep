@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { PYQ_SESSIONS, pyqBySession } from "@/lib/content";
 import PyqBrowser from "./PyqBrowser";
 
@@ -18,7 +19,9 @@ export default function PyqPage() {
           No questions bundled yet.
         </div>
       ) : (
-        <PyqBrowser grouped={pyqBySession} sessions={sessions} />
+        <Suspense fallback={null}>
+          <PyqBrowser grouped={pyqBySession} sessions={sessions} />
+        </Suspense>
       )}
     </div>
   );

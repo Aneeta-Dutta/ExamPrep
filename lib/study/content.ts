@@ -16,22 +16,26 @@ export const CONTENT: Record<string, Block[]> = {
   "logical-equivalences": [
     {
       kind: "p",
-      text: "Two formulas are **logically equivalent** (written **≡**) when they give the **same answer in every row** of the truth table — they're the same statement wearing different clothes. Spotting this lets you **simplify** a messy expression into a clean one.",
+      text: "A messy logical expression and a clean one can say *exactly the same thing*. Recognising when two formulas are secretly identical lets you **simplify** — and simplification is half of digital-circuit design and query optimisation. We'll discover the rules, not just list them.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Are **p → q** and **¬p ∨ q** the same statement? Don't trust your gut — there's only one way to be *sure*. What is it? (Then actually do it in your head for the row p = T, q = F.)",
+    },
+    {
+      kind: "p",
+      text: "The only certain test is a **truth table** — compute both for *every* row and check they always match. For p = T, q = F: p → q = **F**, and ¬p ∨ q = F ∨ F = **F**. Check the other three rows and they match too. So **p → q ≡ ¬p ∨ q** — they're one statement in two outfits. The symbol **≡** means ‘logically equivalent’.",
     },
     {
       kind: "callout",
       tone: "analogy",
-      text: "Just like **½ = 0.5 = 2/4** are one number written three ways, **p → q** and **¬p ∨ q** are one statement written two ways.",
-    },
-    { kind: "h", text: "Proof is just a matching truth table" },
-    {
-      kind: "p",
-      text: "To check an equivalence, line up both formulas in a truth table. If their columns match on **every** row, they're equivalent. Here's the most useful example, p → q ≡ ¬p ∨ q:",
+      text: "Like **½ = 0.5 = 2/4** — three faces of one number. p → q and ¬p ∨ q are two faces of one statement. Equivalence is *equality for logic*.",
     },
     {
       kind: "diagram",
-      caption: "The last two columns are identical in every row ⇒ p → q ≡ ¬p ∨ q.",
-      svg: `<svg viewBox="0 0 380 180" role="img" aria-label="Truth table showing p to q equals not p or q">
+      caption: "Both right-hand columns are identical in every row ⇒ p → q ≡ ¬p ∨ q.",
+      svg: `<svg viewBox="0 0 380 180" role="img" aria-label="Truth table p to q equals not p or q">
         <g font-family="monospace" font-size="12">
           <rect x="184" y="6" width="190" height="174" rx="4" fill="var(--primary)" opacity="0.08"/>
           <rect x="6" y="6" width="368" height="26" fill="var(--primary)"/>
@@ -58,10 +62,11 @@ export const CONTENT: Record<string, Block[]> = {
         </g>
       </svg>`,
     },
-    { kind: "h", text: "The laws toolkit" },
+
+    { kind: "h", text: "The laws — algebra you already know, on true/false" },
     {
       kind: "p",
-      text: "Instead of drawing a table every time, we apply these standard **laws** (each one is itself a proven equivalence). They're the same algebra you know from numbers — identity, commutative, distributive — just on true/false.",
+      text: "Drawing a table every time is slow. Instead we reuse a toolkit of proven equivalences — the *same* identity, commutative, distributive laws you know from numbers, now on T/F.",
     },
     {
       kind: "table",
@@ -82,17 +87,23 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "callout",
       tone: "note",
-      title: "Two rewrites that unlock most problems",
-      text: "**p → q ≡ ¬p ∨ q** removes the arrow so the laws apply. **p ↔ q ≡ (p → q) ∧ (q → p)** breaks a biconditional into two conditionals. Memorise these two and almost any expression becomes simplifiable.",
+      title: "Two rewrites that unlock everything",
+      text: "**p → q ≡ ¬p ∨ q** kills the arrow so the laws apply. **p ↔ q ≡ (p → q) ∧ (q → p)** breaks a biconditional into two conditionals. Memorise these two and almost any expression becomes simplifiable.",
     },
-    { kind: "h", text: "De Morgan's laws — the workhorse" },
+
+    { kind: "h", text: "The workhorse — De Morgan's laws" },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "‘It is **not** the case that (it's raining **and** cold).’ Rewrite that *without* the outer ‘not’ — push the negation inside. What happens to the **‘and’**?",
+    },
     {
       kind: "p",
-      text: "When a **NOT sits outside a bracket**, De Morgan's law lets you push it inside — and the connective **flips**: ∧ becomes ∨, and ∨ becomes ∧.",
+      text: "It becomes ‘it's **not** raining **or** **not** cold’ — the **and flipped to or**, and each part got negated. That's **De Morgan's law**: ¬(p ∧ q) ≡ ¬p ∨ ¬q, and likewise ¬(p ∨ q) ≡ ¬p ∧ ¬q.",
     },
     {
       kind: "diagram",
-      caption: "Push the ¬ inside; ∧ ↔ ∨ flips. (Notice the negations also land on each part.)",
+      caption: "Push the ¬ inside; the connective flips (∧ ↔ ∨) and each part is negated.",
       svg: `<svg viewBox="0 0 384 126" role="img" aria-label="De Morgan's laws flip the connective">
         <g font-family="monospace" font-size="13">
           <rect x="20" y="16" width="120" height="34" rx="6" fill="var(--card)" stroke="var(--border)"/>
@@ -112,31 +123,37 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "callout",
       tone: "key",
-      text: "**De Morgan's is the most reused idea in the syllabus.** The exact same flip appears in **sets** (¬ → complement: (A∩B)′ = A′∪B′), in **digital circuits** (NAND/NOR), and in code (`NOT (a AND b)` = `(NOT a) OR (NOT b)`). Learn it once here.",
+      text: "**De Morgan's is the most reused idea in the whole syllabus.** The identical flip shows up in **sets** (complement: (A∩B)′ = A′∪B′), **digital circuits** (NAND/NOR), and code (`NOT (a AND b)` = `(NOT a) OR (NOT b)`). Learn it once, here.",
     },
     {
       kind: "callout",
       tone: "note",
-      title: "Worked simplification",
-      text: "Simplify **¬(¬p ∧ q)**:  apply De Morgan's → **¬(¬p) ∨ ¬q**;  apply double negation → **p ∨ ¬q**. Done — three messy symbols become two clean ones, each step justified by a named law.",
+      title: "Worked simplification (watch the reasoning)",
+      text: "Simplify **¬(¬p ∧ q)**. Step 1 — De Morgan opens the bracket and flips ∧→∨: ¬(¬p) ∨ ¬q. Step 2 — double negation turns ¬(¬p) into p: **p ∨ ¬q**. Three messy symbols become two clean ones, every step justified by a named law.",
     },
     {
       kind: "callout",
       tone: "warn",
-      title: "Common mistakes",
-      text: "With De Morgan's you **must flip the connective** — ¬(p ∧ q) is ¬p ∨ ¬q, **not** ¬p ∧ ¬q. Also keep **≡** and **↔** straight: ↔ is a *connective inside* a formula; ≡ is a *fact about two formulas* (p ≡ q means p ↔ q is a tautology).",
+      title: "The mistake examiners bait",
+      text: "With De Morgan's you MUST flip the connective. ¬(p ∧ q) is ¬p **∨** ¬q — **not** ¬p ∧ ¬q. Also keep **≡ vs ↔** straight: ↔ is a *connective inside* a formula; **≡** is a *statement that two formulas are equal* (p ≡ q means p ↔ q is a tautology).",
     },
-    {
-      kind: "callout",
-      tone: "tip",
-      title: "Engrave these",
-      text: "🔑 **p → q ≡ ¬p ∨ q** (kill the arrow).  🔑 **De Morgan: open the bracket, flip ∧↔∨, negate each part.**  🔑 Equivalent = identical final columns.",
-    },
+
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Simplify a compound proposition, name the law that justifies a step, apply De Morgan's to a negation, and rewrite p → q as ¬p ∨ q. Knowing the arrow rewrite and De Morgan's cold handles most of these.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **simplify** a compound proposition to its simplest form; (2) name the **law** that justifies a given step; (3) **apply De Morgan's** to a negated expression; (4) **rewrite p → q as ¬p ∨ q** (and biconditional as two conditionals); (5) prove or disprove an equivalence (matching truth-table columns). Knowing the arrow-rewrite and De Morgan's *cold* answers the large majority.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover the answers, produce each first.**  (a) ¬(p ∨ q) ≡ ?  (b) Rewrite p → q without an arrow.  (c) What does ‘equivalent’ mean in terms of truth tables?  (d) Simplify p ∨ (p ∧ q).  (e) Is ¬(¬p) the same as p?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers (after you've tried)",
+      text: "(a) **¬p ∧ ¬q** (flip the connective).  (b) **¬p ∨ q.**  (c) the two formulas have **identical final columns** in every row.  (d) **p** (absorption law).  (e) **Yes** (double negation).",
     },
   ],
 
@@ -181,87 +198,57 @@ export const CONTENT: Record<string, Block[]> = {
   "prop-logic": [
     {
       kind: "p",
-      text: "Logic is just **careful thinking written down**. You already do it daily — *‘if it rains, I'll take an umbrella.’* Propositional logic gives this everyday reasoning a fixed set of rules, so any two people always reach the **same answer**.",
+      text: "You reason with logic all day — *‘if it rains, I'll carry an umbrella.’* But everyday reasoning is sloppy: two people argue for hours about what ‘follows’ from what. **Propositional logic** is reasoning with the sloppiness removed — the exact same rules a CPU uses to decide. We'll build it from nothing, and at each step I'll ask you to figure things out *before* I explain. A wrong guess teaches more than a smooth read.",
     },
-    { kind: "h", text: "Step 1 · What is a proposition?" },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Why this even exists",
+      text: "Ordinary language is dangerously ambiguous. A single ‘or’ in a contract, or a fuzzy ‘if’ in a program, can cost millions or crash a plane. In the 1800s **George Boole** turned logic into algebra so that reasoning could be *calculated*, not argued. That algebra is what runs inside every digital circuit (Unit 2) and every `if` statement you'll ever write.",
+    },
+
+    { kind: "h", text: "1 · The atom — a proposition" },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Which of these can you stamp clearly **True** or **False**?  (a) ‘Delhi is the capital of India.’  (b) ‘Close the door.’  (c) ‘2 + 2 = 5.’  (d) ‘x + 1 = 3.’  Decide each before reading on.",
+    },
     {
       kind: "p",
-      text: "A **proposition** is a sentence that is **either true or false — never both, never neither**. That single test is everything. Facts pass; questions, commands and ‘it depends’ sentences fail.",
-    },
-    {
-      kind: "diagram",
-      caption: "If you can stamp it True or False, it's a proposition.",
-      svg: `<svg viewBox="0 0 384 150" role="img" aria-label="Proposition or not a proposition">
-        <g font-size="11">
-          <rect x="6" y="8" width="182" height="134" rx="8" fill="#0a8f5b" opacity="0.08"/>
-          <rect x="6" y="8" width="182" height="134" rx="8" fill="none" stroke="#0a8f5b"/>
-          <text x="97" y="28" text-anchor="middle" fill="#0a8f5b" font-weight="700" font-size="12">✓ Proposition</text>
-          <text x="22" y="56" fill="var(--text)">“Delhi is in India.”</text>
-          <text x="22" y="69" fill="var(--muted)" font-size="9">→ true</text>
-          <text x="22" y="93" fill="var(--text)">“2 + 2 = 5”</text>
-          <text x="22" y="106" fill="var(--muted)" font-size="9">→ false (still a proposition)</text>
-          <text x="22" y="130" fill="var(--text)">“The Sun is a star.”</text>
-          <rect x="196" y="8" width="182" height="134" rx="8" fill="#c0392b" opacity="0.08"/>
-          <rect x="196" y="8" width="182" height="134" rx="8" fill="none" stroke="#c0392b"/>
-          <text x="287" y="28" text-anchor="middle" fill="#c0392b" font-weight="700" font-size="12">✗ Not a proposition</text>
-          <text x="212" y="56" fill="var(--text)">“Close the door.”</text>
-          <text x="212" y="69" fill="var(--muted)" font-size="9">→ a command</text>
-          <text x="212" y="93" fill="var(--text)">“What time is it?”</text>
-          <text x="212" y="106" fill="var(--muted)" font-size="9">→ a question</text>
-          <text x="212" y="130" fill="var(--text)">“x + 1 = 3”  → depends on x</text>
-        </g>
-      </svg>`,
+      text: "Only **(a)** and **(c)** qualify — (a) is True, (c) is False (*being false doesn't disqualify it!*). (b) is a command — neither true nor false. (d) is an *open sentence* — its truth depends on x, so it's not a proposition until x is fixed. So: a **proposition is a declarative sentence that is exactly one of True or False — never both, never neither.**",
     },
     {
       kind: "callout",
       tone: "analogy",
-      text: "Picture each proposition as a **light switch**: it is either ON (**true** = 1) or OFF (**false** = 0). There is no ‘half-on’. Everything that follows is just **wiring switches together**.",
+      text: "Picture each proposition as a **light switch**: ON (true, 1) or OFF (false, 0). There's no ‘half-on’. Everything ahead is just **wiring switches together**.",
     },
-    { kind: "h", text: "Step 2 · Connecting propositions" },
+
+    { kind: "h", text: "2 · Wiring them together — connectives" },
     {
       kind: "p",
-      text: "We name simple propositions with letters (p, q, r) and join them with **connectives** — the logical versions of *not, and, or, if…then,* and *if-and-only-if*.",
-    },
-    {
-      kind: "diagram",
-      caption: "AND = the overlap (need both) · OR = either side · NOT = everything outside. (Same idea as the AND/OR/NOT gates in Unit 2.)",
-      svg: `<svg viewBox="0 0 384 126" role="img" aria-label="AND OR NOT as shaded regions">
-        <defs><clipPath id="pl-and"><circle cx="52" cy="64" r="22"/></clipPath></defs>
-        <text x="66" y="16" text-anchor="middle" font-size="11" font-weight="700" fill="var(--text)">p ∧ q (AND)</text>
-        <g clip-path="url(#pl-and)"><circle cx="80" cy="64" r="22" fill="var(--primary)" opacity="0.65"/></g>
-        <circle cx="52" cy="64" r="22" fill="none" stroke="var(--muted)"/>
-        <circle cx="80" cy="64" r="22" fill="none" stroke="var(--muted)"/>
-        <text x="40" y="104" font-size="9" fill="var(--muted)">p</text>
-        <text x="92" y="104" font-size="9" fill="var(--muted)">q</text>
-        <text x="66" y="118" text-anchor="middle" font-size="8.5" fill="var(--muted)">only the overlap</text>
-        <text x="192" y="16" text-anchor="middle" font-size="11" font-weight="700" fill="var(--text)">p ∨ q (OR)</text>
-        <circle cx="178" cy="64" r="22" fill="var(--primary)" opacity="0.55" stroke="var(--muted)"/>
-        <circle cx="206" cy="64" r="22" fill="var(--primary)" opacity="0.55" stroke="var(--muted)"/>
-        <text x="166" y="104" font-size="9" fill="var(--muted)">p</text>
-        <text x="218" y="104" font-size="9" fill="var(--muted)">q</text>
-        <text x="192" y="118" text-anchor="middle" font-size="8.5" fill="var(--muted)">either side counts</text>
-        <text x="326" y="16" text-anchor="middle" font-size="11" font-weight="700" fill="var(--text)">¬p (NOT)</text>
-        <rect x="288" y="42" width="76" height="46" rx="6" fill="var(--primary)" opacity="0.5"/>
-        <circle cx="326" cy="65" r="17" fill="var(--card)" stroke="var(--muted)"/>
-        <text x="326" y="69" text-anchor="middle" font-size="9" fill="var(--muted)">p</text>
-        <text x="326" y="118" text-anchor="middle" font-size="8.5" fill="var(--muted)">everything outside p</text>
-      </svg>`,
+      text: "We label simple propositions p, q, r… and combine them with five **connectives**. Four are intuitive; one will trip you up (we'll corner it in section 4).",
     },
     {
       kind: "table",
       head: ["In words", "Symbol", "Output is TRUE when…"],
       rows: [
         ["not p", "¬p", "p is false (it flips the value)"],
-        ["p and q", "p ∧ q", "both are true"],
-        ["p or q", "p ∨ q", "at least one is true"],
-        ["if p then q", "p → q", "everything except: p true and q false"],
-        ["p if and only if q", "p ↔ q", "both have the same value"],
+        ["p and q", "p ∧ q", "BOTH are true"],
+        ["p or q", "p ∨ q", "AT LEAST one is true (inclusive)"],
+        ["if p then q", "p → q", "everything EXCEPT: p true and q false"],
+        ["p if and only if q", "p ↔ q", "p and q have the SAME value"],
       ],
     },
-    { kind: "h", text: "Step 3 · The truth table — your calculator" },
+
+    { kind: "h", text: "3 · The calculator — truth tables" },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "You have **3** propositions p, q, r. How many rows will their truth table need? (Each can be T or F — count the combinations.)",
+    },
     {
       kind: "p",
-      text: "A **truth table** writes out the answer for *every* possible input. Two switches → 4 rows, three → 8 rows; in general **2ⁿ rows** for n propositions. Read it like a times-table.",
+      text: "**8 = 2³.** Each proposition doubles the rows, so **n propositions → 2ⁿ rows**. A truth table simply lists every combination and the resulting output — the one tool that settles *any* question in this topic.",
     },
     {
       kind: "diagram",
@@ -292,121 +279,85 @@ export const CONTENT: Record<string, Block[]> = {
         </g>
       </svg>`,
     },
+
+    { kind: "h", text: "4 · The one that trips everyone — implication" },
     {
       kind: "callout",
-      tone: "note",
-      title: "Read one row with me",
-      text: "Row 2: p = T, q = F. So ¬p = F, p ∧ q = F (both aren't true), p ∨ q = T (one is true), p → q = **F** (the single false case), p ↔ q = F (values differ). That's the whole skill — repeat per row.",
+      tone: "try",
+      text: "I promise: *‘**If** you score 90%, **then** I'll buy you a phone.’* In which of these did I **break** my promise?  (1) You scored 90%, got the phone.  (2) You scored 90%, no phone.  (3) You scored 60%, got a phone anyway.  (4) You scored 60%, no phone.",
     },
-    { kind: "h", text: "Step 4 · The tricky one — ‘if p then q’" },
     {
       kind: "p",
-      text: "Almost everyone trips on **p → q**. The fix: read it as a **promise**. A promise is broken in **only one** situation, and that one case is the entire rule.",
-    },
-    {
-      kind: "diagram",
-      caption: "“If you score 90% (p), I'll buy a phone (q).” It breaks only when you keep your side but I don't.",
-      svg: `<svg viewBox="0 0 384 168" role="img" aria-label="Implication as a promise, four cases">
-        <text x="192" y="16" text-anchor="middle" font-size="10.5" fill="var(--text)">When is the promise broken?</text>
-        <g font-size="10">
-          <rect x="8" y="26" width="182" height="62" rx="8" fill="#0a8f5b" opacity="0.10" stroke="#0a8f5b"/>
-          <text x="20" y="46" fill="#0a8f5b" font-weight="700">p = T , q = T</text>
-          <text x="20" y="64" fill="var(--text)">Scored & got the phone</text>
-          <text x="20" y="80" fill="var(--muted)">→ promise KEPT (T)</text>
-          <rect x="194" y="26" width="182" height="62" rx="8" fill="#c0392b" opacity="0.12" stroke="#c0392b" stroke-width="1.6"/>
-          <text x="206" y="46" fill="#c0392b" font-weight="700">p = T , q = F</text>
-          <text x="206" y="64" fill="var(--text)">Scored but NO phone</text>
-          <text x="206" y="80" fill="#c0392b" font-weight="700">→ promise BROKEN (F)</text>
-          <rect x="8" y="96" width="182" height="62" rx="8" fill="#0a8f5b" opacity="0.10" stroke="#0a8f5b"/>
-          <text x="20" y="116" fill="#0a8f5b" font-weight="700">p = F , q = T</text>
-          <text x="20" y="134" fill="var(--text)">Didn't score, still gifted</text>
-          <text x="20" y="150" fill="var(--muted)">→ promise KEPT (T)</text>
-          <rect x="194" y="96" width="182" height="62" rx="8" fill="#0a8f5b" opacity="0.10" stroke="#0a8f5b"/>
-          <text x="206" y="116" fill="#0a8f5b" font-weight="700">p = F , q = F</text>
-          <text x="206" y="134" fill="var(--text)">Didn't score, no phone</text>
-          <text x="206" y="150" fill="var(--muted)">→ promise KEPT (T)</text>
-        </g>
-      </svg>`,
+      text: "Only case **(2)** breaks the promise — you kept your side (p true) and I didn't keep mine (q false). In cases (3) and (4) the trigger never happened, so I broke nothing — the promise still holds. That's the whole rule: **p → q is FALSE only when p is true and q is false (T → F).** Every other row, including when p is false, is true.",
     },
     {
       kind: "callout",
       tone: "key",
-      text: "**p → q is FALSE only when p is true and q is false (T → F).** Every other row is true — even when p is false (a promise with no trigger can't be broken). If you remember one thing from this page, remember this.",
+      text: "Burn this in: **implication fails only on T → F.** A false premise can never make a true implication false — *‘a promise with no trigger is never broken.’* If you remember one thing from this page, this is it.",
     },
-    { kind: "h", text: "Step 5 · Flipping a conditional" },
-    {
-      kind: "p",
-      text: "From p → q we build three relatives by **swapping** and/or **negating** the two parts. Only **one** keeps the original meaning.",
-    },
-    {
-      kind: "diagram",
-      caption: "Swap → converse · negate → inverse · swap + negate → contrapositive (the twin that always agrees).",
-      svg: `<svg viewBox="0 0 384 168" role="img" aria-label="Converse inverse contrapositive">
-        <g font-size="11">
-          <rect x="8" y="10" width="368" height="32" rx="6" fill="var(--primary-bg)" stroke="var(--primary)"/>
-          <text x="20" y="30" fill="var(--muted)" font-size="9">ORIGINAL</text>
-          <text x="150" y="31" fill="var(--text)" font-weight="700" font-family="monospace">p → q</text>
-          <rect x="8" y="48" width="368" height="30" rx="6" fill="var(--card)" stroke="var(--border)"/>
-          <text x="20" y="67" fill="var(--muted)" font-size="9">Converse (swap)</text>
-          <text x="150" y="68" fill="var(--text)" font-family="monospace">q → p</text>
-          <text x="368" y="67" text-anchor="end" fill="#c0392b" font-size="9.5">✗ not equivalent</text>
-          <rect x="8" y="84" width="368" height="30" rx="6" fill="var(--card)" stroke="var(--border)"/>
-          <text x="20" y="103" fill="var(--muted)" font-size="9">Inverse (negate)</text>
-          <text x="150" y="104" fill="var(--text)" font-family="monospace">¬p → ¬q</text>
-          <text x="368" y="103" text-anchor="end" fill="#c0392b" font-size="9.5">✗ not equivalent</text>
-          <rect x="8" y="120" width="368" height="32" rx="6" fill="#0a8f5b" opacity="0.10" stroke="#0a8f5b" stroke-width="1.6"/>
-          <text x="20" y="140" fill="#0a8f5b" font-size="9" font-weight="700">Contrapositive (swap + negate)</text>
-          <text x="150" y="141" fill="var(--text)" font-family="monospace" font-weight="700">¬q → ¬p</text>
-          <text x="368" y="140" text-anchor="end" fill="#0a8f5b" font-size="9.5" font-weight="700">✓ same as original</text>
-        </g>
-      </svg>`,
-    },
+
+    { kind: "h", text: "5 · Three relatives of a conditional" },
     {
       kind: "callout",
-      tone: "key",
-      text: "The **contrapositive ¬q → ¬p always equals the original** — this is why ‘proof by contrapositive’ works. The **converse** and **inverse** do **not** (a favourite exam trap). Handy: converse ≡ inverse (they match each other).",
-    },
-    { kind: "h", text: "Step 6 · Always-true, always-false" },
-    {
-      kind: "p",
-      text: "Now read just the **last column** of a formula's truth table and name it:",
+      tone: "try",
+      text: "Take *‘If it rains, the ground is wet’* (p → q). Form the **converse** (swap), the **inverse** (negate both), and the **contrapositive** (swap + negate). Which one is **guaranteed** to mean the same as the original?",
     },
     {
-      kind: "ul",
-      items: [
-        "**All T → Tautology** — always true, e.g. *p ∨ ¬p* (‘it rains or it doesn't’).",
-        "**All F → Contradiction** — always false, e.g. *p ∧ ¬p*.",
-        "**A mix → Contingency** — sometimes true, sometimes false (most formulas).",
+      kind: "table",
+      head: ["Name", "Form", "Same as original?"],
+      rows: [
+        ["Original", "p → q", "—"],
+        ["Converse", "q → p", "No"],
+        ["Inverse", "¬p → ¬q", "No"],
+        ["Contrapositive", "¬q → ¬p", "YES ✓"],
       ],
     },
     {
       kind: "callout",
-      tone: "warn",
-      title: "Three traps to avoid",
-      text: "(1) Logic's **OR is inclusive** — true even when *both* are true. (2) **p → q ≠ q → p.** (3) Word tricks: **‘p only if q’ = p → q**, but **‘p if q’ = q → p**; and **‘unless’ means ‘if not’** — *A unless B* = ¬B → A.",
+      tone: "key",
+      text: "The **contrapositive (¬q → ¬p) always equals the original** — *‘if the ground isn't wet, it didn't rain’* is just a restatement. This is why **proof by contrapositive** works. The **converse** and **inverse** are NOT equivalent to the original (but they equal *each other*).",
+    },
+
+    { kind: "h", text: "6 · Always-true, always-false" },
+    {
+      kind: "p",
+      text: "Read the **last column** of a formula's truth table and name it: all **T** = **tautology** (always true, e.g. p ∨ ¬p); all **F** = **contradiction** (always false, e.g. p ∧ ¬p); a **mix** = **contingency** (most formulas).",
     },
     {
       kind: "callout",
-      tone: "tip",
-      title: "Engrave these",
-      text: "🔑 Implication breaks only on **T → F**.  🔑 A truth table has **2ⁿ rows**.  🔑 Connective strength: **¬ › ∧ › ∨ › → › ↔** (NOT binds tightest).",
+      tone: "warn",
+      title: "The traps NET loves",
+      text: "(1) Logic's **OR is inclusive** — p ∨ q is true even when *both* are true. (2) **p → q ≠ q → p.** (3) **‘p only if q’ = p → q**, but **‘p if q’ = q → p** — opposite directions! (4) **‘unless’ = ‘if not’**: *‘A unless B’ = ¬B → A.* (5) Precedence, tightest→loosest: **¬ , ∧ , ∨ , → , ↔.**",
     },
+
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Find a formula's truth value, count truth-table rows (2ⁿ), label a formula tautology/contradiction, pick the contrapositive, and convert English ↔ symbols. The ‘only if’ vs ‘if’ and ‘unless’ wordings are the usual traps.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **evaluate** a compound formula's truth value for given p, q, r; (2) **count truth-table rows** (2ⁿ); (3) decide **tautology / contradiction / contingency** from the final column; (4) pick the **contrapositive** of a statement (and know it's the equivalent one); (5) **translate English ↔ symbols**, especially ‘only if’ (→), ‘if’ (←), ‘unless’ (¬B→A), and ‘necessary/sufficient’ (sufficient = the antecedent, necessary = the consequent). The wording traps in the box above are where most marks are lost.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover the answers and say each aloud first.**  (a) For how many rows of 4 variables is the table built?  (b) Is p → q false when p is false?  (c) Which relative of p→q is logically equivalent to it?  (d) Translate ‘You pass only if you study’.  (e) Is p ∨ ¬p a tautology or contradiction?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers (after you've tried)",
+      text: "(a) **16 = 2⁴**.  (b) **No** — it's true (vacuously); false only for T→F.  (c) the **contrapositive** ¬q → ¬p.  (d) pass → study (‘only if’ points to the consequent).  (e) a **tautology** (always true).",
     },
   ],
   // ---- Unit 1 · Mathematical Logic (remaining subtopics) ----
   "normal-forms": [
     {
       kind: "p",
-      text: "Every whole number breaks into a standard form — a product of primes. Logical formulas have **standard shapes** too. Putting a messy formula into one makes it easy to compare, simplify, or feed to a computer. The two shapes are **DNF** and **CNF**.",
+      text: "Any whole number breaks into a unique product of primes. Logical formulas have **standard shapes** too — and forcing a formula into one makes it easy to compare, simplify, or hand to a computer. We'll figure out *why* there are exactly two such shapes.",
     },
     {
-      kind: "p",
-      text: "First, a **literal** is a variable or its negation (p or ¬p). Now the two forms differ only by which connective sits on the **outside**:",
+      kind: "callout",
+      tone: "try",
+      text: "First, a **literal** is a variable or its negation (p or ¬p). Now: how many ways can you glue literals together with ANDs and ORs at two levels? Picture ‘ORs of ANDs’ vs ‘ANDs of ORs’ — those are the two shapes. Which connective sits on the *outside* names each one.",
     },
     {
       kind: "diagram",
@@ -424,42 +375,59 @@ export const CONTENT: Record<string, Block[]> = {
       kind: "callout",
       tone: "tip",
       title: "Never mix them up",
-      text: "**D**NF has **D**isjunction (OR) on the outside. **C**NF has **C**onjunction (AND) on the outside. The first letter tells you the outer glue.",
+      text: "**D**NF has **D**isjunction (OR) on the outside. **C**NF has **C**onjunction (AND) on the outside. The first letter is the outer glue.",
     },
-    { kind: "h", text: "Principal (canonical) forms — minterms & maxterms" },
+    { kind: "h", text: "Principal forms — read straight off the truth table" },
     {
       kind: "p",
-      text: "A **principal** form (PDNF/PCNF) is the unique version where *every* term mentions *every* variable. You read it straight off the truth table:",
+      text: "A **principal (canonical)** form is the unique version where *every* term mentions *every* variable. The beautiful part: you read it directly from the truth table.",
     },
     {
-      kind: "ul",
-      items: [
-        "**Minterm** — an AND-term true for exactly one row. **PDNF** = OR of the minterms of all **True** rows.",
-        "**Maxterm** — an OR-clause false for exactly one row. **PCNF** = AND of the maxterms of all **False** rows.",
-        "So: number of minterms = number of **1s**, number of maxterms = number of **0s**, and minterms + maxterms = 2ⁿ.",
-      ],
+      kind: "callout",
+      tone: "try",
+      text: "A formula has **3** True rows and **5** False rows in its 8-row table. How many **minterms** in its principal DNF, and how many **maxterms** in its principal CNF?",
+    },
+    {
+      kind: "p",
+      text: "**3 minterms** (one per True row) and **5 maxterms** (one per False row) — together 8 = 2ⁿ. A **minterm** is an AND-term true for exactly one row; **PDNF** = OR of the minterms of all **True** rows. A **maxterm** is an OR-clause false for exactly one row; **PCNF** = AND of the maxterms of all **False** rows.",
     },
     {
       kind: "callout",
       tone: "key",
-      text: "DNF/PDNF is the **Sum-Of-Products (SOP)** you'll meet again in Boolean Algebra & digital circuits; CNF/PCNF is **Product-Of-Sums (POS)**. Same idea, different unit — learn it once.",
+      text: "**DNF/PDNF is Sum-Of-Products (SOP); CNF/PCNF is Product-Of-Sums (POS)** — the very same forms you'll minimise with K-maps in Boolean Algebra & digital circuits. #minterms = #1s, #maxterms = #0s.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Identify whether a formula is in CNF or DNF, convert a formula to a normal form, and count minterms/maxterms (= count of True/False rows). Tip: rewrite p → q as ¬p ∨ q first, then distribute.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) identify whether a formula is **CNF or DNF** (look at the outer connective); (2) **convert** a formula to a normal form (tip: rewrite p→q as ¬p∨q first, then distribute); (3) **count minterms/maxterms** = count of True/False rows; (4) SOP↔DNF and POS↔CNF naming.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) (a∨b)∧(c∨d) is CNF or DNF?  (b) Minterms come from True or False rows?  (c) DNF is SOP or POS?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **CNF** (AND outside).  (b) **True** rows.  (c) **SOP** (sum of products).",
     },
   ],
 
   "predicates-quantifiers": [
     {
       kind: "p",
-      text: "Plain propositional logic can't say *‘every student passed’* — it has no notion of ‘every’. **Predicate logic** adds two powers: **predicates** (statements with a variable) and **quantifiers** (how many things they apply to).",
+      text: "Propositional logic hits a wall fast. It can say ‘Socrates is mortal’, but it **cannot** say ‘*every* human is mortal’ — it has no notion of ‘every’ or ‘some’, and no way to talk about objects in general. **Predicate logic** adds exactly that power.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Take the sentence ‘x is even’. Is it true or false? Until you do **two** things to it, it isn't a proposition at all. What are those two things?",
     },
     {
       kind: "p",
-      text: "A **predicate** P(x) is a sentence with a blank, like *‘x is even’*. It isn't true or false until we either fix x **or** quantify it. There are two quantifiers:",
+      text: "Either **fix x** (‘4 is even’ — now true) or **quantify x** (‘*every* number is even’ — now false). The open sentence ‘x is even’ is a **predicate** P(x): a statement with a blank that only gets a truth value once the blank is handled. The two ways to quantify:",
     },
     {
       kind: "diagram",
@@ -482,12 +450,17 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "callout",
       tone: "analogy",
-      text: "**∀ is a giant AND** (P of first ∧ P of second ∧ …); **∃ is a giant OR** (P of first ∨ P of second ∨ …). Everything about quantifiers follows from that one idea.",
+      text: "**∀ is a giant AND** (P(a) ∧ P(b) ∧ …) — one failure breaks it. **∃ is a giant OR** (P(a) ∨ P(b) ∨ …) — one success makes it. Every rule about quantifiers falls out of that.",
     },
-    { kind: "h", text: "Negating a quantifier (the exam favourite)" },
+    { kind: "h", text: "Negation — the exam favourite" },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "‘All students passed’ is false. What exactly must be true for it to be false — that NO student passed, or that AT LEAST ONE student didn't? Say the negation precisely.",
+    },
     {
       kind: "p",
-      text: "To negate, **flip the quantifier and push the ¬ inside** — exactly De Morgan's law, scaled up:",
+      text: "It's false when **at least one** student didn't pass — *not* when none passed. So **¬(∀x P(x)) ≡ ∃x ¬P(x)**: to negate, **flip the quantifier and push ¬ inside** (it's De Morgan's law, scaled up). Likewise ¬(∃x P(x)) ≡ ∀x ¬P(x).",
     },
     {
       kind: "formula",
@@ -496,25 +469,45 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "callout",
       tone: "warn",
-      title: "Translate carefully",
-      text: "**‘All P are Q’ = ∀x (P(x) → Q(x))** — uses an arrow. **‘Some P are Q’ = ∃x (P(x) ∧ Q(x))** — uses AND. Using ∧ with ∀ or → with ∃ is the classic mistake.",
+      title: "The translation trap",
+      text: "**‘All P are Q’ = ∀x (P(x) → Q(x))** — uses an **arrow**. **‘Some P are Q’ = ∃x (P(x) ∧ Q(x))** — uses **AND**. Using ∧ with ∀, or → with ∃, is the single most common mistake. (∀ pairs with →, ∃ pairs with ∧.)",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Translate English ↔ quantified logic, negate a quantified statement (flip ∀↔∃, negate inside), and judge truth over a small domain. Remember ∀ pairs with →, ∃ pairs with ∧.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **translate** English ↔ quantified logic (watch ∀→ and ∃∧); (2) **negate** a quantified statement (flip ∀↔∃, negate inside); (3) judge **truth over a small domain**; (4) the equivalence ¬∀ = ∃¬. Bound vs free variables may also appear.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Negate ∀x P(x).  (b) ‘Some birds fly’ — uses → or ∧?  (c) ∃ behaves like which connective?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **∃x ¬P(x)**.  (b) **∧**:  ∃x (Bird(x) ∧ Fly(x)).  (c) a big **OR**.",
     },
   ],
 
   "nested-quantifiers": [
     {
       kind: "p",
-      text: "*‘Everyone has a mother’* and *‘there is one mother of everyone’* use the same words — but mean very different things. With **nested quantifiers**, the **order** is the meaning.",
+      text: "Once you have ∀ and ∃, you can stack them — and that's where meaning gets subtle. ‘Everyone has a mother’ and ‘there's one mother of everyone’ use the same words; one is true, one is absurd. **Order is meaning.**",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Let L(x, y) = ‘x loves y’. Read these two aloud and decide if they mean the same:  **∀x ∃y L(x, y)**  vs  **∃y ∀x L(x, y)**.  (Hint: think about whether the ‘y’ is allowed to be different for each x.)",
+    },
+    {
+      kind: "p",
+      text: "They're very different. **∀x ∃y L(x,y)** = ‘everyone loves *someone*’ — each person may love a different y. **∃y ∀x L(x,y)** = ‘there's *one* person everyone loves’ — a single y fixed for all. The second is far stronger.",
     },
     {
       kind: "diagram",
-      caption: "Swapping ∀ and ∃ changes everything; same-type quantifiers can be swapped freely.",
+      caption: "Swapping ∀ and ∃ changes everything; same-type quantifiers can swap freely.",
       svg: `<svg viewBox="0 0 384 120" role="img" aria-label="Order of nested quantifiers">
         <g font-size="11">
           <rect x="8" y="10" width="368" height="42" rx="6" fill="var(--primary-bg)" stroke="var(--primary)"/>
@@ -529,32 +522,48 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "callout",
       tone: "key",
-      text: "**∃y∀x ⇒ ∀x∃y** (the stronger one implies the weaker), but **not** the reverse. Same-type quantifiers commute: ∀x∀y ≡ ∀y∀x and ∃x∃y ≡ ∃y∃x. Only **mixed** ∀/∃ order matters.",
+      text: "**∃y∀x ⇒ ∀x∃y** (the stronger implies the weaker), but **NOT** the reverse. Same-type quantifiers commute freely: ∀x∀y ≡ ∀y∀x and ∃x∃y ≡ ∃y∃x. Only **mixed** ∀/∃ order matters.",
     },
     {
       kind: "p",
-      text: "**Negating** a nested statement is mechanical: move ¬ left to right, flipping each quantifier and finally negating the predicate. For example, ¬∀x∃y P(x,y) ≡ ∃x∀y ¬P(x,y).",
+      text: "**Negating** a nested statement is mechanical: sweep the ¬ left-to-right, flipping each quantifier, and negate the predicate at the end. E.g. ¬∀x∃y P(x,y) ≡ ∃x∀y ¬P(x,y).",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "State the meaning of a nested statement, decide if two orderings are equivalent (mixed ∀/∃ usually aren't), and negate a nested statement by flipping every quantifier.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **state the meaning** of a nested statement in English; (2) decide if two orderings are **equivalent** (mixed ∀/∃ usually aren't); (3) **negate** a nested statement by flipping every quantifier. The ∀∃ vs ∃∀ distinction is the classic trap.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Does ∀x∃y ⇒ ∃y∀x?  (b) Negate ∃x∀y P(x,y).  (c) Is ∀x∀y ≡ ∀y∀x?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **No** (only the reverse holds).  (b) **∀x∃y ¬P(x,y)**.  (c) **Yes** — same-type quantifiers commute.",
     },
   ],
 
   "rules-inference": [
     {
       kind: "p",
-      text: "A **proof** is a chain of statements where every link is *guaranteed* by the ones before it. **Rules of inference** are the legal moves — the steps you're always allowed to take.",
+      text: "A **proof** is a chain where every link is *guaranteed* by the ones before it. **Rules of inference** are the legal moves — and just as important, some natural-looking moves are **illegal** (fallacies). Telling them apart is the whole skill.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Given ‘If it rains, the match is cancelled’ and ‘It rained’ — what follows? Now the dangerous twin: given the same rule and ‘The match was cancelled’ — can you conclude ‘it rained’?",
     },
     {
       kind: "p",
-      text: "The famous one is **Modus Ponens**: if ‘p → q’ holds and p is true, you may conclude q.",
+      text: "From rain + ‘it rained’ you **may** conclude ‘cancelled’ — that's **Modus Ponens**, valid. But from ‘cancelled’ you may **NOT** conclude ‘it rained’ (it could be cancelled for many reasons) — that's the fallacy of **affirming the consequent**. Valid reasoning affirms the *antecedent*, not the consequent.",
     },
     {
       kind: "diagram",
-      caption: "Modus Ponens: the engine of forward reasoning.",
+      caption: "Modus Ponens — the engine of forward reasoning.",
       svg: `<svg viewBox="0 0 384 110" role="img" aria-label="Modus ponens">
         <g font-family="monospace" font-size="14">
           <text x="150" y="34" text-anchor="middle" fill="var(--text)">p → q</text>
@@ -568,7 +577,7 @@ export const CONTENT: Record<string, Block[]> = {
     },
     {
       kind: "table",
-      head: ["Rule", "From… you may infer"],
+      head: ["Rule", "From… infer"],
       rows: [
         ["Modus Ponens", "p → q , p  ⊢  q"],
         ["Modus Tollens", "p → q , ¬q  ⊢  ¬p"],
@@ -582,19 +591,30 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "callout",
       tone: "warn",
-      title: "Valid moves vs fallacies",
-      text: "Look-alikes are **invalid**: **Affirming the consequent** (p → q, q ⊢ p) ✗ and **Denying the antecedent** (p → q, ¬p ⊢ ¬q) ✗. Valid = affirm p (Ponens) or deny q (Tollens). Notice Modus Tollens is just the **contrapositive** in action.",
+      title: "Valid moves vs their fallacy twins",
+      text: "VALID: **affirm p** (Modus Ponens) or **deny q** (Modus Tollens). INVALID look-alikes: **affirming the consequent** (p→q, q ⊢ p) ✗ and **denying the antecedent** (p→q, ¬p ⊢ ¬q) ✗. Notice **Modus Tollens is the contrapositive in action** — that's why it's valid.",
     },
     {
       kind: "callout",
       tone: "key",
-      text: "An argument is **valid** when the conclusion is true in every row where *all* premises are true — i.e. (premises → conclusion) is a **tautology**. Validity is about *form*, not whether the statements are actually true.",
+      text: "An argument is **valid** when the conclusion is true in every row where *all* premises are true — equivalently, (premises → conclusion) is a **tautology**. Validity is about **form**, not whether the statements are actually true in the world.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Name the rule used in a step, decide if an argument is valid, and spot the two fallacies. Modus Ponens & Modus Tollens vs their invalid twins is the most common question.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **name the rule** used in a step (Modus Ponens/Tollens, the syllogisms, resolution); (2) decide if an argument is **valid**; (3) spot the **two fallacies**. The Modus Ponens/Tollens vs their invalid twins is the most common item; resolution underlies automated theorem proving (links to Unit 10 AI).",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) p→q and ¬q give you?  (b) Is ‘p→q, q, ∴ p’ valid?  (c) p→q and q→r give you?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **¬p** (Modus Tollens).  (b) **No** — affirming the consequent (fallacy).  (c) **p→r** (Hypothetical Syllogism).",
     },
   ],
 
@@ -602,87 +622,114 @@ export const CONTENT: Record<string, Block[]> = {
   "sets-relations": [
     {
       kind: "p",
-      text: "A **set** is just a collection of distinct things (its *elements*). Sets are the vocabulary of all of mathematics — and a **relation** is simply a set of ordered pairs that links elements together.",
+      text: "A **set** is just a collection of distinct things — the vocabulary the rest of mathematics is written in. A **relation** is the next idea: a precise way to say *which* elements are linked to which. We'll build both, and you'll classify relations yourself before I name the rules.",
     },
-    { kind: "h", text: "Set operations" },
+    { kind: "h", text: "1 · Set operations" },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "A = {1,2,3}, B = {3,4}. Before reading on, write down A ∪ B, A ∩ B, and A − B. Then: how many subsets does a 3-element set have?",
+    },
+    {
+      kind: "p",
+      text: "A ∪ B = {1,2,3,4} (everything), A ∩ B = {3} (in both), A − B = {1,2} (in A not B). And a set with n elements has **2ⁿ subsets** (its *power set*) — each element is independently in or out, so 2³ = 8 here.",
+    },
     {
       kind: "diagram",
-      caption: "Union = either, Intersection = both, Difference = in A not B, Complement = outside A.",
+      caption: "Union = either, Intersection = both, Difference = in A not B.",
       svg: `<svg viewBox="0 0 384 120" role="img" aria-label="Set operations Venn diagrams">
-        <defs>
-          <clipPath id="sr-u"><circle cx="44" cy="60" r="22"/></clipPath>
-          <clipPath id="sr-i"><circle cx="180" cy="60" r="22"/></clipPath>
-        </defs>
+        <defs><clipPath id="sr2-i"><circle cx="180" cy="60" r="22"/></clipPath></defs>
         <text x="56" y="18" text-anchor="middle" font-size="10" font-weight="700" fill="var(--text)">A ∪ B</text>
         <circle cx="44" cy="60" r="22" fill="var(--primary)" opacity="0.5" stroke="var(--muted)"/>
         <circle cx="72" cy="60" r="22" fill="var(--primary)" opacity="0.5" stroke="var(--muted)"/>
         <text x="192" y="18" text-anchor="middle" font-size="10" font-weight="700" fill="var(--text)">A ∩ B</text>
         <circle cx="180" cy="60" r="22" fill="none" stroke="var(--muted)"/>
         <circle cx="208" cy="60" r="22" fill="none" stroke="var(--muted)"/>
-        <g clip-path="url(#sr-i)"><circle cx="208" cy="60" r="22" fill="var(--primary)" opacity="0.6"/></g>
+        <g clip-path="url(#sr2-i)"><circle cx="208" cy="60" r="22" fill="var(--primary)" opacity="0.6"/></g>
         <text x="330" y="18" text-anchor="middle" font-size="10" font-weight="700" fill="var(--text)">A − B</text>
-        <circle cx="316" cy="60" r="22" fill="none" stroke="var(--muted)"/>
-        <circle cx="344" cy="60" r="22" fill="none" stroke="var(--muted)"/>
-        <g clip-path="url(#sr-u)"></g>
         <path d="M316,38 a22,22 0 1,0 0,44 a22,22 0 0,0 0,-44" fill="var(--primary)" opacity="0.5"/>
         <circle cx="344" cy="60" r="22" fill="var(--card)" stroke="var(--muted)"/>
       </svg>`,
     },
     {
-      kind: "ul",
-      items: [
-        "A set with n elements has **2ⁿ subsets** (its *power set*).",
-        "**De Morgan's laws** return here: (A ∪ B)′ = A′ ∩ B′ and (A ∩ B)′ = A′ ∪ B′.",
-        "**Inclusion–Exclusion:** |A ∪ B| = |A| + |B| − |A ∩ B|.",
-      ],
+      kind: "callout",
+      tone: "note",
+      title: "An old friend returns",
+      text: "**De Morgan's laws** (from logic) apply to sets too: (A ∪ B)′ = A′ ∩ B′ and (A ∩ B)′ = A′ ∪ B′. And **inclusion–exclusion**: |A ∪ B| = |A| + |B| − |A ∩ B| (you subtract the overlap you counted twice).",
     },
-    { kind: "h", text: "Relations and their properties" },
+    { kind: "h", text: "2 · Relations and their four properties" },
     {
       kind: "p",
-      text: "A **relation R on a set A** is any set of ordered pairs from A. We classify relations by four properties:",
+      text: "A **relation R on a set A** is any set of ordered pairs from A — e.g. ‘≤’ on numbers, or ‘is a sibling of’ on people. We classify every relation by four yes/no properties.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Take ‘**is a sibling of**’ on people. Is it **reflexive** (are you your own sibling?), **symmetric** (if A is B's sibling, is B A's?), **transitive** (sibling of a sibling)? Decide each before the table.",
     },
     {
       kind: "table",
-      head: ["Property", "Meaning"],
+      head: ["Property", "Means"],
       rows: [
-        ["Reflexive", "(a, a) ∈ R for every a (everything relates to itself)"],
-        ["Symmetric", "if a R b then b R a"],
-        ["Antisymmetric", "if a R b and b R a then a = b"],
-        ["Transitive", "if a R b and b R c then a R c"],
+        ["Reflexive", "(a, a) ∈ R for every a — everything relates to itself"],
+        ["Symmetric", "a R b ⇒ b R a"],
+        ["Antisymmetric", "a R b and b R a ⇒ a = b"],
+        ["Transitive", "a R b and b R c ⇒ a R c"],
       ],
     },
     {
       kind: "callout",
       tone: "key",
-      text: "Two star combinations: **Equivalence relation = Reflexive + Symmetric + Transitive** — it *partitions* the set into equivalence classes. **Partial order (POSET) = Reflexive + Antisymmetric + Transitive** — drawn as a **Hasse diagram**.",
+      text: "Two star combinations: **Equivalence relation = Reflexive + Symmetric + Transitive** — it carves the set into disjoint **equivalence classes** (like ‘same remainder mod 5’). **Partial order (POSET) = Reflexive + Antisymmetric + Transitive** — like ‘≤’ or ‘divides’, drawn as a **Hasse diagram**.",
     },
     {
       kind: "callout",
       tone: "warn",
-      title: "Common mistake",
-      text: "Antisymmetric is **not** ‘not symmetric’. A relation can be both symmetric and antisymmetric (e.g. equality). Also, ‘≤’ is antisymmetric and a partial order; ‘<’ is not reflexive, so not a partial order.",
+      title: "The classic trap",
+      text: "**Antisymmetric is NOT ‘not symmetric’.** A relation can be *both* symmetric and antisymmetric (e.g. equality ‘=’). And ‘≤’ is antisymmetric & a partial order, but ‘<’ is **not** reflexive, so not a partial order.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Check which properties a given relation has, count equivalence classes, identify a POSET / draw its Hasse diagram, and apply inclusion–exclusion or the 2ⁿ subset count.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) check which **properties** a given relation has; (2) decide if it's an **equivalence relation** or **partial order**, and **count equivalence classes**; (3) build/read a **Hasse diagram**; (4) **2ⁿ subsets** and **inclusion–exclusion** counts; (5) number of relations on a set = 2^(n²).",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Equivalence relation = which 3 properties?  (b) Subsets of a 4-element set?  (c) Can a relation be both symmetric and antisymmetric?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **Reflexive, Symmetric, Transitive.**  (b) **2⁴ = 16.**  (c) **Yes** — e.g. equality.",
     },
   ],
 
   "counting-probability": [
     {
       kind: "p",
-      text: "Counting answers *‘in how many ways?’* without listing them all. Two tiny rules start everything: the **sum rule** (either/or → add) and the **product rule** (one then another → multiply).",
+      text: "‘In how many ways?’ — without listing them all. That's **counting**, and one decision drives almost every problem: **does order matter?** Get that right and the formulas pick themselves.",
     },
-    { kind: "h", text: "Permutations vs combinations" },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Start with two tiny rules",
+      text: "**Sum rule:** if you can do A *or* B (mutually exclusive), choices add. **Product rule:** if you do A *then* B, choices multiply. A meal with 3 starters and 4 mains has 3 × 4 = 12 combinations (product), not 7.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "From {A, B, C}, pick 2. First **list** the ordered pairs (AB, BA, …) — how many? Then list the *unordered* selections (AB and BA count once) — how many now?",
+    },
     {
       kind: "p",
-      text: "The single most important distinction: **does order matter?**",
+      text: "Ordered: **6** (AB, BA, AC, CA, BC, CB) — a **permutation**. Unordered: **3** (AB, AC, BC) — a **combination**. The combination is exactly the permutation count divided by the orderings (6 ÷ 2! = 3).",
     },
     {
       kind: "diagram",
-      caption: "Pick 2 of {A,B,C}: 6 ordered arrangements (P), but only 3 unordered selections (C).",
+      caption: "Order matters → permutation; order ignored → combination.",
       svg: `<svg viewBox="0 0 384 120" role="img" aria-label="Permutations versus combinations">
         <g font-size="11" font-family="monospace">
           <text x="16" y="20" font-family="sans-serif" font-weight="700" fill="var(--primary)">Order matters → Permutation ³P₂ = 6</text>
@@ -700,22 +747,33 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "ul",
       items: [
-        "**Pigeonhole principle:** put n items in m boxes; if n > m, some box holds ≥ 2. In general some box holds ≥ ⌈n/m⌉.",
+        "**Pigeonhole principle:** put n items in m boxes; if n > m, some box holds ≥ 2. In general some box holds ≥ ⌈n/m⌉. (13 people → two share a birth month.)",
         "**Inclusion–Exclusion:** |A ∪ B| = |A| + |B| − |A ∩ B|.",
-        "**Probability:** P(E) = favourable / total. **Bayes:** P(H | E) = P(E | H)·P(H) / P(E).",
+        "**Probability** P(E) = favourable/total; **Bayes:** P(H | E) = P(E | H)·P(H) / P(E) — updates a belief after seeing evidence.",
       ],
     },
     {
       kind: "callout",
       tone: "tip",
       title: "Decide in one question",
-      text: "Ask *‘would swapping two chosen items make a different outcome?’* — **Yes → permutation**, **No → combination**. A handshake/committee is a combination; a ranking/password is a permutation.",
+      text: "Ask: *‘would swapping two chosen items give a different outcome?’* **Yes → permutation** (passwords, rankings). **No → combination** (committees, handshakes).",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Compute ⁿPᵣ / ⁿCᵣ, apply the pigeonhole minimum, use inclusion–exclusion, and plug into Bayes' theorem. Watch the order-matters cue — it decides P vs C.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) compute **ⁿPᵣ / ⁿCᵣ** (decide order first); (2) **pigeonhole** minimum (⌈n/m⌉); (3) **inclusion–exclusion** counts; (4) plug into **Bayes' theorem**; (5) basic probability of an event. Mixing up P and C, and forgetting the −|A∩B|, are the usual losses.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) A 4-digit PIN — permutation or combination?  (b) ⁵C₂ = ?  (c) 5 letters into 4 boxes — at least one box has how many?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **Permutation** (order matters).  (b) **10**.  (c) at least **⌈5/4⌉ = 2** (pigeonhole).",
     },
   ],
 
@@ -723,17 +781,26 @@ export const CONTENT: Record<string, Block[]> = {
   "graph-theory": [
     {
       kind: "p",
-      text: "A **graph** models *things and the links between them* — cities and roads, people and friendships, web pages and links. Formally G = (V, E): a set of **vertices** V and **edges** E joining them.",
+      text: "A **graph** models *things and the links between them* — cities and roads, people and friendships, web pages and hyperlinks. Formally G = (V, E): **vertices** V joined by **edges** E. A handful of ideas unlock the whole topic; we'll discover the most useful one first.",
     },
     {
       kind: "callout",
-      tone: "key",
-      text: "**Handshake lemma:** the sum of all vertex **degrees = 2 × (number of edges)** — because every edge adds 1 to two vertices. Consequence: the number of odd-degree vertices is always even.",
+      tone: "try",
+      text: "Draw any graph and add up the **degree** (number of edges) of every vertex. Compare that total to the number of edges. Try a couple of graphs — what's the relationship?",
     },
-    { kind: "h", text: "Two journeys students confuse" },
+    {
+      kind: "p",
+      text: "The degree-sum is always **exactly twice** the number of edges — because each edge has two ends, contributing 1 to two vertices. That's the **Handshake Lemma: Σ deg = 2·|E|.** A neat corollary falls out: the number of **odd-degree vertices is always even**.",
+    },
+    { kind: "h", text: "Two journeys students mix up" },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "‘Trace a route using every **edge** exactly once’ vs ‘visit every **vertex** exactly once’. These are two famous, *different* problems. Which is named after Euler, and which after Hamilton?",
+    },
     {
       kind: "diagram",
-      caption: "Euler trail uses every EDGE once; Hamiltonian uses every VERTEX once.",
+      caption: "Eulerian = every EDGE once; Hamiltonian = every VERTEX once.",
       svg: `<svg viewBox="0 0 384 130" role="img" aria-label="Euler versus Hamiltonian">
         <g font-size="10">
           <text x="96" y="16" text-anchor="middle" font-weight="700" fill="var(--primary)">Eulerian — every edge</text>
@@ -752,39 +819,54 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "ul",
       items: [
-        "**Eulerian** circuit exists ⇔ graph is connected and **every vertex has even degree** (an Euler *path* allows exactly 2 odd-degree vertices).",
-        "**Hamiltonian** (visit every vertex once) has **no easy test** — it's an NP-hard style problem.",
-        "**Tree:** a connected graph with **no cycles**; n vertices ⇒ exactly **n − 1 edges**. A **spanning tree** reaches all vertices with the fewest edges (MST = cheapest, via Prim/Kruskal).",
-        "**Planar** graph can be drawn with no crossings; **Euler's formula** V − E + F = 2. K₅ and K₃,₃ are the smallest non-planar graphs.",
-        "**Bipartite** = 2-colourable = contains **no odd cycle**.",
+        "**Eulerian** (every edge) has a clean test: an Euler **circuit** exists ⇔ the graph is connected and **every vertex has even degree**; an Euler **path** allows exactly **2** odd-degree vertices.",
+        "**Hamiltonian** (every vertex) has **no easy test** — it's an NP-hard-style problem (this is the trap: people expect a degree rule, but there isn't one).",
+        "**Tree:** connected with **no cycles**; n vertices ⇒ exactly **n − 1 edges**. Spanning tree reaches all vertices; **MST** = cheapest one (Prim/Kruskal).",
+        "**Planar** (drawable without crossings): **Euler's formula V − E + F = 2**. K₅ and K₃,₃ are the smallest non-planar graphs. **Bipartite** = 2-colourable = **no odd cycle**.",
       ],
     },
     {
       kind: "callout",
       tone: "tip",
       title: "Engrave the difference",
-      text: "**Eul**er → **E**dges (check degree parity). **Ham**ilton → vertices (hard, no shortcut). Tree always has **n − 1** edges.",
+      text: "**Eul**er → **E**dges (just check degree parity). **Ham**ilton → vertices (hard, no shortcut). A tree always has **n − 1** edges.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Apply the handshake lemma, test for an Euler path/circuit by counting odd-degree vertices, use V − E + F = 2, give a tree's edge count, and find chromatic number / check bipartiteness.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) apply the **Handshake Lemma** (degree-sum = 2E, count edges); (2) test for an **Euler path/circuit** by counting odd-degree vertices; (3) **V − E + F = 2** for planar/faces; (4) a tree's **edge count (n−1)**; (5) **chromatic number** / bipartite check. Euler-vs-Hamilton confusion is the single biggest mark-loser.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Sum of degrees = ? in terms of edges.  (b) Euler circuit needs every vertex to have what degree?  (c) A tree with 10 vertices has how many edges?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **2 × |E|.**  (b) **even** degree (and connected).  (c) **9** (n − 1).",
     },
   ],
 
   "boolean-algebra": [
     {
       kind: "p",
-      text: "**Boolean algebra** is the same true/false logic from earlier, now treated as **algebra** for designing circuits. Values are 0 and 1; the operations are **· (AND)**, **+ (OR)** and **¬ (NOT)**.",
+      text: "Remember Boole turning logic into algebra? **Boolean algebra** is that algebra used to *design and simplify circuits*. Values are 0 and 1; operations are **· (AND), + (OR), ¬ (NOT)** — the very same logic from the start of this unit, now building hardware.",
     },
     {
       kind: "p",
-      text: "A function is usually written as **Sum of Products (SOP)** — an OR of AND-terms (the DNF you already met). The goal is **minimization**: the smallest equivalent expression means the cheapest circuit. The fastest hand tool is the **Karnaugh map (K-map)**.",
+      text: "A function is usually written as **Sum of Products (SOP)** — an OR of AND-terms (the DNF you already met). The goal is **minimisation**: a smaller expression = a cheaper, faster circuit. The fastest hand tool is the **Karnaugh map (K-map)**.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Below, the value B is 1 in all four cells where B appears, regardless of A or C. If a variable doesn't affect the output across a group of 1s, should it appear in the simplified term? Look at the circled group and guess the one-letter answer.",
     },
     {
       kind: "diagram",
-      caption: "K-map: place each 1, then circle the largest groups of adjacent 1s (sizes 1,2,4,8…). One circled group = one simplified term.",
+      caption: "K-map: circle the largest groups of adjacent 1s (sizes 1,2,4,8…). One group = one simplified term.",
       svg: `<svg viewBox="0 0 384 140" role="img" aria-label="Karnaugh map grouping">
         <g font-size="11" font-family="monospace">
           <text x="22" y="30" fill="var(--muted)">AB→</text>
@@ -806,41 +888,65 @@ export const CONTENT: Record<string, Block[]> = {
             )
             .join("")}
           <rect x="120" y="46" width="124" height="72" rx="10" fill="none" stroke="#c0392b" stroke-width="2"/>
-          <text x="182" y="134" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#c0392b">this group of 4 ones simplifies to just  B</text>
+          <text x="182" y="134" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#c0392b">this group of four 1s simplifies to just  B</text>
         </g>
       </svg>`,
     },
     {
+      kind: "p",
+      text: "The answer is **B** — A and C change across the group while the output stays 1, so they drop out. Bigger groups eliminate more variables, giving simpler terms.",
+    },
+    {
       kind: "callout",
       tone: "key",
-      text: "Boolean algebra mirrors propositional logic exactly: **AND ↔ ∧, OR ↔ ∨, NOT ↔ ¬**, and the same laws (De Morgan, distributive, duality) apply. Master one and you've mastered both — plus the digital-logic part of Unit 2.",
+      text: "Boolean algebra **mirrors propositional logic exactly**: AND↔∧, OR↔∨, NOT↔¬, and the same laws (De Morgan, distributive, **duality**). **NAND and NOR are universal** — any circuit can be built from one of them alone. Master this and you've mastered the digital-logic part of Unit 2 too.",
     },
     {
       kind: "callout",
       tone: "tip",
       title: "K-map rules",
-      text: "Group only **1s**, in rectangles of size **2ᵏ** (1, 2, 4, 8…), as **large** as possible, wrapping around edges. Bigger groups = fewer variables in the term. Every 1 must be covered at least once.",
+      text: "Group only **1s**, in rectangles of size **2ᵏ** (1, 2, 4, 8…), as **large** as possible, wrapping around edges. Bigger group = fewer variables in the term. Every 1 must be covered at least once. *Don't-care* (×) cells may be used to enlarge a group.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Minimise a function with a K-map, convert between SOP/POS and minterm/maxterm lists, apply Boolean laws (especially De Morgan & absorption), and use duality. Don't-care terms (×) may be grouped to enlarge groups.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **minimise** a function with a K-map; (2) convert SOP↔POS and minterm/maxterm lists (Σm / ΠM); (3) apply **Boolean laws** (especially De Morgan & absorption); (4) **duality**; (5) recall **NAND/NOR are universal**.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) SOP means OR-of-? .  (b) A K-map group of 4 (in a 3-variable map) leaves how many variables in the term?  (c) Which gates are universal?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) OR of **AND-terms** (products).  (b) **1** variable (group of 4 removes 2 of 3).  (c) **NAND and NOR.**",
     },
   ],
 
   "optimization": [
     {
       kind: "p",
-      text: "**Optimization** finds the *best* outcome — maximum profit, minimum cost — subject to limits. **Linear Programming (LP)** is the core case: a linear **objective** to maximise/minimise under linear **constraints** (inequalities).",
+      text: "**Optimization** finds the *best* outcome — most profit, least cost — under limits. The core case is **Linear Programming (LP)**: a linear goal to maximise/minimise, subject to linear **constraints**. There's a beautiful shortcut to where the answer lives.",
     },
     {
       kind: "p",
-      text: "With two variables you can solve it by **graphing**. The constraints carve out a **feasible region** (a convex polygon). The magic fact below makes the rest easy:",
+      text: "With two variables you can **graph** it: the constraints carve out a **feasible region** (a convex polygon of all allowed points). Now the key question:",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "The objective (e.g. profit = 3x + 2y) keeps rising as you push in one direction across the feasible polygon. Where in that region will the maximum be — somewhere in the middle, on an edge, or at a **corner**? Reason it out before reading.",
+    },
+    {
+      kind: "p",
+      text: "It's always at a **corner (vertex)**. A linear objective increases steadily in one direction, so it gets pushed until it can't move further — which is a corner of the polygon. That single fact *is* the graphical method.",
     },
     {
       kind: "diagram",
-      caption: "Shade the feasible region; the optimum sits on a CORNER (vertex), never inside.",
+      caption: "Shade the feasible region; the optimum sits on a CORNER, never strictly inside.",
       svg: `<svg viewBox="0 0 384 150" role="img" aria-label="LP feasible region">
         <line x1="40" y1="120" x2="360" y2="120" stroke="var(--muted)"/>
         <line x1="40" y1="120" x2="40" y2="14" stroke="var(--muted)"/>
@@ -858,21 +964,32 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "callout",
       tone: "key",
-      text: "**The optimum of an LP always lies at a vertex (corner point) of the feasible region.** So you just evaluate the objective at each corner and pick the best — that's the whole graphical method, and the idea the **Simplex** method automates for many variables.",
+      text: "**The optimum of an LP always lies at a vertex of the feasible region.** So evaluate the objective at every corner and pick the best — that's the whole graphical method, and exactly what the **Simplex** method automates (walking corner-to-corner) when there are too many variables to draw.",
     },
     {
       kind: "ul",
       items: [
-        "**Simplex method** walks corner-to-corner toward the optimum when there are too many variables to graph; **duality** pairs every LP with a related one whose optimum value matches.",
-        "**Transportation & assignment** problems are special LPs solved by table methods (e.g. Hungarian method for assignment).",
-        "**PERT/CPM** schedules projects: the **critical path** is the longest chain of dependent tasks — it fixes the minimum project duration.",
+        "**Duality** pairs every LP with a related one whose optimum value matches.",
+        "**Transportation & assignment** are special LPs solved by table methods (e.g. the Hungarian method for assignment).",
+        "**PERT/CPM:** the **critical path** is the longest chain of dependent tasks — it sets the minimum project duration; tasks on it have **zero slack**.",
       ],
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Evaluate the objective at feasible-region corners to find the optimum, write an LP in standard form, and compute a PERT critical path / project duration. ‘Optimum at a vertex’ answers most graphical questions.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **evaluate corners** of a feasible region to find the optimum; (2) identify feasible/infeasible points or write an LP in standard form; (3) **PERT critical path** & project duration; (4) duality/transportation basics. ‘Optimum at a vertex’ answers most graphical questions.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) An LP optimum is found where in the feasible region?  (b) What does the Simplex method walk between?  (c) The critical path is the longest or shortest task chain?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) at a **corner (vertex)**.  (b) **corner points** of the feasible region.  (c) the **longest** chain (it fixes the minimum duration).",
     },
   ],
 
@@ -882,7 +999,18 @@ export const CONTENT: Record<string, Block[]> = {
   "digital-logic-circuits": [
     {
       kind: "p",
-      text: "Computers ultimately do everything with **two voltages** — call them 0 and 1. **Logic gates** are tiny circuits that take 0/1 inputs and produce a 0/1 output. Stack enough of them and you get adders, memory, and a whole CPU.",
+      text: "Every photo, song, and program inside a computer is ultimately **two voltages** — call them 0 and 1. **Logic gates** are the tiny circuits that take 0/1 inputs and produce a 0/1 output. Wire enough together and you get adders, memory, and an entire CPU. We'll build the intuition, and you'll predict outputs before I give them.",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Why binary, and not decimal?",
+      text: "A wire is **reliable at telling two states apart** (low vs high voltage) but unreliable at ten. Two states means rare errors and cheap, fast switches (transistors). So computers count in base-2 — and logic gates are how they *compute* with it.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Predict the output of each: **AND**(1, 0) = ?  **OR**(1, 0) = ?  **NOT**(0) = ?  **XOR**(1, 1) = ?",
     },
     {
       kind: "diagram",
@@ -903,53 +1031,73 @@ export const CONTENT: Record<string, Block[]> = {
       </svg>`,
     },
     {
+      kind: "p",
+      text: "Answers: AND(1,0) = **0** (needs all 1s), OR(1,0) = **1** (any 1), NOT(0) = **1** (flip), XOR(1,1) = **0** (same inputs → 0).",
+    },
+    {
       kind: "callout",
-      tone: "key",
-      text: "**NAND and NOR are ‘universal’ gates** — any circuit can be built from NAND alone (or NOR alone). That's why chips are mass-produced from them. (NAND = AND then NOT; NOR = OR then NOT.)",
+      tone: "try",
+      text: "A factory can cheaply mass-produce only **one** type of gate. Could you still build *any* circuit — an adder, a memory cell — from copies of just that one gate? Which gate would make that possible?",
+    },
+    {
+      kind: "p",
+      text: "Yes — if that gate is **NAND** (or **NOR**). They're **universal**: NOT, AND, OR can all be made from NAND alone, so any circuit can. That's exactly why chips are built from oceans of identical NAND gates. (NAND = AND-then-NOT; NOR = OR-then-NOT.)",
     },
     { kind: "h", text: "Two families of circuits" },
     {
       kind: "table",
       head: ["Type", "Output depends on", "Examples"],
       rows: [
-        ["Combinational", "only the current inputs", "Adder, Decoder, Multiplexer, Encoder"],
+        ["Combinational", "ONLY the current inputs", "Adder, Decoder, Multiplexer, Encoder"],
         ["Sequential", "current inputs + stored state (memory)", "Flip-flops, Registers, Counters"],
-      ],
-    },
-    {
-      kind: "ul",
-      items: [
-        "A **flip-flop** stores 1 bit. Types: **SR, D, JK, T**. The **JK** removes SR's invalid state; **T** (toggle) flips on each clock.",
-        "A **decoder** turns an n-bit code into one active line out of 2ⁿ; a **multiplexer (MUX)** selects one of 2ⁿ inputs onto a single output (the reverse is a **demultiplexer**).",
       ],
     },
     {
       kind: "callout",
       tone: "analogy",
-      text: "A **multiplexer** is a railway switch: many incoming tracks, but the *select* lever decides which single train passes through. n select lines choose among 2ⁿ inputs.",
+      text: "A **multiplexer** is a railway switch: many incoming tracks, but the *select* lever decides which single train passes. n select lines choose among **2ⁿ** inputs. A **decoder** is the reverse — an n-bit code lights exactly one of 2ⁿ output lines.",
+    },
+    {
+      kind: "callout",
+      tone: "key",
+      text: "**Combinational = no memory (output from inputs alone); Sequential = has memory (flip-flops).** A **flip-flop stores 1 bit** — types **SR, D, JK, T**: JK fixes SR's invalid state, T (toggle) flips each clock. **NAND & NOR are universal gates.**",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Compute a gate/circuit output, recall NAND & NOR are universal, count select lines for a MUX (2ⁿ inputs need n select lines), and match flip-flop type ↔ behaviour (JK has no invalid state, T toggles).",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **compute** a gate/circuit output (or fill a truth table); (2) recall **NAND/NOR are universal**; (3) **MUX select lines** (2ⁿ inputs need n select lines) and decoder/encoder sizing; (4) match **flip-flop** type ↔ behaviour (JK no invalid state, T toggles); (5) combinational vs sequential classification.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Which gates are universal?  (b) How many select lines for an 8-to-1 MUX?  (c) Is a counter combinational or sequential?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **NAND and NOR.**  (b) **3** (2³ = 8).  (c) **Sequential** (it stores a count).",
     },
   ],
 
   "data-representation": [
     {
       kind: "p",
-      text: "Inside the machine, *everything* — numbers, letters, colours — is a pattern of bits. **Data representation** is the set of agreed rules for encoding values, and how the computer does arithmetic on them.",
+      text: "Inside the machine, *everything* — numbers, letters, colours — is a pattern of bits. **Data representation** is the agreed set of rules for encoding values and doing arithmetic on them. The trickiest part, and the most-tested, is how to store **negative** numbers.",
     },
-    { kind: "h", text: "Number systems & conversion" },
     {
       kind: "p",
-      text: "The same value has different shapes in **binary (base 2), octal (8), decimal (10), hexadecimal (16)**. Group binary in 3s for octal, in 4s for hex.",
+      text: "First, the same value wears different clothes in **binary (2), octal (8), decimal (10), hexadecimal (16)**. Group binary digits in **3s** to read octal, in **4s** to read hex.",
     },
-    { kind: "h", text: "Signed numbers — 2's complement" },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "There's no minus-sign wire inside a CPU — only 0s and 1s. So how would you store **−5** in 8 bits? (Hint: find a rule that makes 5 + (−5) come out 0 using the same adder.) Take a guess at the trick before reading.",
+    },
     {
       kind: "p",
-      text: "To store negatives, computers almost always use **2's complement**: to negate a number, **invert every bit and add 1**. It lets one adder handle both addition and subtraction.",
+      text: "The standard answer is **2's complement: invert every bit of +5, then add 1.** Why it's brilliant: with this scheme, ordinary binary addition of 5 and (−5) naturally rolls over to 0, so **one adder handles both addition and subtraction**.",
     },
     {
       kind: "diagram",
@@ -969,33 +1117,48 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "callout",
       tone: "key",
-      text: "An **n-bit 2's complement** register holds values from **−2ⁿ⁻¹ to +2ⁿ⁻¹−1** (e.g. 8 bits → −128…+127). The leftmost bit is the **sign** (1 = negative). There is only **one** zero — a key advantage over 1's complement.",
+      text: "An **n-bit 2's-complement** register holds **−2ⁿ⁻¹ to +2ⁿ⁻¹−1** (8 bits → −128…+127). The leftmost bit is the **sign** (1 = negative), and there is only **one** zero — its big advantage over 1's complement (which has +0 and −0).",
     },
-    { kind: "h", text: "Real numbers — floating point" },
     {
       kind: "p",
-      text: "Fractions use **floating point** (IEEE 754): a number is stored as **sign · mantissa · 2^exponent**. Single precision = 32 bits (1 sign + 8 exponent + 23 mantissa); double = 64 bits.",
+      text: "Fractions use **floating point (IEEE 754)**: a number is **sign · mantissa · 2^exponent**. Single precision = 32 bits (1 sign + 8 exponent + 23 mantissa); double = 64 bits.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Convert between bases, take a 2's complement and do signed add/subtract, state the value range of an n-bit register (−2ⁿ⁻¹ … 2ⁿ⁻¹−1), and break down the IEEE-754 sign/exponent/mantissa fields.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **convert** between bases (binary↔octal↔hex via 3-/4-bit groups); (2) take a **2's complement** and do signed add/subtract; (3) state the **range** of an n-bit register (−2ⁿ⁻¹ … 2ⁿ⁻¹−1); (4) break down the **IEEE-754** sign/exponent/mantissa fields; (5) error-detection codes (parity).",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Range of a signed 8-bit number?  (b) 2's complement of 0000 0001?  (c) How many bits in single-precision float?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **−128 to +127.**  (b) invert → 1111 1110, +1 → **1111 1111** (= −1).  (c) **32 bits** (1 + 8 + 23).",
     },
   ],
 
   "register-transfer": [
     {
       kind: "p",
-      text: "Inside the CPU, work happens by **moving and transforming the contents of registers**. We describe this precisely with **Register Transfer Language (RTL)** — a compact notation for what moves where on each clock pulse.",
+      text: "Zoom inside the CPU and ‘running a program’ becomes something concrete: **moving and transforming the contents of registers**, one clock tick at a time. We describe this precisely with **Register Transfer Language (RTL)**.",
     },
     {
       kind: "formula",
-      text: "R2 ← R1        (copy contents of R1 into R2)",
+      text: "R2 ← R1        (copy the contents of R1 into R2)",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "You have 8 registers that all need to send data to each other. Wiring every register directly to every other takes a tangle of connections. What single shared resource could they take turns using instead — and how many select lines would choosing among 8 need?",
     },
     {
       kind: "p",
-      text: "Registers usually share a **common bus**: a control signal picks which register drives the bus, and which register reads from it. This saves wiring versus connecting every register to every other.",
+      text: "A **common bus** — one shared set of wires. A control signal picks which register *drives* the bus and which *reads* it; selecting 1 of 8 sources needs **3** select lines (2³ = 8). Far less wiring than point-to-point.",
     },
     {
       kind: "diagram",
@@ -1010,43 +1173,53 @@ export const CONTENT: Record<string, Block[]> = {
         </g>
       </svg>`,
     },
-    { kind: "h", text: "Micro-operations" },
     {
       kind: "ul",
       items: [
-        "**Arithmetic:** add, subtract, increment, decrement (R3 ← R1 + R2).",
-        "**Logic:** AND, OR, XOR, complement — bit-by-bit.",
-        "**Shift:** logical (fill 0), arithmetic (keep sign), circular/rotate (wrap bits around).",
+        "**Arithmetic** micro-ops: add, subtract, increment, decrement (R3 ← R1 + R2).",
+        "**Logic** micro-ops: AND, OR, XOR, complement — applied bit-by-bit.",
+        "**Shift** micro-ops: *logical* (fill 0), *arithmetic* (preserve the sign bit), *circular/rotate* (wrap bits around).",
       ],
     },
     {
       kind: "callout",
       tone: "key",
-      text: "A **micro-operation** is one elementary action done on data in registers during a single clock pulse. Whole instructions are just *sequences* of micro-operations — this is the bridge to control unit design.",
+      text: "A **micro-operation** is one elementary action on register data during a single clock pulse. A whole instruction is just a *sequence* of micro-operations — the bridge to the control unit. Mind the **shift types**: arithmetic shift keeps the sign; logical fills with 0.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Read/predict an RTL statement's effect, compute the result of a shift (logical vs arithmetic vs circular), and count bus/selection lines. A 2ⁿ-register bus needs an n-bit select.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) read/predict an **RTL** statement's effect; (2) compute the result of a **shift** (logical vs arithmetic vs circular); (3) **bus/select-line** counts (2ⁿ sources → n lines). Distinguishing the three shift types is the common trap.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) R2 ← R1 does what?  (b) Which shift preserves the sign bit?  (c) Select lines for a 16-register bus?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) copies R1's contents **into R2**.  (b) **arithmetic** shift.  (c) **4** (2⁴ = 16).",
     },
   ],
-
   "basic-computer-org": [
     {
       kind: "p",
-      text: "A basic computer follows the **stored-program** idea: instructions *and* data live together in memory. The CPU repeatedly **fetches, decodes, and executes** instructions — the famous **instruction cycle**.",
+      text: "What makes a computer *general-purpose* rather than a fixed gadget? The **stored-program** idea: instructions live in memory right beside the data, and the CPU just repeats one loop forever — **fetch, decode, execute**. Master that loop and the rest of architecture clicks into place.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "The CPU is about to run an instruction. What three things must happen, in order, to (1) get the instruction, (2) understand it, and (3) carry it out? Name them before the diagram.",
     },
     {
       kind: "diagram",
-      caption: "The instruction cycle repeats forever (with an interrupt check each round).",
+      caption: "The instruction cycle repeats forever (checking for interrupts each round).",
       svg: `<svg viewBox="0 0 384 130" role="img" aria-label="Instruction cycle">
         <g font-size="11">
-          ${([
-            ["Fetch", 70],
-            ["Decode", 175],
-            ["Execute", 285],
-          ] as [string, number][])
+          ${([["Fetch", 70], ["Decode", 175], ["Execute", 285]] as [string, number][])
             .map(([t, x]) => `<rect x="${x - 38}" y="40" width="76" height="34" rx="17" fill="var(--primary)" opacity="0.85"/><text x="${x}" y="62" text-anchor="middle" fill="#fff" font-weight="700">${t}</text>`)
             .join("")}
           <line x1="110" y1="57" x2="135" y2="57" stroke="var(--muted)" stroke-width="2" marker-end="url(#ic)"/>
@@ -1061,38 +1234,54 @@ export const CONTENT: Record<string, Block[]> = {
       kind: "table",
       head: ["Register", "Role"],
       rows: [
-        ["PC — Program Counter", "Address of the NEXT instruction"],
-        ["AR — Address Register", "Address currently sent to memory"],
-        ["IR — Instruction Register", "Holds the instruction being executed"],
-        ["AC — Accumulator", "Main register for results"],
-        ["DR — Data Register", "Holds data read from / written to memory"],
+        ["PC — Program Counter", "address of the NEXT instruction"],
+        ["AR — Address Register", "address currently sent to memory"],
+        ["IR — Instruction Register", "holds the instruction being executed"],
+        ["AC — Accumulator", "main register for results"],
+        ["DR — Data Register", "data read from / written to memory"],
       ],
     },
     {
       kind: "callout",
-      tone: "key",
-      text: "**Direct vs indirect addressing:** direct → the instruction holds the operand's address; indirect → it holds the address *of* the address (one extra memory lookup). Indirect needs **more memory accesses** but allows pointers.",
+      tone: "try",
+      text: "**Direct** addressing: the instruction holds the operand's address. **Indirect**: it holds the address *of* the address. Which one needs an **extra memory access** to reach the data — and why might you still want it?",
     },
     {
       kind: "p",
-      text: "An **interrupt** lets a device grab the CPU's attention: the current state is saved, the CPU services the device, then resumes — checked at the end of each instruction cycle.",
+      text: "**Indirect** needs the extra access (one lookup to get the real address, another to get the data) — but it enables **pointers** (the address can change at run time). That trade-off — flexibility for an extra memory reference — is a classic exam point.",
+    },
+    {
+      kind: "callout",
+      tone: "key",
+      text: "Loop = **Fetch → Decode → Execute**, repeated, with an **interrupt** checked at the end of each cycle (current state saved, device serviced, then resumed). **PC = next instruction's address.** Indirect addressing = one extra memory reference vs direct.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Match register ↔ function (PC = next address!), order the instruction-cycle phases, count memory accesses for direct vs indirect, and recall when interrupts are serviced (after the current instruction).",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **match register ↔ function** (PC = next address is the favourite); (2) **order the instruction-cycle** phases; (3) **count memory accesses** for direct vs indirect; (4) when **interrupts** are serviced (after the current instruction).",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Which register holds the next instruction's address?  (b) Direct or indirect needs more memory accesses?  (c) Order the cycle phases.",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **PC** (Program Counter).  (b) **Indirect.**  (c) **Fetch → Decode → Execute.**",
     },
   ],
 
   "programming-basic-computer": [
     {
       kind: "p",
-      text: "The CPU only understands **machine language** (raw binary). Humans write **assembly language** — short mnemonics like `ADD`, `LDA`, `STA` — and an **assembler** translates it to machine code.",
+      text: "The CPU only truly understands **machine language** — raw binary like `0001 0000 0110`. Writing that by hand is misery, so we write **assembly** (`LDA X`, `ADD Y`) and let an **assembler** translate it. This topic is about those layers of translation.",
     },
     {
       kind: "table",
-      head: ["Level", "Looks like", "Who runs it"],
+      head: ["Level", "Looks like", "Run by"],
       rows: [
         ["Machine language", "0001 0000 0110…", "the CPU directly"],
         ["Assembly language", "LDA X · ADD Y · STA Z", "assembler → machine code"],
@@ -1102,33 +1291,62 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "callout",
       tone: "analogy",
-      text: "Assembly is a **human-readable nickname** for machine code: `ADD` instead of `0001…`. The **assembler** is the translator that swaps nicknames back to the binary the CPU expects.",
+      text: "Assembly is a **human-readable nickname** for machine code — `ADD` instead of `0001…`. The **assembler** is the translator that swaps nicknames back into the exact binary the CPU expects. It's nearly **1-to-1**; a high-level statement is **1-to-many** machine instructions.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "An assembly program says `JMP LOOP`, but `LOOP` is a label defined *later* in the file. On its first read, the assembler hasn't seen LOOP's address yet. How could a **two-pass** assembler solve this?",
+    },
+    {
+      kind: "p",
+      text: "**Pass 1** scans the whole program and builds a **symbol table** (every label → its address). **Pass 2** then generates machine code, now that every label's address is known. (This is why it's ‘two-pass’.)",
     },
     {
       kind: "ul",
       items: [
-        "A **two-pass assembler**: pass 1 builds a **symbol table** (labels → addresses); pass 2 generates the machine code.",
         "**Program loops** repeat code using a counter and a conditional branch.",
-        "A **subroutine** (function) is called and returns to where it left off — the **return address** is saved (often on a stack).",
+        "A **subroutine** (function) is called and **returns** to where it left off — the **return address** is saved (often on a stack).",
+        "**I/O programming** transfers data to/from devices via instructions.",
       ],
     },
     {
       kind: "callout",
       tone: "key",
-      text: "The key idea: each layer **translates down** to the one below. Assembly ↔ machine is essentially 1-to-1; high-level languages are 1-to-many (one statement → many machine instructions).",
+      text: "Each layer **translates down** to the one below. The **assembler** + its **symbol table** convert symbolic assembly to machine code in two passes. A **subroutine** works by saving the **return address** so control can come back.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Identify the role of the assembler & symbol table, distinguish machine vs assembly vs high-level, and trace a small assembly loop. Subroutine = save return address is a common one-liner.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) role of the **assembler** & **symbol table**; (2) distinguish machine vs assembly vs high-level (1-to-1 vs 1-to-many); (3) why **two passes** are needed (forward references); (4) subroutine = save return address; trace a small assembly loop.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) What does pass 1 of an assembler build?  (b) Assembly→machine is roughly 1-to-? .  (c) What does a subroutine save to return?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) the **symbol table** (labels → addresses).  (b) **1-to-1.**  (c) the **return address.**",
     },
   ],
 
   "microprogrammed-control": [
     {
       kind: "p",
-      text: "The **control unit** generates the signals that drive every micro-operation. There are two ways to build it: **hardwired** (fixed logic gates) or **microprogrammed** (signals stored as words in a small memory).",
+      text: "Something has to generate the precise control signals that drive every micro-operation — open this gate, latch that register, now. That something is the **control unit**, and there are two ways to build it, with a sharp trade-off you'll be asked to weigh.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Option A: build the control logic out of **fixed gates** wired for speed. Option B: store the control signals as **words in a small memory** you can rewrite. Before reading: which is **faster**, and which is **easier to modify** for a new instruction set?",
+    },
+    {
+      kind: "p",
+      text: "**Hardwired (A) is faster** (it's just gates) but **rigid** — changing it means redesigning circuits. **Microprogrammed (B) is flexible** (rewrite the control memory) but **slower** (each step is a memory lookup). That's the whole trade-off.",
     },
     {
       kind: "diagram",
@@ -1159,25 +1377,37 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "callout",
       tone: "key",
-      text: "Trade-off in one line: **hardwired = fast but inflexible; microprogrammed = flexible but slower.** Address sequencing decides which control word runs next.",
+      text: "One line: **hardwired = fast but inflexible; microprogrammed = flexible but slower.** The **control memory** holds control words; **address sequencing** (via the CAR) decides which runs next. RISC→hardwired, CISC→microprogrammed.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Compare hardwired vs microprogrammed (speed/flexibility), define control memory & control word, and link RISC→hardwired, CISC→microprogrammed.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **compare hardwired vs microprogrammed** (speed/flexibility); (2) define **control memory / control word**; (3) the **CAR & address sequencing** role; (4) link **RISC→hardwired, CISC→microprogrammed.**",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Which control unit is faster?  (b) Which is easier to modify?  (c) CISC tends to use which?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **Hardwired.**  (b) **Microprogrammed.**  (c) **Microprogrammed** control.",
     },
   ],
 
   "cpu": [
     {
       kind: "p",
-      text: "The **CPU** is the brain that executes instructions. Its design choices — how registers are arranged, what an instruction looks like, and how it finds operands — decide a machine's speed and style (**RISC** vs **CISC**).",
+      text: "The **CPU** is the brain that executes instructions. Three design choices shape its speed and personality: how **instructions are formatted**, how it **finds operands** (addressing modes), and the big philosophy split — **RISC vs CISC**.",
     },
     { kind: "h", text: "Instruction formats" },
     {
-      kind: "p",
-      text: "An instruction packs an **opcode** (what to do) plus where the operands are. Designs differ by how many addresses each instruction carries:",
+      kind: "callout",
+      tone: "try",
+      text: "‘Add R2 and R3, put the result in R1’. Write it as a 3-address instruction. Now imagine a CPU that only has *one* special register (the accumulator) — how few addresses could an ADD instruction need?",
     },
     {
       kind: "table",
@@ -1213,31 +1443,47 @@ export const CONTENT: Record<string, Block[]> = {
       kind: "ul",
       items: [
         "**Immediate** — operand is *in* the instruction. **Register** — operand is in a register.",
-        "**Direct** — address field is the operand's address. **Indirect** — address field points to the address.",
-        "**Indexed / Base / Relative** — effective address = a register + an offset (great for arrays & loops).",
+        "**Direct** — address field *is* the operand's address. **Indirect** — it points to the address (extra memory reference).",
+        "**Indexed / Base / Relative** — effective address = a register + an offset (perfect for arrays & loops).",
       ],
     },
     {
       kind: "callout",
       tone: "key",
-      text: "**RISC vs CISC:** RISC = few, simple, fixed-length instructions, many registers, mostly hardwired, one instruction per cycle. CISC = many complex variable-length instructions, microprogrammed. RISC trades instruction richness for **speed and pipelining**.",
+      text: "**RISC vs CISC:** RISC = few, simple, fixed-length instructions, many registers, mostly **hardwired**, ~one instruction per cycle, easy to **pipeline**. CISC = many complex variable-length instructions, **microprogrammed**. RISC trades instruction richness for **speed**. A **stack machine = 0-address**; **indirect = extra memory reference.**",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Compute the **effective address** for a given mode, identify a 0/1/2/3-address format, and contrast RISC vs CISC. ‘Indirect needs an extra memory reference’ and ‘stack machine = 0-address’ are favourites.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) compute the **effective address** for a given mode; (2) identify a **0/1/2/3-address** format; (3) **RISC vs CISC** contrasts. ‘Stack → 0-address’ and ‘indirect needs an extra memory access’ are staples.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) A stack machine uses how many addresses per instruction?  (b) RISC usually uses hardwired or microprogrammed control?  (c) Which mode has the operand inside the instruction itself?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **0-address.**  (b) **Hardwired.**  (c) **Immediate.**",
     },
   ],
 
   "pipeline-vector": [
     {
       kind: "p",
-      text: "**Pipelining** speeds up the CPU like an assembly line: while one instruction is being executed, the next is being decoded, and a third is being fetched — all at once. No single instruction finishes faster, but **more finish per second**.",
+      text: "How do you make a CPU faster *without* a faster clock? **Pipelining** — run instructions like a factory assembly line, so several are in progress at once, each in a different stage.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "An instruction passes through 4 stages: Fetch, Decode, Execute, Write. In a pipeline, do you wait for instruction 1 to fully finish before starting instruction 2's Fetch — or can stage 1 start on instruction 2 while instruction 1 moves to stage 2? Picture the timeline.",
     },
     {
       kind: "diagram",
-      caption: "4 instructions through a 4-stage pipeline: stages overlap across clock cycles.",
+      caption: "4 instructions through a 4-stage pipeline: the stages overlap across clock cycles.",
       svg: `<svg viewBox="0 0 384 132" role="img" aria-label="Pipeline space-time diagram">
         <g font-size="9">
           ${["I1", "I2", "I3", "I4"].map((ins, r) => `<text x="14" y="${42 + r * 22}" fill="var(--text)" font-weight="700">${ins}</text>`).join("")}
@@ -1256,42 +1502,54 @@ export const CONTENT: Record<string, Block[]> = {
       </svg>`,
     },
     {
-      kind: "callout",
-      tone: "key",
-      text: "For a **k-stage** pipeline running **n** instructions: total time = **(k + n − 1)** cycles instead of n·k. Ideal **speedup → k** for large n. The catch is **hazards** that stall the line.",
+      kind: "p",
+      text: "They **overlap** — that's the whole point. No single instruction finishes sooner, but **more finish per second**.",
     },
     {
-      kind: "ul",
-      items: [
-        "**Structural hazard** — two stages need the same resource at once.",
-        "**Data hazard** — an instruction needs a result not yet produced (fixed by forwarding/stalls).",
-        "**Control hazard** — a branch changes what comes next (fixed by branch prediction).",
-      ],
+      kind: "callout",
+      tone: "key",
+      text: "For a **k-stage** pipeline running **n** instructions: total = **(k + n − 1)** cycles instead of n·k. Ideal **speedup → k** for large n. The catch is **hazards**: *structural* (resource clash), *data* (need a result not ready — fixed by forwarding/stalls), *control* (a branch — fixed by branch prediction).",
     },
     {
       kind: "p",
-      text: "**Vector / array processors** push parallelism further: one instruction operates on a whole **array** of data at once (SIMD) — ideal for graphics and scientific computing.",
+      text: "**Vector / array processors** push it further (SIMD): one instruction operates on a whole **array** at once — ideal for graphics & scientific computing.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Compute pipeline cycles **(k + n − 1)**, speedup and efficiency, and identify the hazard type. Numerical pipeline questions appear almost every cycle — practise the formula.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **compute pipeline cycles (k + n − 1)**, speedup and efficiency; (2) identify the **hazard type**; (3) vector/SIMD basics. Numerical pipeline questions appear almost every cycle — drill the formula.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Cycles for a 5-stage pipeline running 10 instructions?  (b) A branch causes which hazard?  (c) Ideal speedup of a k-stage pipeline?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **k + n − 1 = 5 + 10 − 1 = 14.**  (b) **Control** hazard.  (c) **k.**",
     },
   ],
 
   "io-organization": [
     {
       kind: "p",
-      text: "The CPU must exchange data with slow outside devices (keyboard, disk, printer). **I/O organization** is about *how* that transfer is coordinated without wasting the fast CPU's time.",
+      text: "The CPU is blisteringly fast; keyboards, disks and printers are glacially slow. **I/O organization** is about coordinating that transfer **without wasting the CPU's time** waiting.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Three ways to move data from a slow device: (A) the CPU keeps **asking** ‘ready yet? ready yet?’; (B) the device **taps the CPU on the shoulder** when ready; (C) a dedicated controller moves a whole block **directly to memory**, telling the CPU only when done. Rank A, B, C from **most** CPU time wasted to **least**.",
     },
     {
       kind: "table",
       head: ["Mode", "How it works", "CPU involvement"],
       rows: [
-        ["Programmed I/O", "CPU keeps polling the device's status", "Highest — CPU busy-waits"],
-        ["Interrupt-driven", "Device interrupts the CPU when ready", "Medium — CPU works meanwhile"],
-        ["DMA", "A controller moves data directly to/from memory", "Lowest — CPU only sets up & is told when done"],
+        ["Programmed I/O", "CPU keeps polling the device's status", "Highest — busy-waits"],
+        ["Interrupt-driven", "device interrupts the CPU when ready", "Medium — CPU works meanwhile"],
+        ["DMA", "a controller moves data directly to/from memory", "Lowest — told only when done"],
       ],
     },
     {
@@ -1313,48 +1571,59 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "callout",
       tone: "key",
-      text: "**DMA (Direct Memory Access)** is the efficient choice for **bulk transfers** (e.g. disk ↔ memory): the CPU is interrupted only once at the end, instead of handling every byte. It briefly 'steals' bus cycles from the CPU.",
-    },
-    {
-      kind: "p",
-      text: "When several devices interrupt at once, a **priority** scheme decides order — e.g. a **daisy chain** (devices closer to the CPU win) or a parallel priority encoder.",
+      text: "Order (most→least CPU time): **Programmed > Interrupt > DMA.** **DMA** is the choice for **bulk transfers** (disk ↔ memory) — the CPU is interrupted only once at the end; the controller briefly ‘steals’ bus cycles (**cycle stealing**). Multiple simultaneous interrupts are ordered by **priority** (e.g. a **daisy chain** — nearest device wins).",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Rank the three transfer modes by CPU involvement, explain DMA & cycle stealing, and resolve interrupt priority (daisy chain = nearest device highest). DMA for bulk transfer is the classic answer.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **rank the three transfer modes** by CPU involvement; (2) explain **DMA & cycle stealing**; (3) resolve **interrupt priority** (daisy chain = nearest highest). ‘DMA for bulk transfer’ is the classic answer.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Which mode wastes the most CPU time?  (b) Best mode for a large disk→memory transfer?  (c) Daisy chain gives highest priority to the device that is…?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **Programmed I/O** (polling).  (b) **DMA.**  (c) **closest to the CPU.**",
     },
   ],
 
   "memory-hierarchy": [
     {
       kind: "p",
-      text: "Fast memory is expensive and small; cheap memory is large and slow. The fix is a **hierarchy** — keep what you're using *now* in tiny fast memory, and the rest further down. It works because programs show **locality** (they reuse nearby data).",
+      text: "Fast memory is tiny and expensive; cheap memory is huge and slow. You can't have one memory that's all three (fast, big, cheap) — so computers fake it with a **hierarchy**, and it works because of one deep fact about how programs behave.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Keeping a small amount of *recently-used* data in a tiny, fast memory (cache) speeds programs up enormously. **Why does that even help?** What pattern in how programs access memory makes a small cache so effective?",
+    },
+    {
+      kind: "p",
+      text: "**Locality of reference** — programs reuse the *same* data and *nearby* data over and over (loops, arrays). So a small cache holding the recent/nearby data catches the vast majority of accesses. That single property is why the whole hierarchy works.",
     },
     {
       kind: "diagram",
       caption: "Top = fastest & smallest (most expensive per bit); bottom = slowest & largest.",
       svg: `<svg viewBox="0 0 384 150" role="img" aria-label="Memory hierarchy pyramid">
         <g font-size="10" text-anchor="middle">
-          ${[
+          ${([
             ["Registers", 70, "#fff"],
             ["Cache (SRAM)", 130, "#fff"],
             ["Main memory (DRAM)", 200, "#fff"],
             ["SSD / Disk", 280, "var(--text)"],
             ["Tape / Cloud", 360, "var(--text)"],
-          ]
-            .map(([label, w, col], i) => `<rect x="${192 - Number(w) / 2}" y="${10 + i * 26}" width="${w}" height="22" rx="3" fill="var(--primary)" opacity="${0.85 - i * 0.15}"/><text x="192" y="${25 + i * 26}" fill="${col}">${label}</text>`)
+          ] as [string, number, string][])
+            .map(([label, w, col], i) => `<rect x="${192 - w / 2}" y="${10 + i * 26}" width="${w}" height="22" rx="3" fill="var(--primary)" opacity="${0.85 - i * 0.15}"/><text x="192" y="${25 + i * 26}" fill="${col}">${label}</text>`)
             .join("")}
           <text x="20" y="22" fill="var(--muted)" font-size="9" text-anchor="start">fast</text>
           <text x="20" y="140" fill="var(--muted)" font-size="9" text-anchor="start">slow</text>
         </g>
       </svg>`,
-    },
-    { kind: "h", text: "Cache — the speed multiplier" },
-    {
-      kind: "p",
-      text: "**Cache** sits between CPU and main memory, holding recently used blocks. A request that's found is a **hit**; otherwise a **miss** (fetch from main memory).",
     },
     {
       kind: "formula",
@@ -1363,67 +1632,90 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "ul",
       items: [
-        "**Mapping:** *Direct* (each block → one fixed line), *Associative* (block → any line), *Set-associative* (block → any line within a set).",
-        "**Virtual memory** uses disk to pretend RAM is larger; the **page table** maps virtual → physical pages, and a missing page causes a **page fault**.",
+        "**Cache mapping:** *Direct* (each block → one fixed line), *Associative* (any line), *Set-associative* (any line within a set).",
+        "**Virtual memory** uses disk to pretend RAM is bigger; the **page table** maps virtual → physical pages, and a missing page is a **page fault**.",
+        "**Frames = physical memory ÷ page size.**",
       ],
     },
     {
       kind: "callout",
       tone: "key",
-      text: "Two ideas power the whole topic: **locality** (recent/nearby data is reused) makes caching work, and **effective access time** (above) quantifies the payoff. A high hit ratio is everything.",
+      text: "Two ideas run the topic: **locality** (recent/nearby reuse) makes caching work, and **effective access time** quantifies the payoff. A **hit** is found in cache; a **miss** goes to main memory. A high **hit ratio** is everything.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Compute effective access time and hit ratio, work out cache mapping (which line/set a block goes to), and reason about page faults & virtual-to-physical translation. Frames = physical memory ÷ page size is a common sub-step.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **compute effective access time** & hit ratio; (2) **cache mapping** — which line/set a block maps to; (3) **page faults** & virtual→physical translation; (4) **frames = memory ÷ page size**. These numericals recur every cycle.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) What property makes caching effective?  (b) Cache time 10 ns, memory 100 ns, hit ratio 0.9 → effective access time?  (c) Frames if RAM = 4 MB, page = 2 KB?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **locality of reference.**  (b) 0.9×10 + 0.1×100 = **19 ns.**  (c) 4 MB / 2 KB = **2048.**",
     },
   ],
 
   "multiprocessors": [
     {
       kind: "p",
-      text: "A **multiprocessor** has several CPUs sharing the work to go faster than one ever could. The big questions are how they're **connected**, how they stay **consistent**, and how we **classify** such parallel machines.",
+      text: "One CPU can only go so fast. A **multiprocessor** puts several CPUs to work together. The exam centres on three things: how we **classify** such machines, how they **connect**, and how they stay **consistent**.",
     },
-    { kind: "h", text: "Flynn's taxonomy — the classic classification" },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Two knobs describe any parallel machine: how many **instruction streams** run at once (one or many), and how many **data streams** they act on (one or many). That makes a 2×2 grid of four classes. Can you name the everyday PC's class, and the GPU/vector class?",
+    },
     {
       kind: "diagram",
-      caption: "Classify by how many Instruction streams × Data streams run at once.",
+      caption: "Flynn's taxonomy — classify by Instruction streams × Data streams.",
       svg: `<svg viewBox="0 0 384 134" role="img" aria-label="Flynn's taxonomy">
         <g font-size="11" text-anchor="middle">
           <text x="120" y="16" fill="var(--muted)" font-size="9">single data</text>
           <text x="280" y="16" fill="var(--muted)" font-size="9">multiple data</text>
           <text x="22" y="48" fill="var(--muted)" font-size="9" transform="rotate(-90 22 48)">1 instr</text>
           <text x="22" y="104" fill="var(--muted)" font-size="9" transform="rotate(-90 22 104)">N instr</text>
-          ${[
+          ${([
             ["SISD", "ordinary PC", 0, 0],
             ["SIMD", "vector / GPU", 1, 0],
             ["MISD", "rare", 0, 1],
             ["MIMD", "multicore", 1, 1],
-          ]
-            .map(([t, d, c, r]) => `<rect x="${44 + Number(c) * 162}" y="${24 + Number(r) * 56}" width="150" height="48" rx="6" fill="var(--primary)" opacity="${t === "MISD" ? 0.3 : 0.85}"/><text x="${119 + Number(c) * 162}" y="${46 + Number(r) * 56}" fill="#fff" font-weight="700">${t}</text><text x="${119 + Number(c) * 162}" y="${62 + Number(r) * 56}" fill="#fff" font-size="9">${d}</text>`)
+          ] as [string, string, number, number][])
+            .map(([t, d, c, r]) => `<rect x="${44 + c * 162}" y="${24 + r * 56}" width="150" height="48" rx="6" fill="var(--primary)" opacity="${t === "MISD" ? 0.3 : 0.85}"/><text x="${119 + c * 162}" y="${46 + r * 56}" fill="#fff" font-weight="700">${t}</text><text x="${119 + c * 162}" y="${62 + r * 56}" fill="#fff" font-size="9">${d}</text>`)
             .join("")}
         </g>
       </svg>`,
     },
     {
-      kind: "ul",
-      items: [
-        "**Interconnection:** shared bus (simple, limited), crossbar switch, or multistage networks.",
-        "**Cache coherence:** when each CPU caches the same data, a write by one must not leave others stale — solved by protocols like **MESI** (snooping).",
-        "**Multicore:** several CPUs on one chip — today's mainstream MIMD.",
-      ],
+      kind: "p",
+      text: "The everyday PC is **SISD**; a GPU/vector processor is **SIMD** (one instruction on many data); independent cores are **MIMD**; **MISD** is rare.",
     },
     {
       kind: "callout",
       tone: "key",
-      text: "**Flynn's taxonomy** is the must-know: **SISD** (normal PC), **SIMD** (one instruction on many data — GPUs/vector), **MISD** (rare), **MIMD** (independent cores — multicore). Cache coherence is the price of shared data.",
+      text: "**Flynn's taxonomy** is the must-know: **SISD** (normal PC), **SIMD** (one instruction, many data — GPU/vector), **MISD** (rare), **MIMD** (independent cores — multicore). When several CPUs cache the same data, a write by one must not leave others stale — that's **cache coherence** (e.g. MESI snooping).",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Classify a machine by Flynn's taxonomy (SIMD = vector/GPU, MIMD = multicore), explain cache coherence and the need for it, and compare interconnection structures.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **classify** a machine by Flynn's taxonomy (SIMD = vector/GPU, MIMD = multicore); (2) explain **cache coherence** and why it's needed; (3) **interconnection** structures (bus, crossbar, multistage).",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) A GPU doing one op on a big array is which Flynn class?  (b) Multicore CPUs are which class?  (c) What problem arises when two cores cache the same variable?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **SIMD.**  (b) **MIMD.**  (c) **cache coherence** (stale copies).",
     },
   ],
 
@@ -1433,19 +1725,24 @@ export const CONTENT: Record<string, Block[]> = {
   "language-design": [
     {
       kind: "p",
-      text: "Different problems suit different styles of language. A **programming paradigm** is a *way of thinking* about a program — and most modern languages mix several. Knowing the four families lets you place any language quickly.",
+      text: "Why are there hundreds of programming languages instead of one? Because different problems suit different *ways of thinking*. A **programming paradigm** is exactly that — a mental model for telling a computer what to do. Knowing the four families lets you place any language instantly.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Sort these by their core style: **C** (do this, then this), **Java** (objects sending messages), **Lisp** (everything is a function), **Prolog** (state facts & rules, let it deduce). Four different paradigms — can you name them?",
     },
     {
       kind: "diagram",
-      caption: "The four paradigms — how each one tells the computer what to do.",
+      caption: "The four paradigms — how each tells the computer what to do.",
       svg: `<svg viewBox="0 0 384 116" role="img" aria-label="Programming paradigms">
         <g font-size="10" text-anchor="middle">
-          ${[
+          ${([
             ["Imperative", "step-by-step (C)"],
             ["Object-Oriented", "objects (Java, C++)"],
             ["Functional", "math functions (Lisp)"],
             ["Logic", "rules & facts (Prolog)"],
-          ]
+          ] as [string, string][])
             .map((d, i) => `<rect x="${12 + i * 92}" y="30" width="84" height="48" rx="6" fill="var(--primary)" opacity="0.85"/><text x="${54 + i * 92}" y="52" fill="#fff" font-weight="700">${d[0]}</text><text x="${54 + i * 92}" y="68" fill="#fff" font-size="8">${d[1]}</text>`)
             .join("")}
         </g>
@@ -1455,9 +1752,9 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "ul",
       items: [
-        "**Syntax** = grammar (the *form*); **semantics** = meaning. A program can be syntactically correct yet semantically wrong.",
-        "**Binding time** — when a name gets its value/type/address fixed: at compile time (**static**, faster) or run time (**dynamic**, more flexible).",
-        "Source code is turned into runnable form by a **translator** — covered in depth in Unit 8.",
+        "**Syntax** = grammar (the *form*); **semantics** = meaning. A program can be perfectly grammatical yet meaningless — like ‘colourless green ideas sleep furiously’.",
+        "**Binding time** — when a name's value/type/address is fixed: at **compile time (static**, faster) or **run time (dynamic**, more flexible).",
+        "Source code is turned into runnable form by a **translator** (compiler/interpreter — detailed in Unit 8).",
       ],
     },
     {
@@ -1466,27 +1763,47 @@ export const CONTENT: Record<string, Block[]> = {
       rows: [
         ["Translates", "the whole program at once", "line by line as it runs"],
         ["Speed", "fast execution", "slower execution"],
-        ["Errors", "reported after full scan", "stops at the first error"],
+        ["Errors", "reported after a full scan", "stops at the first error"],
         ["Example", "C, C++", "Python, classic BASIC"],
       ],
     },
     {
       kind: "callout",
       tone: "key",
-      text: "**Compiler vs interpreter:** a compiler translates *ahead of time* (one fast executable); an interpreter translates *on the fly* (flexible, easier to debug, slower). Java does both — compile to bytecode, then interpret/JIT.",
+      text: "**Compiler = translate ahead of time (one fast executable); Interpreter = translate on the fly (flexible, easier to debug, slower).** Java does **both** — compile to bytecode, then interpret/JIT. Static binding is fixed at compile time; dynamic at run time.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Classify a language by paradigm, distinguish static vs dynamic binding, and compare compiler vs interpreter. Syntax-vs-semantics and ‘which language is functional/logic’ are common one-liners.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **classify a language by paradigm** (Lisp = functional, Prolog = logic, C = imperative); (2) **static vs dynamic binding**; (3) **compiler vs interpreter** (speed, error reporting, examples); (4) syntax vs semantics.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Prolog belongs to which paradigm?  (b) Which translator stops at the first error?  (c) Java compiles to what intermediate form?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **Logic.**  (b) **Interpreter.**  (c) **Bytecode.**",
     },
   ],
 
   "elementary-data-types": [
     {
       kind: "p",
-      text: "A **data type** is two things bundled together: a **set of values** and the **operations** allowed on them. `int` means ‘whole numbers + (+ − × …)’; `bool` means ‘{true, false} + (and, or, not)’. The type tells the compiler how to store and use the bits.",
+      text: "When you declare `int x`, you're telling the compiler two things at once. Spotting what a **data type** really bundles is the key to this short but exam-friendly topic.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "`int` allows the values …−2, −1, 0, 1, 2… AND the operations + − × ÷. `bool` allows {true, false} AND and/or/not. So a data type is a bundle of **two** things — what are they?",
+    },
+    {
+      kind: "p",
+      text: "A **type = a set of values + the operations allowed on them.** That's why the compiler knows how to store the bits and what you may do with them.",
     },
     {
       kind: "diagram",
@@ -1505,29 +1822,38 @@ export const CONTENT: Record<string, Block[]> = {
       </svg>`,
     },
     {
-      kind: "ul",
-      items: [
-        "**Scalar (primitive):** a single indivisible value — int, float, char, boolean, enumeration, pointer.",
-        "**Composite:** built from other types — array (same type, indexed), structure/record (mixed types), string, set.",
-      ],
-    },
-    {
       kind: "callout",
       tone: "key",
-      text: "A type = **values + operations**. **Strong typing** forbids mixing types without conversion (safer); **static typing** fixes types at compile time, **dynamic** at run time. C is statically & fairly weakly typed; Python is dynamically & strongly typed.",
+      text: "**Scalar (primitive)** = one indivisible value (int, float, char, bool, enum, pointer). **Composite** = built from others (array = same type indexed; structure/record = mixed types; string; set). **Strong typing** forbids mixing types without conversion; **static** fixes types at compile time, **dynamic** at run time.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Classify a type as scalar vs composite, and distinguish strong/weak and static/dynamic typing. ‘Array = homogeneous, structure = heterogeneous’ is a frequent distinction.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **classify** a type as scalar vs composite; (2) **strong/weak** and **static/dynamic** typing. ‘Array = homogeneous, structure = heterogeneous’ is the classic distinction.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) A type bundles which two things?  (b) Array vs structure — which holds mixed types?  (c) Is a pointer scalar or composite?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **values + operations.**  (b) **Structure** (heterogeneous).  (c) **Scalar.**",
     },
   ],
 
   "programming-c": [
     {
       kind: "p",
-      text: "**C** is the classic systems language: small, fast, and close to the hardware. The thing that makes C *C* — and the thing exams love — is the **pointer**: a variable that stores a memory **address**.",
+      text: "**C** is the classic systems language — small, fast, close to the hardware. Exams hammer two things: **pointers**, and **tracing the output** of tricky loops & `printf`s. We'll nail both, and you'll trace before I reveal.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "`int x = 10;` lives at memory address 200. If `p = &x`, what value does **p** hold? And what does **\\*p** give you?",
     },
     {
       kind: "diagram",
@@ -1547,49 +1873,79 @@ export const CONTENT: Record<string, Block[]> = {
       </svg>`,
     },
     {
+      kind: "p",
+      text: "**p = 200** (the *address of* x), and **\\*p = 10** (*dereference* — the value p points to). Two operators to keep straight: **&** = ‘address of’, **\\*** = ‘value at’.",
+    },
+    {
       kind: "ul",
       items: [
-        "**&x** = ‘address of x’; **\\*p** = ‘the value p points to’ (dereference).",
         "**Arrays & pointers** are linked: the array name is the address of its first element, and `a[i]` ≡ `*(a + i)`.",
         "**Storage classes** set lifetime & visibility: `auto`, `static`, `register`, `extern`.",
-        "**Format specifiers** in printf/scanf: `%d` int, `%f` float, `%c` char, `%s` string, `%x` hex.",
+        "**Format specifiers** in printf/scanf: `%d` int, `%f` float, `%c` char, `%s` string, `%x` hex, `%u` unsigned.",
       ],
     },
     {
       kind: "callout",
+      tone: "note",
+      title: "Trace it like the examiner will",
+      text: "`for (i = 0; i < 5; i++) sum += i;` — walk it: i = 0,1,2,3,4 (stops when i = 5), so sum = 0+1+2+3+4 = **10**. Read **every** part: the start, the `<` vs `<=` bound, and `i++` vs `++i`. One off-by-one flips the answer.",
+    },
+    {
+      kind: "callout",
       tone: "warn",
-      title: "Where students lose marks",
-      text: "Watch **operator precedence** and **loop bounds** in tracing questions (`i++` vs `++i`, off-by-one). A wrong **format specifier** (e.g. `%d` for a float) gives garbage. Integer division truncates: `5/2 == 2`.",
+      title: "Where marks vanish",
+      text: "**Integer division truncates:** `5/2 == 2`. A **wrong format specifier** (`%d` for a float) prints garbage. Watch **loop bounds** (`<` vs `<=`) and **precedence** in expressions. `++i` vs `i++` differs when the value is *used* in the same statement.",
+    },
+    {
+      kind: "callout",
+      tone: "key",
+      text: "**&x = address of x; \\*p = value p points to.** `a[i]` is just `*(a+i)`. Integer division throws away the remainder. Match the **format specifier** to the type, exactly.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "**Trace a for-loop and give the output**, predict pointer/array expressions, pick the right **format specifier**, and identify a **storage class's** scope/lifetime. C output-prediction numericals are very common — read every `++`, `%`, and condition carefully.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **trace a for-loop and give the output** (the most common C item); (2) predict **pointer/array** expressions; (3) pick the right **format specifier**; (4) **storage class** scope/lifetime; (5) `++i` vs `i++`. Read the code character by character — these are pure attention tests.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) What does `&x` give?  (b) `7/2` in C equals?  (c) Format specifier for a float?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) the **address** of x.  (b) **3** (integer division).  (c) **%f.**",
     },
   ],
 
   "oop": [
     {
       kind: "p",
-      text: "**Object-Oriented Programming** organises code around **objects** — bundles of *data* (attributes) and *behaviour* (methods) — instead of loose functions. A **class** is the blueprint; an **object** is a built instance of it.",
+      text: "**Object-Oriented Programming** organises code around **objects** — bundles of *data* (attributes) and *behaviour* (methods) — instead of loose functions. A **class** is the blueprint; an **object** is a built instance.",
     },
     {
       kind: "callout",
       tone: "analogy",
-      text: "A **class** is the *cookie cutter*; **objects** are the *cookies*. One `Car` class can stamp out thousands of car objects, each with its own colour and speed.",
+      text: "A **class** is the *cookie cutter*; **objects** are the *cookies*. One `Car` class stamps out thousands of car objects, each with its own colour and speed.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "OOP rests on **four pillars**. One *hides data* behind a clean interface; one *hides complexity*; one lets a class *reuse* a parent; one lets *one method name behave differently* per object. Name all four.",
     },
     {
       kind: "diagram",
       caption: "The four pillars every OOP question is built on.",
       svg: `<svg viewBox="0 0 384 110" role="img" aria-label="Four pillars of OOP">
         <g font-size="9.5" text-anchor="middle">
-          ${[
+          ${([
             ["Encapsulation", "bundle + hide data"],
             ["Abstraction", "show only essentials"],
             ["Inheritance", "reuse from a parent"],
             ["Polymorphism", "one name, many forms"],
-          ]
+          ] as [string, string][])
             .map((d, i) => `<rect x="${10 + i * 93}" y="26" width="86" height="56" rx="6" fill="var(--primary)" opacity="${0.6 + i * 0.1}"/><text x="${53 + i * 93}" y="50" fill="#fff" font-weight="700" font-size="10">${d[0]}</text><text x="${53 + i * 93}" y="66" fill="#fff" font-size="8">${d[1]}</text>`)
             .join("")}
         </g>
@@ -1599,29 +1955,48 @@ export const CONTENT: Record<string, Block[]> = {
       kind: "table",
       head: ["Pillar", "Plain meaning"],
       rows: [
-        ["Encapsulation", "Keep data + methods together and hide internals (private fields, public methods)."],
-        ["Abstraction", "Expose what an object does, hide how (interface vs implementation)."],
-        ["Inheritance", "A child class reuses & extends a parent class (‘is-a’ relationship)."],
-        ["Polymorphism", "The same call behaves differently per object (overloading / overriding)."],
+        ["Encapsulation", "keep data + methods together and hide internals (private fields, public methods)"],
+        ["Abstraction", "expose what an object does, hide how (interface vs implementation)"],
+        ["Inheritance", "a child class reuses & extends a parent (an ‘is-a’ relationship)"],
+        ["Polymorphism", "the same call behaves differently per object (overloading / overriding)"],
       ],
     },
     {
       kind: "callout",
       tone: "key",
-      text: "Memorise the four pillars: **Encapsulation, Abstraction, Inheritance, Polymorphism**. Encapsulation *hides data*; abstraction *hides complexity*; inheritance *reuses*; polymorphism *adapts behaviour*.",
+      text: "Memorise: **Encapsulation, Abstraction, Inheritance, Polymorphism.** Encapsulation *hides data*; abstraction *hides complexity*; inheritance *reuses* (‘is-a’); polymorphism *adapts behaviour* (overloading = compile-time, overriding = run-time).",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Name the pillar shown by an example, tell class vs object apart, and match feature ↔ pillar (data hiding = encapsulation, ‘is-a’ = inheritance, overriding = polymorphism).",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **name the pillar** shown by an example; (2) class vs object; (3) match feature ↔ pillar (data hiding = encapsulation, ‘is-a’ = inheritance, overriding = polymorphism).",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Which pillar = data hiding?  (b) ‘A Dog is-a Animal’ uses which pillar?  (c) Class vs object — which is the blueprint?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **Encapsulation.**  (b) **Inheritance.**  (c) the **class.**",
     },
   ],
-
   "programming-cpp": [
     {
       kind: "p",
-      text: "**C++** is C *plus* object orientation. On top of everything in C, it adds classes, and special member functions that run automatically — the favourites in exams are **constructors** and **destructors**.",
+      text: "**C++** is C *plus* object orientation. On top of everything in C, it adds classes and special member functions that run **automatically** — and the exam favourites are **constructors** and **destructors**.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "There's a special member function that has the **same name as the class**, takes **no return type** (not even void), and runs **the instant an object is created** — to set it up. What is it called, and what's its cleanup counterpart that runs when the object dies?",
+    },
+    {
+      kind: "p",
+      text: "The **constructor** (born → set up) and the **destructor** (`~ClassName()`, dies → clean up). They run automatically — you never call them by hand.",
     },
     {
       kind: "diagram",
@@ -1639,35 +2014,45 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "ul",
       items: [
-        "**Constructor:** same name as the class, **no return type**, runs automatically when an object is created. Can be overloaded (default, parameterised, copy).",
-        "**Destructor:** `~ClassName()`, no arguments, runs when the object goes out of scope — used to free resources.",
-        "**Overloading** = same name, different parameters (compile-time polymorphism). **Virtual functions** = run-time polymorphism via overriding.",
+        "**Constructor:** class's name, **no return type**, auto-runs on creation. Can be **overloaded** (default, parameterised, **copy** — takes a reference to the same class).",
+        "**Overloading** = same name, different parameters (**compile-time** polymorphism). **Virtual functions** = **run-time** polymorphism via overriding.",
         "**Templates** write type-independent code; **inheritance** can be single, multiple, multilevel or hierarchical.",
       ],
     },
     {
       kind: "callout",
-      tone: "key",
-      text: "**Constructor rules:** named like the class, **no return type (not even void)**, auto-invoked, overloadable. A **copy constructor** takes a reference to the same class. The **scope-resolution operator `::`** and a few others **cannot be overloaded**.",
+      tone: "warn",
+      title: "The traps examiners bait",
+      text: "A constructor has **NO return type** — writing one makes it an ordinary function, not a constructor. **Multiple inheritance** can duplicate a grandparent's members (the **diamond problem**), fixed with **virtual base classes**. Only **virtual** functions give run-time polymorphism. The **scope-resolution operator `::`** (and `.`, `?:`, `sizeof`) **cannot be overloaded**.",
     },
     {
       kind: "callout",
-      tone: "warn",
-      title: "Common traps",
-      text: "Constructors have **no return value** — writing one is an error, not a constructor. **Multiple inheritance** can duplicate a grandparent's members (the *diamond problem*), fixed by **virtual** base classes. Only **virtual** functions give run-time polymorphism.",
+      tone: "key",
+      text: "**Constructor: class name, no return type, auto-invoked, overloadable.** Objects are constructed in declaration order and **destroyed in reverse** order. Overloading = compile-time; virtual overriding = run-time polymorphism.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Predict **constructor/destructor call order**, identify valid constructor signatures, distinguish overloading (compile-time) vs virtual overriding (run-time), and recall which operators can't be overloaded (`::`, `.`, `?:`, `sizeof`).",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) predict **constructor/destructor call order** (reverse for destructors); (2) identify a **valid constructor** signature; (3) **overloading (compile-time) vs virtual overriding (run-time)**; (4) which operators **can't** be overloaded (`::`, `.`, `?:`, `sizeof`); (5) the diamond problem & virtual base classes.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Return type of a constructor?  (b) Run-time polymorphism needs which keyword?  (c) Can `::` be overloaded?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **none** (not even void).  (b) **virtual.**  (c) **No.**",
     },
   ],
 
   "web-programming": [
     {
       kind: "p",
-      text: "The web is a giant **client–server** conversation: your **browser (client)** asks for a page, a **server** sends it back. Web programming is the set of languages that build and power that exchange.",
+      text: "The web is a giant **client–server conversation**: your **browser (client)** asks for a page, a **server** sends it back. Web programming is the set of languages that build and power that exchange.",
     },
     {
       kind: "diagram",
@@ -1683,31 +2068,46 @@ export const CONTENT: Record<string, Block[]> = {
       </svg>`,
     },
     {
+      kind: "callout",
+      tone: "try",
+      text: "**HTML** and **XML** both use angle-bracket tags. But one is for *showing* a page and the other for *carrying* data with custom tags. Which does which — and does an **applet** run on the client or the server?",
+    },
+    {
       kind: "ul",
       items: [
-        "**HTML** structures content with tags; **DHTML** = HTML + CSS + JavaScript for interactivity; **CSS** styles it.",
-        "**XML** *describes* data with custom tags — it carries data, it doesn't display it (unlike HTML).",
-        "**Client-side** scripting (JavaScript, applets) runs in the browser; **server-side** (servlets, JSP, PHP) runs on the server.",
-        "An **applet** runs on the client (in the browser); a **servlet** runs on the server.",
+        "**HTML** structures content for **display**; **DHTML** = HTML + CSS + JavaScript for interactivity; **CSS** styles it.",
+        "**XML** *describes/carries* data with custom tags — it doesn't display anything (and it's case-sensitive & must be well-formed).",
+        "**Client-side** scripting (JavaScript, applets) runs in the **browser**; **server-side** (servlets, JSP, PHP) runs on the **server**.",
       ],
     },
     {
       kind: "callout",
       tone: "key",
-      text: "The key contrast: **HTML displays data, XML describes data**; **client-side code runs in the browser, server-side runs on the server**. Applet = client, Servlet = server.",
+      text: "**HTML displays data; XML describes data.** **Applet = client-side (in the browser); Servlet = server-side.** JavaScript runs client-side; JSP/PHP run server-side.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Identify HTML tags & structure, HTML vs XML (display vs describe; XML is case-sensitive & well-formed), and client-side vs server-side (applet vs servlet, JavaScript vs JSP/PHP).",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **HTML tags & structure**; (2) **HTML vs XML** (display vs describe; XML well-formed/case-sensitive); (3) **client-side vs server-side** (applet vs servlet, JavaScript vs JSP/PHP).",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Which carries data with custom tags — HTML or XML?  (b) A servlet runs where?  (c) Is JavaScript client- or server-side?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **XML.**  (b) on the **server.**  (c) **client-side.**",
     },
   ],
 
   "computer-graphics": [
     {
       kind: "p",
-      text: "Computer graphics turns numbers into pictures on a screen made of tiny dots called **pixels**. Two big questions: how does the **display** draw, and how do **algorithms** decide which pixels to light up for a line or circle?",
+      text: "Computer graphics turns numbers into pictures on a screen made of tiny dots — **pixels**. Two questions drive the topic: how the **display** draws, and how **algorithms** decide which pixels to light for a line or circle.",
     },
     {
       kind: "table",
@@ -1719,14 +2119,19 @@ export const CONTENT: Record<string, Block[]> = {
       ],
     },
     {
+      kind: "callout",
+      tone: "try",
+      text: "You want to draw a slanted straight line on a grid of square pixels. Since you can only light whole pixels, what will a diagonal line actually look like up close — and what's that effect called?",
+    },
+    {
       kind: "diagram",
-      caption: "A line on a pixel grid: the algorithm picks the nearest pixels — a tiny ‘staircase’.",
+      caption: "A line on a pixel grid: the algorithm picks the nearest pixels — a tiny ‘staircase’ (aliasing).",
       svg: `<svg viewBox="0 0 384 120" role="img" aria-label="Raster line staircase">
         <g>
           ${[0, 1, 2, 3, 4, 5, 6, 7]
             .map((c) => [0, 1, 2, 3].map((r) => `<rect x="${40 + c * 30}" y="${20 + r * 22}" width="30" height="22" fill="none" stroke="var(--border)"/>`).join(""))
             .join("")}
-          ${[[0, 3], [1, 3], [2, 2], [3, 2], [4, 1], [5, 1], [6, 0], [7, 0]]
+          ${([[0, 3], [1, 3], [2, 2], [3, 2], [4, 1], [5, 1], [6, 0], [7, 0]] as [number, number][])
             .map(([c, r]) => `<rect x="${41 + c * 30}" y="${21 + r * 22}" width="28" height="20" fill="var(--primary)" opacity="0.8"/>`)
             .join("")}
           <line x1="40" y1="108" x2="280" y2="20" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4 3"/>
@@ -1734,34 +2139,55 @@ export const CONTENT: Record<string, Block[]> = {
       </svg>`,
     },
     {
+      kind: "p",
+      text: "A **staircase** (aliasing). The line-drawing algorithm picks the nearest pixel for each step; smoothing it out is *anti-aliasing*.",
+    },
+    {
       kind: "ul",
       items: [
         "**Line drawing:** **DDA** uses floating-point steps (simpler, slower); **Bresenham** uses only **integer** add/subtract (faster, no rounding) — the preferred algorithm.",
-        "**Circles:** the **midpoint circle** algorithm, using 8-way symmetry.",
-        "**Filling:** **scan-line** polygon fill, plus **boundary-fill** and **flood-fill** (recursively fill from a seed point).",
+        "**Circles:** the **midpoint circle** algorithm (8-way symmetry).",
+        "**Filling:** **scan-line** polygon fill, plus **boundary-fill** and **flood-fill** (fill outward from a seed point).",
       ],
     },
     {
       kind: "callout",
       tone: "key",
-      text: "**Raster = pixels in a frame buffer; vector = line commands.** For lines, **Bresenham beats DDA** because it avoids floating-point and rounding using pure integer arithmetic.",
+      text: "**Raster = pixels in a frame buffer; vector = line commands.** For lines, **Bresenham beats DDA** by using pure integer arithmetic (no floats, no rounding).",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Compare DDA vs Bresenham (integer vs float), raster vs random scan, and boundary-fill vs flood-fill. ‘Bresenham uses integer arithmetic’ and ‘frame buffer stores the raster image’ are common answers.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **DDA vs Bresenham** (integer vs float); (2) **raster vs random** scan (frame buffer vs display list); (3) **boundary-fill vs flood-fill**. ‘Bresenham uses integer arithmetic’ recurs.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Which line algorithm avoids floating point?  (b) Raster image is stored in the…?  (c) The staircase effect is called?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **Bresenham.**  (b) **frame buffer.**  (c) **aliasing.**",
     },
   ],
+
 
   "graphics-3d": [
     {
       kind: "p",
-      text: "3-D graphics takes objects defined in three dimensions and figures out how to show them on a flat 2-D screen — through **projection**, while deciding what's hidden behind what.",
+      text: "3-D graphics takes objects defined in three dimensions and works out how to show them on a flat 2-D screen — through **projection** — while deciding what's hidden behind what.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Two ways to flatten a 3-D scene onto a screen: one keeps far objects the **same size** as near ones (good for engineering drawings); the other makes far objects **shrink** toward a point (like a photo, like railway tracks meeting at the horizon). Which is which — and which has a *vanishing point*?",
     },
     {
       kind: "diagram",
-      caption: "Parallel projection keeps rays parallel; perspective converges them to the eye (objects shrink with distance).",
+      caption: "Parallel projection keeps rays parallel; perspective converges them to the eye (far objects shrink).",
       svg: `<svg viewBox="0 0 384 120" role="img" aria-label="Parallel versus perspective projection">
         <g font-size="9.5">
           <text x="96" y="16" text-anchor="middle" font-weight="700" fill="var(--primary)">Parallel</text>
@@ -1775,24 +2201,38 @@ export const CONTENT: Record<string, Block[]> = {
       </svg>`,
     },
     {
+      kind: "p",
+      text: "**Parallel** keeps sizes true (engineering/CAD). **Perspective** converges to a viewpoint, giving a **vanishing point** and realistic foreshortening (photos, games).",
+    },
+    {
       kind: "ul",
       items: [
-        "**Parallel projection** — projection lines stay parallel; keeps true dimensions (used in CAD). **Perspective** — lines converge to a viewpoint, giving a **vanishing point** and realistic foreshortening.",
-        "**Curves & surfaces:** **Bezier** and **B-spline** curves are defined by control points; a Bezier curve passes through its first and last control points and stays inside their convex hull.",
+        "**Curves & surfaces:** **Bezier** and **B-spline** curves are shaped by control points; a Bezier curve passes through its **first and last** control points, stays inside their **convex hull**, and has degree = (control points − 1).",
         "**Hidden-surface removal:** the **Z-buffer (depth buffer)** keeps the nearest pixel; **back-face culling** drops faces pointing away.",
-        "**Illumination models** (ambient, diffuse, specular) plus shading (Gouraud, Phong) make surfaces look lit.",
+        "**Illumination** (ambient, diffuse, specular) + shading (Gouraud, Phong) make surfaces look lit.",
       ],
     },
     {
       kind: "callout",
       tone: "key",
-      text: "**Parallel projection preserves size; perspective adds a vanishing point and depth.** For ‘what's visible’, the **Z-buffer** compares depths pixel-by-pixel — simple and the most common hidden-surface method.",
+      text: "**Parallel preserves size; perspective adds a vanishing point & depth.** For ‘what's visible’, the **Z-buffer** compares depths pixel-by-pixel — the simplest and most common hidden-surface method.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Distinguish parallel vs perspective projection (vanishing point), recall **Bezier curve** properties (endpoints, convex hull, degree = control points − 1), and name hidden-surface methods (Z-buffer, back-face culling).",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **parallel vs perspective** (vanishing point, foreshortening); (2) **Bezier curve** properties (endpoints, convex hull, degree = control points − 1); (3) hidden-surface methods (**Z-buffer**, back-face culling).",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Which projection has a vanishing point?  (b) A Bezier curve passes through which control points?  (c) Simplest hidden-surface method?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **Perspective.**  (b) the **first and last.**  (c) **Z-buffer.**",
     },
   ],
 
@@ -1804,11 +2244,16 @@ export const CONTENT: Record<string, Block[]> = {
   "db-concepts-architecture": [
     {
       kind: "p",
-      text: "A **DBMS** is software that stores data in an organised way and lets many users query and update it safely. Versus loose files, it gives **controlled redundancy, consistency, security, and concurrent access**.",
+      text: "A **DBMS** is software that stores data in an organised way and lets many users query and update it **safely and at once**. Versus loose files, it gives controlled redundancy, consistency, security and concurrency. Its big design idea is splitting the database into **three levels**.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "A company changes how its data is physically stored on disk (new indexes, new file layout) for speed. Should every application that uses the database have to be **rewritten** because of this? What architectural idea would let storage change *without* breaking the apps above it?",
     },
     {
       kind: "p",
-      text: "Its big design idea is **three levels of abstraction** (the ANSI/SPARC architecture) — separating *what data means* from *how it's stored*, so one can change without breaking the other.",
+      text: "No — that's the whole point of **data independence**, delivered by the **three-schema (ANSI/SPARC) architecture**: separating *what data means* from *how it's stored* so each can change without disturbing the other.",
     },
     {
       kind: "diagram",
@@ -1828,28 +2273,39 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "ul",
       items: [
-        "**External / View level** — what each user or application sees (custom slices).",
-        "**Conceptual / Logical level** — the whole database's structure: entities, relationships, constraints.",
+        "**External / View level** — what each user or app sees (custom slices).",
+        "**Conceptual / Logical level** — the whole DB's structure: entities, relationships, constraints.",
         "**Internal / Physical level** — how bytes, files and indexes are actually stored.",
       ],
     },
     {
       kind: "callout",
       tone: "key",
-      text: "**Data independence** is the payoff: **logical** independence = change the conceptual schema without touching user views (harder to achieve); **physical** independence = change storage without touching the logical schema. Also know: **degree** = number of attributes, **cardinality** = number of tuples.",
+      text: "**Physical** data independence = change storage without touching the logical schema (easy). **Logical** data independence = change the conceptual schema without touching views (harder). Also lock in: **degree = number of attributes (columns), cardinality = number of tuples (rows).**",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Match level ↔ description, define the two data independences (logical is the tougher one), and the degree-vs-cardinality one-liner. DBMS advantages over file systems also appear.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **match level ↔ description**; (2) define the **two data independences** (logical is the tougher one); (3) **degree vs cardinality**; (4) DBMS advantages over file systems.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Which independence is harder to achieve?  (b) Degree of a relation = ?  (c) Which level does a single user's customised view live at?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **Logical** data independence.  (b) the **number of attributes**.  (c) the **external / view** level.",
     },
   ],
 
   "data-modeling": [
     {
       kind: "p",
-      text: "**Data modelling** is the step of deciding *what* to store and *how things relate* — before writing a single table. It moves from a human picture to a precise design through three stages.",
+      text: "Before building a single table, you decide *what* to store and *how things relate*. **Data modelling** is that planning step — and it flows through three stages, each refining the last.",
     },
     {
       kind: "ol",
@@ -1862,14 +2318,19 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "callout",
       tone: "key",
-      text: "Think of the flow **ER diagram → tables (relational model) → queries**. The sub-topics below follow exactly that path: ER Diagram, Relational Model, Keys, and Codd's rules for a ‘true’ relational system.",
+      text: "The flow is **ER diagram → tables (relational model) → queries**. The sub-topics below follow exactly that path — **ER Diagram → Relational Model → Keys → Codd's rules** for a ‘truly relational’ system. Start with the ER diagram.",
     },
   ],
 
   "er-model": [
     {
       kind: "p",
-      text: "An **Entity–Relationship (ER) diagram** is a picture of the data: the **things** we store (entities), their **details** (attributes), and how they **connect** (relationships). It's the blueprint before tables exist.",
+      text: "An **Entity–Relationship (ER) diagram** is a *picture* of the data — the **things** you store, their **details**, and how they **connect** — drawn before any table exists. It's the architect's blueprint.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "ER diagrams use three core shapes: one for a **thing** (Student), one for a **detail** (roll_no), one for a **link** (enrolls). Guess which shape is which: rectangle, ellipse, diamond?",
     },
     {
       kind: "diagram",
@@ -1891,27 +2352,43 @@ export const CONTENT: Record<string, Block[]> = {
       items: [
         "**Cardinality** — how many entities relate: 1:1, 1:N, M:N.",
         "**Participation** — *total* (every entity must take part, double line) vs *partial*.",
-        "**Weak entity** (double rectangle) — has no key of its own; identified through an owner + a partial key.",
+        "**Weak entity** (double rectangle) — no key of its own; identified via an owner + a partial key.",
         "**Attributes** — key (underlined), composite, multivalued (double ellipse), derived (dashed).",
       ],
     },
     {
       kind: "callout",
       tone: "key",
-      text: "Converting ER → tables: an **M:N relationship always becomes its own table** (holding both keys as foreign keys); a **multivalued attribute** also becomes a separate table; a 1:N usually folds the ‘1’ side's key into the ‘N’ side.",
+      text: "Converting ER → tables: an **M:N relationship ALWAYS becomes its own table** (holding both keys as foreign keys); a **multivalued attribute** also becomes a separate table; a 1:N usually folds the ‘1’ side's key into the ‘N’ side. The M:N → separate table rule is the classic trap.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Match symbol ↔ meaning, identify weak vs strong entity and cardinality, and find the **minimum number of tables** for an ER diagram. The M:N → separate table rule is the classic trap.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **match symbol ↔ meaning**; (2) **weak vs strong** entity, cardinality, participation; (3) the **minimum number of tables** for an ER diagram (count M:N relationships & multivalued attributes).",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Which symbol is a relationship?  (b) An M:N relationship needs how many tables of its own?  (c) A weak entity is drawn how?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) the **diamond**.  (b) **one** (its own table with both foreign keys).  (c) a **double rectangle**.",
     },
   ],
 
   "relational-model": [
     {
       kind: "p",
-      text: "The **relational model** stores data in **relations** — plain tables of **rows (tuples)** over **columns (attributes)**. Its beauty is a small algebra that combines tables to answer any query.",
+      text: "The **relational model** stores data in **relations** — plain tables of **rows (tuples)** over **columns (attributes)**. Its power is a tiny algebra that combines tables to answer any query.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Two fundamental operations: one keeps certain **rows** (e.g. ‘students with marks > 60’), the other keeps certain **columns** (e.g. ‘just the name and roll_no’). One is **σ (select)**, the other **π (project)** — which is which?",
     },
     {
       kind: "diagram",
@@ -1933,8 +2410,8 @@ export const CONTENT: Record<string, Block[]> = {
       kind: "table",
       head: ["Operator", "Symbol", "Does"],
       rows: [
-        ["Select", "σ", "keep rows that match a condition"],
-        ["Project", "π", "keep chosen columns (drops duplicates)"],
+        ["Select", "σ", "keep ROWS that match a condition"],
+        ["Project", "π", "keep chosen COLUMNS (drops duplicates)"],
         ["Union / Minus / Intersect", "∪ − ∩", "set operations (union-compatible tables)"],
         ["Cartesian product", "×", "every row of A paired with every row of B"],
         ["Join", "⋈", "combine related rows across tables"],
@@ -1943,316 +2420,39 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "callout",
       tone: "key",
-      text: "**σ filters rows, π filters columns** — don't swap them. **Integrity rules:** *entity integrity* = a primary key can't be NULL; *referential integrity* = a foreign key must match an existing primary-key value (or be NULL). Relational **algebra is procedural**; relational **calculus is declarative**.",
+      text: "**σ filters rows, π filters columns** — never swap them, and **π removes duplicate rows** (σ doesn't). **Integrity:** *entity integrity* = a primary key can't be NULL; *referential integrity* = a foreign key must match an existing primary-key value (or be NULL). Relational **algebra is procedural**; **calculus is declarative**.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Evaluate an algebra expression's output, σ (rows) vs π (columns), natural/theta/outer joins, and entity vs referential integrity. Remember PROJECT removes duplicate rows; SELECT does not.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **evaluate** an algebra expression's output; (2) **σ (rows) vs π (columns)**; (3) join types (natural/theta/outer); (4) **entity vs referential** integrity. ‘Project removes duplicates’ is a favourite.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Which operator picks columns?  (b) Which one removes duplicates?  (c) A primary key can't be what (entity integrity)?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **π (project)**.  (b) **π (project)**.  (c) **NULL**.",
     },
   ],
-
-  "codd-rules": [
-    {
-      kind: "p",
-      text: "**E. F. Codd** invented the relational model and listed **12 rules** (numbered 0–12) that a system must satisfy to be called *truly relational*. You don't memorise all twelve — you grasp the spirit and a few famous ones.",
-    },
-    {
-      kind: "ul",
-      items: [
-        "**Rule 0 (Foundation):** the system must manage the database entirely through its relational capabilities.",
-        "**Information rule:** all data is represented in **tables (relations) only** — even metadata.",
-        "**Guaranteed access:** every value is reachable by *table + primary key + column*.",
-        "**Systematic NULL handling:** NULLs uniformly represent ‘missing/unknown’, independent of data type.",
-        "**Physical & logical data independence:** apps survive changes to storage and (where possible) to schema.",
-      ],
-    },
-    {
-      kind: "callout",
-      tone: "key",
-      text: "The heart of Codd's rules: **everything is a table, reachable by key, and the database is independent of how it's physically stored.** No commercial DBMS satisfies *all* 12 perfectly.",
-    },
-    {
-      kind: "callout",
-      tone: "exam",
-      title: "How NET tests this",
-      text: "Recall that there are **12 rules (0–12)**, that the *Information rule* says all data is in tables, and match a described rule to its name. Knowing Codd defined the relational model is itself worth a mark.",
-    },
-  ],
-
-  "sql": [
-    {
-      kind: "p",
-      text: "**SQL (Structured Query Language)** is how we actually talk to a relational database. It reads almost like English — `SELECT name FROM student WHERE marks > 60` — and splits into sub-languages by job.",
-    },
-    {
-      kind: "table",
-      head: ["Sub-language", "Commands", "Purpose"],
-      rows: [
-        ["DDL (Definition)", "CREATE, ALTER, DROP, TRUNCATE", "define/change structure"],
-        ["DML (Manipulation)", "SELECT, INSERT, UPDATE, DELETE", "work with the data"],
-        ["DCL (Control)", "GRANT, REVOKE", "permissions"],
-        ["TCL (Transaction)", "COMMIT, ROLLBACK, SAVEPOINT", "make changes permanent / undo"],
-      ],
-    },
-    {
-      kind: "diagram",
-      caption: "A query is logically evaluated in this order — NOT the order you write it.",
-      svg: `<svg viewBox="0 0 384 86" role="img" aria-label="SQL logical query order">
-        <g font-size="9.5" text-anchor="middle">
-          ${["FROM", "WHERE", "GROUP BY", "HAVING", "SELECT", "ORDER BY"]
-            .map((s, i) => `<rect x="${6 + i * 63}" y="30" width="56" height="26" rx="5" fill="var(--primary)" opacity="${0.5 + i * 0.08}"/><text x="${34 + i * 63}" y="47" fill="#fff" font-size="8.5">${s}</text>${i < 5 ? `<text x="${64 + i * 63}" y="47" fill="var(--muted)">›</text>` : ""}`)
-            .join("")}
-        </g>
-      </svg>`,
-    },
-    {
-      kind: "ul",
-      items: [
-        "**WHERE** filters individual rows *before* grouping; **HAVING** filters *after* grouping (used with aggregates).",
-        "**Aggregates** — COUNT, SUM, AVG, MIN, MAX — mostly **ignore NULLs**.",
-        "**DELETE** removes rows (DML, can ROLLBACK); **TRUNCATE** empties a table fast (DDL); **DROP** deletes the table itself.",
-      ],
-    },
-    {
-      kind: "callout",
-      tone: "key",
-      text: "Two ideas answer most SQL questions: the **logical order FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY**, and **WHERE vs HAVING** (rows before grouping vs groups after). Also: DELETE ≠ TRUNCATE ≠ DROP.",
-    },
-    {
-      kind: "callout",
-      tone: "exam",
-      title: "How NET tests this",
-      text: "Predict a query's result, WHERE vs HAVING, classify a command (DDL/DML/DCL/TCL), and DELETE vs TRUNCATE vs DROP. NULL handling in aggregates and the GROUP BY rule are common traps.",
-    },
-  ],
-
-  "normalization-db": [
-    {
-      kind: "p",
-      text: "This part of the syllabus bundles two big ideas that keep a database **correct under change**: **normalization** (designing tables with no redundancy) and **transaction control** (keeping data consistent when many users act at once).",
-    },
-    {
-      kind: "callout",
-      tone: "key",
-      text: "Split it mentally: **Normalization** = *good table design* (driven by functional dependencies); **Transactions & Concurrency** = *safe simultaneous access* (serializability, locking, recovery). The two sub-topics below cover each.",
-    },
-  ],
-
-  "normalization": [
-    {
-      kind: "p",
-      text: "**Normalization** restructures tables to remove **redundancy** and the update/insert/delete **anomalies** it causes. It's driven by **functional dependencies (FDs)** — ‘X → Y’ means *X determines Y* (knowing X fixes Y).",
-    },
-    {
-      kind: "callout",
-      tone: "analogy",
-      text: "Storing a student's department head's name in *every* enrollment row is like writing your home address on every page of a notebook — change once and you must fix it everywhere, or risk contradictions. Normalization splits data so each fact is stored **once**.",
-    },
-    {
-      kind: "diagram",
-      caption: "Each form is stricter than the one before it.",
-      svg: `<svg viewBox="0 0 384 70" role="img" aria-label="Normal forms progression">
-        <g font-size="11" text-anchor="middle">
-          ${["1NF", "2NF", "3NF", "BCNF", "4NF", "5NF"]
-            .map((f, i) => `<rect x="${10 + i * 62}" y="22" width="50" height="26" rx="5" fill="${i < 3 ? "var(--primary-l)" : "var(--primary)"}"/><text x="${35 + i * 62}" y="39" fill="#fff" font-weight="700">${f}</text>${i < 5 ? `<text x="${64 + i * 62}" y="40" fill="var(--muted)" font-size="13">›</text>` : ""}`)
-            .join("")}
-        </g>
-      </svg>`,
-    },
-    {
-      kind: "table",
-      head: ["Form", "Requires"],
-      rows: [
-        ["1NF", "Atomic values only — no repeating groups or arrays in a cell."],
-        ["2NF", "1NF + no partial dependency (non-key attr on PART of a composite key)."],
-        ["3NF", "2NF + no transitive dependency (non-key → non-key)."],
-        ["BCNF", "For every FD X → Y, X is a super key (stricter than 3NF)."],
-        ["4NF", "BCNF + no non-trivial multivalued dependency."],
-      ],
-    },
-    {
-      kind: "callout",
-      tone: "key",
-      text: "A **prime attribute** is part of some candidate key; 2NF/3NF talk about *non-prime* attributes. Strictness: **BCNF ⊃ 3NF ⊃ 2NF ⊃ 1NF**. 3NF is always achievable while staying *dependency-preserving and lossless*; BCNF sometimes sacrifices dependency preservation.",
-    },
-    {
-      kind: "callout",
-      tone: "exam",
-      title: "How NET tests this",
-      text: "Given FDs, find the **highest normal form** a relation satisfies, name the violating dependency, or decompose losslessly. ‘Partial dependency → fails 2NF’, ‘transitive → fails 3NF’ is the decision tree to memorise.",
-    },
-  ],
-
-  "enhanced-data-models": [
-    {
-      kind: "p",
-      text: "Plain relational tables aren't ideal for *every* kind of data. **Enhanced data models** extend the database to handle specialised needs — time, media, logic, documents, and distribution.",
-    },
-    {
-      kind: "table",
-      head: ["Model", "Handles"],
-      rows: [
-        ["Temporal", "data that changes over time (valid-time, transaction-time)"],
-        ["Multimedia", "images, audio, video — large binary objects"],
-        ["Deductive", "facts + rules; derives new facts (Datalog, Prolog-like)"],
-        ["Object / Object-Relational", "objects, inheritance, complex types inside the DB"],
-        ["Distributed", "data spread across multiple sites, queried as one"],
-      ],
-    },
-    {
-      kind: "callout",
-      tone: "key",
-      text: "A **distributed database** stores data across sites but presents **one logical database** to users; goals are *transparency* (you don't see the split) and *reliability* (no single point of failure). **Fragmentation** (horizontal/vertical) and **replication** are the core techniques.",
-    },
-    {
-      kind: "callout",
-      tone: "exam",
-      title: "How NET tests this",
-      text: "Match model ↔ use case (temporal = time-varying, deductive = facts+rules), and recall distributed-DB transparency, fragmentation (horizontal = rows, vertical = columns) and replication trade-offs.",
-    },
-  ],
-
-  "data-warehousing-mining": [
-    {
-      kind: "p",
-      text: "Day-to-day databases (**OLTP**) are tuned for many small transactions. To *analyse* mountains of history, we build a **data warehouse** and run **OLAP**. **Data mining** then digs patterns out of that data.",
-    },
-    {
-      kind: "table",
-      head: ["", "OLTP", "OLAP"],
-      rows: [
-        ["Purpose", "run the business (operational)", "analyse the business (decisions)"],
-        ["Operations", "many short INSERT/UPDATE", "few complex read queries"],
-        ["Data", "current, detailed", "historical, summarised"],
-      ],
-    },
-    {
-      kind: "diagram",
-      caption: "Star schema: one central fact table (the measures) surrounded by dimension tables (the context).",
-      svg: `<svg viewBox="0 0 384 130" role="img" aria-label="Star schema">
-        <g font-size="9" text-anchor="middle">
-          <rect x="152" y="50" width="80" height="30" rx="4" fill="var(--primary)" opacity="0.9"/><text x="192" y="69" fill="#fff" font-weight="700">FACT</text>
-          ${[
-            [40, 14, "Time"],
-            [304, 14, "Product"],
-            [40, 100, "Customer"],
-            [304, 100, "Store"],
-          ]
-            .map((d) => `<rect x="${d[0]}" y="${d[1]}" width="64" height="26" rx="4" fill="var(--primary-bg)" stroke="var(--primary)"/><text x="${Number(d[0]) + 32}" y="${Number(d[1]) + 17}" fill="var(--text)">${d[2]}</text>`)
-            .join("")}
-          <line x1="104" y1="32" x2="152" y2="55" stroke="var(--border)"/><line x1="304" y1="32" x2="232" y2="55" stroke="var(--border)"/>
-          <line x1="104" y1="108" x2="152" y2="75" stroke="var(--border)"/><line x1="304" y1="108" x2="232" y2="75" stroke="var(--border)"/>
-        </g>
-      </svg>`,
-    },
-    {
-      kind: "ul",
-      items: [
-        "A **warehouse** is *subject-oriented, integrated, time-variant, non-volatile* (Inmon's definition).",
-        "**Data mining** tasks: **classification** (predict a label), **clustering** (group similar), **association rules** (market-basket — measured by *support* & *confidence*, found by Apriori), **regression** (predict a number).",
-      ],
-    },
-    {
-      kind: "callout",
-      tone: "key",
-      text: "**OLTP runs the business; OLAP analyses it.** In a warehouse, the **fact table** holds numeric measures (sales, quantity) and **dimension tables** hold context (time, product, store) — the **star schema**.",
-    },
-    {
-      kind: "callout",
-      tone: "exam",
-      title: "How NET tests this",
-      text: "OLTP vs OLAP, fact vs dimension table, the four warehouse properties, and association-rule **support/confidence**. Classification vs clustering (supervised vs unsupervised) is a frequent match.",
-    },
-  ],
-
-  "big-data": [
-    {
-      kind: "p",
-      text: "When data is too **big, fast, or varied** for one machine and ordinary databases, it's **Big Data**. The answer is to spread storage and computation across **clusters** of cheap machines.",
-    },
-    {
-      kind: "diagram",
-      caption: "Big Data is usually described by its V's.",
-      svg: `<svg viewBox="0 0 384 96" role="img" aria-label="The V's of Big Data">
-        <g font-size="10" text-anchor="middle">
-          ${[
-            ["Volume", "huge size"],
-            ["Velocity", "high speed"],
-            ["Variety", "many formats"],
-            ["Veracity", "trust/quality"],
-          ]
-            .map((d, i) => `<circle cx="${56 + i * 92}" cy="40" r="30" fill="var(--primary)" opacity="${0.6 + i * 0.1}"/><text x="${56 + i * 92}" y="40" fill="#fff" font-weight="700" font-size="10">${d[0]}</text><text x="${56 + i * 92}" y="84" fill="var(--muted)" font-size="8.5">${d[1]}</text>`)
-            .join("")}
-        </g>
-      </svg>`,
-    },
-    {
-      kind: "ul",
-      items: [
-        "**HDFS (Hadoop Distributed File System)** stores files in blocks across many nodes; a **NameNode** tracks where everything is, **DataNodes** hold the blocks.",
-        "**MapReduce** processes data in two phases: **Map** (transform each chunk in parallel) then **Reduce** (combine the results).",
-      ],
-    },
-    {
-      kind: "callout",
-      tone: "key",
-      text: "Remember the **V's (Volume, Velocity, Variety, Veracity)** and the **Map → Reduce** pattern (split & process in parallel, then aggregate). HDFS NameNode = the index; DataNodes = the storage.",
-    },
-    {
-      kind: "callout",
-      tone: "exam",
-      title: "How NET tests this",
-      text: "List the V's, describe MapReduce phases, and identify HDFS components (NameNode vs DataNode). ‘NameNode stores metadata, not data’ is a common one-liner.",
-    },
-  ],
-
-  "nosql": [
-    {
-      kind: "p",
-      text: "**NoSQL** (‘Not Only SQL’) databases drop the rigid table model to gain **massive scale and flexible schemas** — ideal for web-scale, rapidly changing data. They come in four main shapes.",
-    },
-    {
-      kind: "table",
-      head: ["Type", "Stores data as", "Example use"],
-      rows: [
-        ["Key-Value", "a big dictionary (key → value)", "caching, sessions (Redis)"],
-        ["Document", "JSON-like documents", "content, catalogs (MongoDB)"],
-        ["Column-family", "columns grouped by family", "time-series, big tables (Cassandra)"],
-        ["Graph", "nodes + edges", "social networks (Neo4j)"],
-      ],
-    },
-    {
-      kind: "diagram",
-      caption: "CAP theorem: in a distributed system you can guarantee at most TWO of the three.",
-      svg: `<svg viewBox="0 0 384 120" role="img" aria-label="CAP theorem triangle">
-        <polygon points="192,16 60,104 324,104" fill="var(--primary)" opacity="0.12" stroke="var(--primary)"/>
-        <g font-size="11" font-weight="700">
-          <text x="192" y="12" text-anchor="middle" fill="var(--text)">Consistency</text>
-          <text x="48" y="116" text-anchor="middle" fill="var(--text)">Availability</text>
-          <text x="336" y="116" text-anchor="middle" fill="var(--text)">Partition tol.</text>
-        </g>
-        <text x="192" y="74" text-anchor="middle" font-size="10" fill="var(--muted)">pick any 2</text>
-      </svg>`,
-    },
-    {
-      kind: "callout",
-      tone: "key",
-      text: "Four NoSQL families: **Key-Value, Document, Column-family, Graph.** The **CAP theorem** says a distributed store can guarantee only **two of Consistency, Availability, Partition-tolerance** — and since network partitions happen, it's really C vs A.",
-    },
-    {
-      kind: "callout",
-      tone: "exam",
-      title: "How NET tests this",
-      text: "Match NoSQL type ↔ example (MongoDB = document, Cassandra = column, Neo4j = graph, Redis = key-value), and state the **CAP theorem** (at most 2 of C/A/P). NoSQL vs RDBMS trade-offs (scale & flexibility vs strict ACID) also appear.",
-    },
-  ],
-
   "dbms-keys": [
     {
       kind: "p",
-      text: "A **key** is an attribute (or group of attributes) that lets you **uniquely identify a row** in a table. Keys are how databases avoid duplicates and link tables together — and NET loves making you *count* or *classify* them.",
+      text: "A **key** is an attribute (or set of attributes) that **uniquely identifies a row** — how a database avoids duplicates and links tables. NET loves making you *count* candidate keys or classify a given attribute set, so we'll build the idea precisely.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "{roll_no} identifies a student uniquely. So does {roll_no, name} and {roll_no, name, city}. All three are ‘super keys’. But only one of them is **minimal** — you can't drop any attribute and still be unique. Which one, and what do we call that minimal version?",
+    },
+    {
+      kind: "p",
+      text: "{roll_no} alone — a **candidate key** (a *minimal* super key). The bulkier ones are still **super keys**, just not minimal. The designer then picks one candidate key as the **primary key**.",
     },
     {
       kind: "diagram",
@@ -2272,49 +2472,239 @@ export const CONTENT: Record<string, Block[]> = {
       kind: "table",
       head: ["Key", "What it is"],
       rows: [
-        ["Super key", "ANY set of attributes that uniquely identifies a row (may have extras)."],
-        ["Candidate key", "A **minimal** super key — remove any attribute and it stops being unique."],
-        ["Primary key", "The candidate key the designer picks; can't be NULL, can't repeat."],
-        ["Alternate key", "A candidate key NOT chosen as the primary key."],
-        ["Foreign key", "An attribute referencing another table's primary key (the link between tables)."],
+        ["Super key", "ANY set that uniquely identifies a row (may have extras)"],
+        ["Candidate key", "a MINIMAL super key — drop any attribute and it stops being unique"],
+        ["Primary key", "the candidate key the designer picks; can't be NULL or repeat"],
+        ["Alternate key", "a candidate key NOT chosen as the primary key"],
+        ["Foreign key", "an attribute referencing another table's primary key (the link)"],
       ],
     },
     {
       kind: "callout",
       tone: "analogy",
-      text: "A **super key** is *any* ID that works — your full name + address + phone definitely identifies you, but it's bulky. The **candidate key** is the *smallest* ID that still works (like your Aadhaar number). The **primary key** is the one the office officially stamps on your file.",
+      text: "A **super key** is *any* ID that works — your full name + address + phone definitely identifies you, but it's bulky. The **candidate key** is the *smallest* ID that still works (your Aadhaar number). The **primary key** is the one the office officially stamps on your file.",
     },
     {
       kind: "callout",
       tone: "key",
-      text: "Containment: **Primary ⊆ Candidate ⊆ Super.** To find candidate keys, compute an attribute set's **closure** under the functional dependencies: if X⁺ = all attributes and no smaller subset does, X is a candidate key. Attributes that never appear on the **right** of any FD must be in *every* candidate key.",
+      text: "Containment: **Primary ⊆ Candidate ⊆ Super.** To find candidate keys, compute an attribute set's **closure** under the FDs: if X⁺ = all attributes and no smaller subset does, X is a candidate key. **Attributes that never appear on the RIGHT of any FD must be in every candidate key.**",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "‘An alternate key is also called ___’ → candidate key. Given R(A,B,C,D) with FDs, **count the candidate keys** or pick which sets are super keys. Master attribute closure — it answers keys *and* normalization questions.",
-    },
-  ],
-
-  "dbms-serializability": [
-    {
-      kind: "p",
-      text: "When many **transactions** run at once, their steps interleave. A **schedule** is one such interleaving. The question is: did the interleaving keep the database **correct**? The gold standard is **serializability**.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) ‘an **alternate key** is also called ___’ → candidate key; (2) given R(A,B,C,D) + FDs, **count the candidate keys** or pick which sets are super keys; (3) super vs candidate vs primary. Master **attribute closure** — it answers keys *and* normalization.",
     },
     {
       kind: "callout",
-      tone: "analogy",
-      text: "Two people editing the same shared document at once can overwrite each other's changes. A schedule is *‘serializable’* if the messy interleaving produces the **same result as if they'd taken turns** — one fully, then the other.",
+      tone: "try",
+      text: "**Cover & answer.**  (a) A minimal super key is called?  (b) Can a primary key be NULL?  (c) An attribute never on the right side of any FD must be in every…?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) a **candidate key**.  (b) **No**.  (c) **candidate key**.",
+    },
+  ],
+
+  "codd-rules": [
+    {
+      kind: "p",
+      text: "**E. F. Codd** invented the relational model and listed **12 rules** (numbered 0–12) a system must meet to be called *truly relational*. You don't memorise all twelve — you grasp the spirit and a few famous ones.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "If a system claims to be ‘relational’, what's the most basic thing ALL of its data — even the metadata describing the tables — should be stored as? (Codd's most fundamental rule.)",
     },
     {
       kind: "p",
-      text: "A schedule is **serializable** if it's *equivalent to some serial (one-after-another) order*. The practical test is **conflict serializability**.",
+      text: "**Everything as tables (relations)** — that's the **Information rule**, the heart of it. Even the catalog/metadata is itself in tables.",
+    },
+    {
+      kind: "ul",
+      items: [
+        "**Rule 0 (Foundation):** manage the database entirely through relational capabilities.",
+        "**Information rule:** all data — including metadata — is represented as **tables** only.",
+        "**Guaranteed access:** every value is reachable by *table + primary key + column*.",
+        "**Systematic NULL handling:** NULLs uniformly mean ‘missing/unknown’, independent of type.",
+        "**Physical & logical data independence:** apps survive storage (and, where possible, schema) changes.",
+      ],
     },
     {
       kind: "callout",
       tone: "key",
-      text: "Two operations **conflict** when they are from **different transactions**, touch the **same data item**, and **at least one is a WRITE**. (Read–Read never conflicts.) Swapping non-conflicting operations doesn't change the outcome — that's what lets us test serializability.",
+      text: "The essence: **everything is a table, reachable by key, and the database is independent of how it's physically stored.** No commercial DBMS satisfies *all* 12 perfectly.",
+    },
+    {
+      kind: "callout",
+      tone: "exam",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) there are **12 rules (0–12)**; (2) the **Information rule** = all data in tables; (3) match a described rule to its name; (4) Codd defined the relational model.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) How many Codd rules?  (b) The Information rule says data is stored as?  (c) Who proposed the relational model?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **12** (rules 0–12).  (b) **tables (relations)**.  (c) **E. F. Codd**.",
+    },
+  ],
+
+  "sql": [
+    {
+      kind: "p",
+      text: "**SQL (Structured Query Language)** is how we actually talk to a relational database. It reads almost like English — `SELECT name FROM student WHERE marks > 60` — and splits into sub-languages by job.",
+    },
+    {
+      kind: "table",
+      head: ["Sub-language", "Commands", "Purpose"],
+      rows: [
+        ["DDL (Definition)", "CREATE, ALTER, DROP, TRUNCATE", "define/change structure"],
+        ["DML (Manipulation)", "SELECT, INSERT, UPDATE, DELETE", "work with the data"],
+        ["DCL (Control)", "GRANT, REVOKE", "permissions"],
+        ["TCL (Transaction)", "COMMIT, ROLLBACK, SAVEPOINT", "make permanent / undo"],
+      ],
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "You write `SELECT` first, but the database can't pick columns before it knows which **table** and which **rows**. So which clause does it logically evaluate **first** — SELECT, FROM, or WHERE? Order the six: SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY.",
+    },
+    {
+      kind: "diagram",
+      caption: "A query is logically evaluated in THIS order — not the order you write it.",
+      svg: `<svg viewBox="0 0 384 86" role="img" aria-label="SQL logical query order">
+        <g font-size="9.5" text-anchor="middle">
+          ${["FROM", "WHERE", "GROUP BY", "HAVING", "SELECT", "ORDER BY"]
+            .map((s, i) => `<rect x="${6 + i * 63}" y="30" width="56" height="26" rx="5" fill="var(--primary)" opacity="${0.5 + i * 0.08}"/><text x="${34 + i * 63}" y="47" fill="#fff" font-size="8.5">${s}</text>${i < 5 ? `<text x="${64 + i * 63}" y="47" fill="var(--muted)">›</text>` : ""}`)
+            .join("")}
+        </g>
+      </svg>`,
+    },
+    {
+      kind: "callout",
+      tone: "key",
+      text: "Logical order: **FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY.** **WHERE** filters rows *before* grouping; **HAVING** filters groups *after* (used with aggregates). Aggregates (COUNT/SUM/AVG…) mostly **ignore NULLs**. **DELETE** (DML, rollback-able) ≠ **TRUNCATE** (DDL, fast empty) ≠ **DROP** (removes the table).",
+    },
+    {
+      kind: "callout",
+      tone: "exam",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **predict a query's result**; (2) **WHERE vs HAVING** (rows before grouping vs groups after); (3) **classify a command** (DDL/DML/DCL/TCL); (4) **DELETE vs TRUNCATE vs DROP**. NULL handling in aggregates is a trap.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) WHERE or HAVING filters groups after aggregation?  (b) Is TRUNCATE DDL or DML?  (c) Which clause is evaluated first?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **HAVING**.  (b) **DDL**.  (c) **FROM**.",
+    },
+  ],
+
+  "normalization-db": [
+    {
+      kind: "p",
+      text: "This part of the syllabus bundles two big ideas that keep a database **correct under change**: **normalization** (table design with no redundancy) and **transaction control** (consistency when many users act at once).",
+    },
+    {
+      kind: "callout",
+      tone: "key",
+      text: "Split it mentally: **Normalization** = *good table design* (driven by functional dependencies); **Transactions & Concurrency** = *safe simultaneous access* (serializability, locking, recovery). The two sub-topics below cover each.",
+    },
+  ],
+
+  "normalization": [
+    {
+      kind: "p",
+      text: "**Normalization** restructures tables to remove **redundancy** and the update/insert/delete **anomalies** it causes. It's driven by **functional dependencies (FDs)** — ‘X → Y’ means *X determines Y* (knowing X fixes Y).",
+    },
+    {
+      kind: "callout",
+      tone: "analogy",
+      text: "Storing a student's department-head name in *every* enrollment row is like writing your home address on every page of a notebook — change it once and you must fix it everywhere, or risk contradictions. Normalization splits data so each fact is stored **once**.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "A table's key is {student, course}, but the attribute ‘student_name’ depends on **student alone** — only *part* of the key. Which normal-form rule does that violate? (Hint: it's about *partial* dependency.)",
+    },
+    {
+      kind: "p",
+      text: "It violates **2NF** (no non-key attribute may depend on *part* of a composite key). Climbing the ladder removes one more kind of bad dependency at each step:",
+    },
+    {
+      kind: "diagram",
+      caption: "Each form is stricter than the one before it.",
+      svg: `<svg viewBox="0 0 384 70" role="img" aria-label="Normal forms progression">
+        <g font-size="11" text-anchor="middle">
+          ${["1NF", "2NF", "3NF", "BCNF", "4NF", "5NF"]
+            .map((f, i) => `<rect x="${10 + i * 62}" y="22" width="50" height="26" rx="5" fill="${i < 3 ? "var(--primary-l)" : "var(--primary)"}"/><text x="${35 + i * 62}" y="39" fill="#fff" font-weight="700">${f}</text>${i < 5 ? `<text x="${64 + i * 62}" y="40" fill="var(--muted)" font-size="13">›</text>` : ""}`)
+            .join("")}
+        </g>
+      </svg>`,
+    },
+    {
+      kind: "table",
+      head: ["Form", "Requires"],
+      rows: [
+        ["1NF", "atomic values only — no repeating groups/arrays in a cell"],
+        ["2NF", "1NF + no partial dependency (non-key attr on PART of a key)"],
+        ["3NF", "2NF + no transitive dependency (non-key → non-key)"],
+        ["BCNF", "for every FD X → Y, X is a super key (stricter than 3NF)"],
+        ["4NF", "BCNF + no non-trivial multivalued dependency"],
+      ],
+    },
+    {
+      kind: "callout",
+      tone: "key",
+      text: "A **prime attribute** is part of some candidate key; 2NF/3NF talk about *non-prime* attributes. Strictness: **BCNF ⊃ 3NF ⊃ 2NF ⊃ 1NF.** 3NF is always achievable while staying *dependency-preserving & lossless*; BCNF sometimes sacrifices dependency preservation.",
+    },
+    {
+      kind: "callout",
+      tone: "exam",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) given FDs, find the **highest normal form** a relation satisfies; (2) name the **violating dependency**; (3) **decompose** losslessly. Decision tree: *partial dependency → fails 2NF; transitive → fails 3NF; non-super-key determinant → fails BCNF.*",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Partial dependency violates which NF?  (b) Transitive dependency violates which?  (c) Which is stricter, 3NF or BCNF?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **2NF**.  (b) **3NF**.  (c) **BCNF**.",
+    },
+  ],
+  "dbms-serializability": [
+    {
+      kind: "p",
+      text: "When many **transactions** run at once, their steps interleave. A **schedule** is one such interleaving. The question that defines this topic: did the interleaving keep the database **correct**? The gold standard is **serializability**.",
+    },
+    {
+      kind: "callout",
+      tone: "analogy",
+      text: "Two people editing the same shared document at once can overwrite each other's changes. A schedule is *serializable* if the messy interleaving produces the **same result as if they'd taken turns** — one fully, then the other.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Two operations from different transactions touch data. When do they actually **conflict** (so their order matters)? Does Read–Read conflict? Read–Write? Write–Write? Work out the rule before reading.",
+    },
+    {
+      kind: "p",
+      text: "Two operations **conflict** when they're from **different transactions**, touch the **same data item**, and **at least one is a WRITE**. So Read–Read never conflicts; the other two do. Swapping *non-conflicting* operations changes nothing — which is exactly what lets us test serializability.",
     },
     { kind: "h", text: "The precedence graph test" },
     {
@@ -2347,17 +2737,256 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "callout",
       tone: "key",
-      text: "**Conflict serializable ⟺ precedence graph is ACYCLIC.** A topological sort of the graph then gives an equivalent serial order. **View serializability** is broader (every conflict-serializable schedule is view-serializable, not vice-versa).",
+      text: "**Conflict serializable ⟺ the precedence graph is ACYCLIC.** A topological sort then gives an equivalent serial order. **View serializability** is broader (every conflict-serializable schedule is view-serializable, not vice-versa).",
     },
     {
       kind: "p",
-      text: "To *guarantee* serializable schedules at run time, DBMSs use **concurrency control** — most often **Two-Phase Locking (2PL)**: acquire all locks (growing phase), then release them (shrinking phase). **ACID** (Atomicity, Consistency, Isolation, Durability) is the overall promise; recovery restores it after crashes.",
+      text: "To *guarantee* serializable schedules at run time, DBMSs use **concurrency control** — most often **Two-Phase Locking (2PL)**: a growing phase (acquire locks) then a shrinking phase (release). **ACID** (Atomicity, Consistency, Isolation, Durability) is the overall promise; recovery restores it after crashes.",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Given a schedule, **draw the precedence graph** and decide conflict serializability (look for a cycle), or give the equivalent serial order. Also: conflict vs view serializability, what a conflict is, and that **2PL guarantees conflict-serializable** schedules.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **draw the precedence graph** and decide conflict serializability (look for a cycle); (2) give the **equivalent serial order**; (3) **conflict vs view** serializability; (4) what a **conflict** is; (5) that **2PL guarantees conflict-serializable** schedules. Plus the ACID expansion.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) A schedule is conflict-serializable iff its precedence graph is…?  (b) Does Read–Read conflict?  (c) What does 2PL guarantee?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **acyclic**.  (b) **No**.  (c) **conflict-serializable** schedules.",
+    },
+  ],
+
+  "enhanced-data-models": [
+    {
+      kind: "p",
+      text: "Plain relational tables aren't ideal for *every* kind of data. **Enhanced data models** extend the database to handle specialised needs — time, media, logic, documents, and distribution.",
+    },
+    {
+      kind: "table",
+      head: ["Model", "Handles"],
+      rows: [
+        ["Temporal", "data that changes over time (valid-time, transaction-time)"],
+        ["Multimedia", "images, audio, video — large binary objects"],
+        ["Deductive", "facts + rules; derives new facts (Datalog)"],
+        ["Object / Object-Relational", "objects, inheritance, complex types in the DB"],
+        ["Distributed", "data spread across sites, queried as one"],
+      ],
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "A **distributed database** splits data across many sites but should *look like one database* to the user. To improve speed/reliability, would you rather (a) split a table by rows across sites, (b) split it by columns, or (c) keep copies of it on several sites — and what are these techniques called?",
+    },
+    {
+      kind: "callout",
+      tone: "key",
+      text: "All three are used: **horizontal fragmentation** (split by rows), **vertical fragmentation** (split by columns), and **replication** (keep copies). A distributed DB aims for **transparency** (you don't see the split) and **reliability** (no single point of failure).",
+    },
+    {
+      kind: "callout",
+      tone: "exam",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **match model ↔ use case** (temporal = time-varying, deductive = facts+rules); (2) distributed-DB **transparency**; (3) **fragmentation** (horizontal = rows, vertical = columns) & replication trade-offs.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Splitting a table by rows across sites is called?  (b) Which model handles facts + rules?  (c) Distributed DB should look like how many databases to the user?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **horizontal fragmentation**.  (b) **deductive**.  (c) **one**.",
+    },
+  ],
+
+  "data-warehousing-mining": [
+    {
+      kind: "p",
+      text: "Day-to-day databases (**OLTP**) are tuned for many small transactions. To *analyse* mountains of history, we build a **data warehouse** and run **OLAP**. **Data mining** then digs patterns out of that data.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "An ATM withdrawal vs a year-end ‘which products sell best in winter across all stores?’ report. One is many tiny read/write transactions, the other is a few huge analytical reads. Which is **OLTP** and which is **OLAP**?",
+    },
+    {
+      kind: "table",
+      head: ["", "OLTP", "OLAP"],
+      rows: [
+        ["Purpose", "run the business (operational)", "analyse it (decisions)"],
+        ["Operations", "many short INSERT/UPDATE", "few complex read queries"],
+        ["Data", "current, detailed", "historical, summarised"],
+      ],
+    },
+    {
+      kind: "diagram",
+      caption: "Star schema: one central fact table (the measures) surrounded by dimension tables (the context).",
+      svg: `<svg viewBox="0 0 384 130" role="img" aria-label="Star schema">
+        <g font-size="9" text-anchor="middle">
+          <rect x="152" y="50" width="80" height="30" rx="4" fill="var(--primary)" opacity="0.9"/><text x="192" y="69" fill="#fff" font-weight="700">FACT</text>
+          ${([
+            [40, 14, "Time"],
+            [304, 14, "Product"],
+            [40, 100, "Customer"],
+            [304, 100, "Store"],
+          ] as [number, number, string][])
+            .map((d) => `<rect x="${d[0]}" y="${d[1]}" width="64" height="26" rx="4" fill="var(--primary-bg)" stroke="var(--primary)"/><text x="${d[0] + 32}" y="${d[1] + 17}" fill="var(--text)">${d[2]}</text>`)
+            .join("")}
+          <line x1="104" y1="32" x2="152" y2="55" stroke="var(--border)"/><line x1="304" y1="32" x2="232" y2="55" stroke="var(--border)"/>
+          <line x1="104" y1="108" x2="152" y2="75" stroke="var(--border)"/><line x1="304" y1="108" x2="232" y2="75" stroke="var(--border)"/>
+        </g>
+      </svg>`,
+    },
+    {
+      kind: "ul",
+      items: [
+        "A **warehouse** is *subject-oriented, integrated, time-variant, non-volatile* (Inmon's definition).",
+        "**Data mining** tasks: **classification** (predict a label), **clustering** (group similar), **association rules** (market-basket — *support* & *confidence*, via Apriori), **regression** (predict a number).",
+      ],
+    },
+    {
+      kind: "callout",
+      tone: "key",
+      text: "**OLTP runs the business; OLAP analyses it.** In a warehouse, the **fact table** holds numeric measures (sales, quantity) and **dimension tables** hold context (time, product, store) — the **star schema**. Classification = supervised; clustering = unsupervised.",
+    },
+    {
+      kind: "callout",
+      tone: "exam",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **OLTP vs OLAP**; (2) **fact vs dimension** table; (3) the four **warehouse properties**; (4) association-rule **support/confidence**; (5) classification vs clustering (supervised vs unsupervised).",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) A year-end sales report is OLTP or OLAP?  (b) Numeric measures sit in which table?  (c) Clustering is supervised or unsupervised?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **OLAP**.  (b) the **fact** table.  (c) **unsupervised**.",
+    },
+  ],
+
+  "big-data": [
+    {
+      kind: "p",
+      text: "When data is too **big, fast, or varied** for one machine and ordinary databases, it's **Big Data**. The answer is to spread storage and computation across **clusters** of cheap machines.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Big Data is famously described by a set of words starting with **V**. Three are about scale, speed and format of the data; a fourth is about whether you can *trust* it. Can you name the four V's?",
+    },
+    {
+      kind: "diagram",
+      caption: "Big Data is usually described by its V's.",
+      svg: `<svg viewBox="0 0 384 96" role="img" aria-label="The V's of Big Data">
+        <g font-size="10" text-anchor="middle">
+          ${([
+            ["Volume", "huge size"],
+            ["Velocity", "high speed"],
+            ["Variety", "many formats"],
+            ["Veracity", "trust/quality"],
+          ] as [string, string][])
+            .map((d, i) => `<circle cx="${56 + i * 92}" cy="40" r="30" fill="var(--primary)" opacity="${0.6 + i * 0.1}"/><text x="${56 + i * 92}" y="40" fill="#fff" font-weight="700" font-size="10">${d[0]}</text><text x="${56 + i * 92}" y="84" fill="var(--muted)" font-size="8.5">${d[1]}</text>`)
+            .join("")}
+        </g>
+      </svg>`,
+    },
+    {
+      kind: "ul",
+      items: [
+        "**HDFS (Hadoop Distributed File System)** stores files in blocks across many nodes; a **NameNode** tracks where everything is (metadata), **DataNodes** hold the blocks.",
+        "**MapReduce** processes data in two phases: **Map** (transform each chunk in parallel) then **Reduce** (combine the results).",
+      ],
+    },
+    {
+      kind: "callout",
+      tone: "key",
+      text: "Remember the **V's (Volume, Velocity, Variety, Veracity)** and the **Map → Reduce** pattern (split & process in parallel, then aggregate). **HDFS NameNode = the index (metadata); DataNodes = the storage.**",
+    },
+    {
+      kind: "callout",
+      tone: "exam",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) list the **V's**; (2) **MapReduce** phases; (3) HDFS components (NameNode vs DataNode). ‘NameNode stores metadata, not data’ is a common one-liner.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Which V is about trust?  (b) Which HDFS node stores the actual data blocks?  (c) Which MapReduce phase aggregates results?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **Veracity**.  (b) **DataNode**.  (c) **Reduce**.",
+    },
+  ],
+
+  "nosql": [
+    {
+      kind: "p",
+      text: "**NoSQL** (‘Not Only SQL’) databases drop the rigid table model to gain **massive scale and flexible schemas** — ideal for web-scale, rapidly changing data. They come in four main shapes.",
+    },
+    {
+      kind: "table",
+      head: ["Type", "Stores data as", "Example"],
+      rows: [
+        ["Key-Value", "a big dictionary (key → value)", "Redis"],
+        ["Document", "JSON-like documents", "MongoDB"],
+        ["Column-family", "columns grouped by family", "Cassandra"],
+        ["Graph", "nodes + edges", "Neo4j"],
+      ],
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "A distributed store wants three things: every read sees the latest write (**Consistency**), it always responds (**Availability**), and it keeps working when the network splits (**Partition-tolerance**). The CAP theorem says you can fully guarantee at most **how many** of these three at once?",
+    },
+    {
+      kind: "diagram",
+      caption: "CAP theorem: in a distributed system you can guarantee at most TWO of the three.",
+      svg: `<svg viewBox="0 0 384 120" role="img" aria-label="CAP theorem triangle">
+        <polygon points="192,16 60,104 324,104" fill="var(--primary)" opacity="0.12" stroke="var(--primary)"/>
+        <g font-size="11" font-weight="700">
+          <text x="192" y="12" text-anchor="middle" fill="var(--text)">Consistency</text>
+          <text x="48" y="116" text-anchor="middle" fill="var(--text)">Availability</text>
+          <text x="336" y="116" text-anchor="middle" fill="var(--text)">Partition tol.</text>
+        </g>
+        <text x="192" y="74" text-anchor="middle" font-size="10" fill="var(--muted)">pick any 2</text>
+      </svg>`,
+    },
+    {
+      kind: "callout",
+      tone: "key",
+      text: "Four NoSQL families: **Key-Value, Document, Column-family, Graph.** The **CAP theorem** says a distributed store guarantees only **two of Consistency, Availability, Partition-tolerance** — and since network partitions *do* happen, it's really **C vs A**.",
+    },
+    {
+      kind: "callout",
+      tone: "exam",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **match NoSQL type ↔ example** (MongoDB = document, Cassandra = column, Neo4j = graph, Redis = key-value); (2) **CAP theorem** (at most 2 of C/A/P); (3) NoSQL vs RDBMS (scale & flexibility vs strict ACID).",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) CAP lets you guarantee at most how many properties?  (b) MongoDB is which NoSQL type?  (c) Neo4j is which type?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **two**.  (b) **document**.  (c) **graph**.",
     },
   ],
 
@@ -3802,15 +4431,20 @@ export const CONTENT: Record<string, Block[]> = {
   "discrete-groups": [
     {
       kind: "p",
-      text: "**Group theory** studies a *set together with one operation* (like + or ×) and asks: how well-behaved is that operation? The answer is a small ladder of names — semigroup, monoid, group, Abelian group — each adding one more rule.",
+      text: "Take a set and **one** operation (like + or ×). How well-behaved is it? Group theory answers that with a short **ladder** of names — each rung adds one rule. Climb it and you understand the whole topic.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "Check the integers under addition, (ℤ, +). Is the sum of two integers always an integer? Is there a ‘do-nothing’ element? Does every integer have something that cancels it back to that element? Hold your answers.",
     },
     {
       kind: "p",
-      text: "Start with a set G and an operation ∗. Four properties can hold, and they stack:",
+      text: "Yes to all: addition stays in ℤ (**closure**), 0 changes nothing (**identity**), and −a cancels a (**inverse**) — plus it's associative and order-free. Those properties, stacked, define the ladder:",
     },
     {
       kind: "diagram",
-      caption: "Each rung adds one axiom. Reach all four (plus commutativity) and you have an Abelian group.",
+      caption: "Each rung adds one axiom; reach all four plus commutativity and you have an Abelian group.",
       svg: `<svg viewBox="0 0 384 168" role="img" aria-label="Algebraic structure ladder">
         <g font-size="11">
           ${[
@@ -3832,33 +4466,48 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "ol",
       items: [
-        "**Closure** — a ∗ b is always back inside G.",
+        "**Closure** — a ∗ b is always back inside the set.",
         "**Associativity** — (a ∗ b) ∗ c = a ∗ (b ∗ c).",
-        "**Identity** — an element e with a ∗ e = e ∗ a = a.",
+        "**Identity** — an e with a ∗ e = e ∗ a = a.",
         "**Inverse** — each a has an a⁻¹ with a ∗ a⁻¹ = e.",
       ],
     },
     {
       kind: "callout",
-      tone: "analogy",
-      text: "Think of (**ℤ, +**): adding integers stays in ℤ (closure), groups freely (associative), 0 does nothing (identity), and −a undoes a (inverse) — and order doesn't matter. So it's an **Abelian group**. But (**ℤ, ×**) has no integer inverse for 2, so it stops at **monoid**.",
+      tone: "try",
+      text: "Now (ℤ, ×) — integers under multiplication. Identity is 1. But does **2** have an inverse *inside the integers* (an integer you multiply by 2 to get 1)? What rung does this stop at?",
+    },
+    {
+      kind: "p",
+      text: "No — 2's inverse would be ½, not an integer. So (ℤ, ×) has closure, associativity and identity but **no inverses** — it stops at **monoid**. (ℤ, +) had inverses *and* commutativity, so it's an **Abelian group**.",
     },
     {
       kind: "callout",
       tone: "key",
-      text: "Memorise the ladder: **Semigroup → (add identity) Monoid → (add inverse) Group → (add commutativity) Abelian group**. Rings and fields just add a *second* operation on top of a group.",
+      text: "The ladder: **Semigroup → (add identity) Monoid → (add inverse) Group → (add commutativity) Abelian group.** Handy facts: identity & inverses are **unique**, and **(a ∗ b)⁻¹ = b⁻¹ ∗ a⁻¹** (reverse the order). **Rings/fields** just add a *second* operation on top of a group.",
     },
     {
       kind: "callout",
       tone: "warn",
-      title: "Handy facts & traps",
-      text: "Identity and inverses are **unique**. The inverse of a product reverses order: **(a ∗ b)⁻¹ = b⁻¹ ∗ a⁻¹**. ‘Group’ does **not** require commutativity — only an *Abelian* group does.",
+      title: "Don't over-assume",
+      text: "A **group does NOT require commutativity** — only an *Abelian* group does. (Matrix multiplication forms groups that aren't Abelian.)",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Given a set + operation (often a Cayley table or modular arithmetic), decide if it's a semigroup / monoid / group / Abelian group, find the identity & an inverse, and simplify expressions using (ab)⁻¹ = b⁻¹a⁻¹.",
+      title: "Exactly how NET asks this",
+      text: "Expect: given a set + operation (often a **Cayley table** or **modular arithmetic** like (ℤₙ, +)), decide if it's a **semigroup / monoid / group / Abelian group**, find the **identity** and an **inverse**, and simplify with **(ab)⁻¹ = b⁻¹a⁻¹**. ‘Is this structure a group?’ checking the four axioms is the staple.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Semigroup + identity = ?  (b) Is (ℤ, ×) a group?  (c) (ab)⁻¹ = ?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) **Monoid.**  (b) **No** — no inverses (it's a monoid).  (c) **b⁻¹a⁻¹.**",
     },
   ],
 
@@ -4256,7 +4905,7 @@ export const CONTENT: Record<string, Block[]> = {
   "gfx-2d-transform": [
     {
       kind: "p",
-      text: "To animate or move a shape, graphics software changes the coordinates of its points. The three building-block **2-D transformations** are **translation** (slide), **scaling** (resize) and **rotation** (turn) — combine them and you can do anything.",
+      text: "To move or animate a shape, graphics software changes the coordinates of its points. The three building blocks are **translation** (slide), **scaling** (resize) and **rotation** (turn). One clever trick unifies all three.",
     },
     {
       kind: "diagram",
@@ -4276,8 +4925,13 @@ export const CONTENT: Record<string, Block[]> = {
       </svg>`,
     },
     {
+      kind: "callout",
+      tone: "try",
+      text: "Scaling and rotation are done by **multiplying** a point by a matrix. But translation is **adding** (x+tx, y+ty) — a different kind of operation. That's annoying: you can't combine an add and a multiply into one matrix. How could you make translation *also* look like a matrix multiply?",
+    },
+    {
       kind: "p",
-      text: "Scaling and rotation are easy as matrix multiplication, but **translation is addition** — a different kind of operation. The clever fix is **homogeneous coordinates**: write a point as (x, y, **1**), and now *all three* transforms become a single 3×3 matrix multiply.",
+      text: "Use **homogeneous coordinates** — write a 2-D point as **(x, y, 1)** with an extra ‘1’. Now translation becomes a 3×3 matrix multiply too, so *all three* transforms are multiplications and can be **combined into one matrix**.",
     },
     {
       kind: "table",
@@ -4291,19 +4945,24 @@ export const CONTENT: Record<string, Block[]> = {
     {
       kind: "callout",
       tone: "key",
-      text: "**Homogeneous coordinates (x, y, 1) exist so translation also fits matrix multiplication.** Then a chain of transforms = one product matrix — but order matters: **rotate-then-translate ≠ translate-then-rotate** (matrix multiplication isn't commutative).",
-    },
-    {
-      kind: "callout",
-      tone: "tip",
-      title: "Rotating about a point (not the origin)",
-      text: "To rotate/scale about an arbitrary pivot: **translate the pivot to the origin → transform → translate back**. This three-step composite is a classic exam construction.",
+      text: "**Homogeneous coordinates (x, y, 1) exist so translation also fits matrix multiplication.** A chain of transforms = one product matrix — but order matters: **rotate-then-translate ≠ translate-then-rotate** (matrix multiplication isn't commutative). To rotate about a pivot: **translate pivot to origin → transform → translate back.**",
     },
     {
       kind: "callout",
       tone: "exam",
-      title: "How NET tests this",
-      text: "Match transform ↔ matrix, apply a transform to a given point, and order a composite-transform sequence. Remember why homogeneous coordinates are needed (to express **translation** as multiplication) and that transform order is not commutative.",
+      title: "Exactly how NET asks this",
+      text: "Expect: (1) **match transform ↔ matrix**; (2) **apply** a transform to a given point; (3) **order** a composite-transform sequence; (4) *why* homogeneous coordinates are needed (to express **translation** as a multiply). Transform order is not commutative — a frequent trap.",
+    },
+    {
+      kind: "callout",
+      tone: "try",
+      text: "**Cover & answer.**  (a) Why add a ‘1’ to make (x, y, 1)?  (b) Is rotate-then-translate the same as translate-then-rotate?  (c) Which transform is naturally addition, not multiplication?",
+    },
+    {
+      kind: "callout",
+      tone: "note",
+      title: "Answers",
+      text: "(a) so **translation** becomes a matrix multiply (homogeneous coords).  (b) **No** (not commutative).  (c) **Translation.**",
     },
   ],
 

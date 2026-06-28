@@ -78,7 +78,7 @@ export default function TestRunner({
       ? Math.min(durationSec, Math.round((Date.now() - startedAt.current) / 1000))
       : durationSec - timeLeft;
 
-    // Save the attempt to the browser so it appears in "My Progress".
+    // Save the attempt to the browser so it appears in "My Progress" & scores.
     addAttempt({
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       set_name: setName,

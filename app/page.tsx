@@ -34,7 +34,7 @@ export default async function HomePage() {
         <div className="pointer-events-none absolute -bottom-12 -left-8 h-40 w-40 rounded-full bg-white/5 blur-2xl" />
         <div className="relative">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-[11px] font-bold backdrop-blur">
-            <Target size={13} strokeWidth={2.4} /> UGC NET Paper I
+            <Target size={13} strokeWidth={2.4} /> UGC NET
           </span>
           <h1 className="mt-3 text-[26px] font-extrabold leading-tight sm:text-[30px]">
             Crack UGC NET,
@@ -122,7 +122,7 @@ export default async function HomePage() {
         <QuickCard href="/syllabus" Icon={BookOpen} title="Syllabus" sub="Paper 2 (087) subject-wise topics" />
         <QuickCard href="/pyq" Icon={Library} title="Previous Year Questions" sub="Year-wise PYQs with answer key" />
         <QuickCard href="/mock" Icon={PencilLine} title="Mock Test" sub="Timed practice tests" />
-        <QuickCard href="/leaderboard" Icon={Trophy} title="Leaderboard" sub="See how you rank" />
+        <QuickCard href="/leaderboard" Icon={Trophy} title="My Scores" sub="Your mock scores, ranked" />
         <QuickCard href="/profile" Icon={BarChart3} title="My Progress" sub="Scores, accuracy & bookmarks" />
       </div>
 

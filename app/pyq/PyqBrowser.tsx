@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Bookmark, BookmarkCheck, CheckCircle2 } from "lucide-react";
 import { OPTION_LABELS, type Question } from "@/lib/types";
 import { getBookmarks, toggleBookmark } from "@/lib/local-store";
@@ -15,12 +16,39 @@ export default function PyqBrowser({
   const [year, setYear] = useState(sessions[0]);
   const [open, setOpen] = useState<Set<string>>(new Set());
   const [bookmarks, setBookmarks] = useState<Set<string>>(new Set());
+  const [highlight, setHighlight] = useState<string | null>(null);
+  const targetId = useSearchParams().get("q");
 
   // Bookmarks live in the browser (localStorage) — load on mount.
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setBookmarks(new Set(getBookmarks()));
   }, []);
+
+  // Deep-link from search: jump to a specific question — switch to its session,
+  // reveal its answer, scroll it into view and flash a highlight.
+  useEffect(() => {
+    if (!targetId) return;
+    const session = sessions.find((s) =>
+      (grouped[s] ?? []).some((q) => q.id === targetId),
+    );
+    if (!session) return;
+    /* eslint-disable react-hooks/set-state-in-effect -- syncing to the ?q= URL param */
+    setYear(session);
+    setOpen((prev) => new Set(prev).add(targetId));
+    setHighlight(targetId);
+    /* eslint-enable react-hooks/set-state-in-effect */
+    const scroll = setTimeout(() => {
+      document
+        .getElementById(`pyq-${targetId}`)
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 80);
+    const clear = setTimeout(() => setHighlight(null), 2400);
+    return () => {
+      clearTimeout(scroll);
+      clearTimeout(clear);
+    };
+  }, [targetId, sessions, grouped]);
 
   const questions = grouped[year] ?? [];
   const allOpen = questions.length > 0 && questions.every((q) => open.has(q.id));
@@ -82,7 +110,15 @@ export default function PyqBrowser({
           const isOpen = open.has(q.id);
           const saved = bookmarks.has(q.id);
           return (
-            <div key={q.id} className="card px-4 py-4">
+            <div
+              key={q.id}
+              id={`pyq-${q.id}`}
+              className={`card px-4 py-4 transition-shadow ${
+                highlight === q.id
+                  ? "ring-2 ring-primary ring-offset-2 ring-offset-bg"
+                  : ""
+              }`}
+            >
               <div className="mb-2.5 flex flex-wrap items-start gap-2">
                 <span className="chip bg-primary-bg text-primary">Q{i + 1}</span>
                 <span className="chip bg-amber-500/15 text-amber-700 dark:text-amber-300">

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Home,
   GraduationCap,
@@ -12,10 +12,12 @@ import {
   Trophy,
   BarChart3,
   LogIn,
+  Search,
   type LucideIcon,
 } from "lucide-react";
 import { signOut } from "@/lib/auth-actions";
 import ThemeToggle from "@/components/ThemeToggle";
+import SearchPalette from "@/components/SearchPalette";
 
 const NAV: { href: string; label: string; Icon: LucideIcon }[] = [
   { href: "/", label: "Home", Icon: Home },
@@ -23,7 +25,7 @@ const NAV: { href: string; label: string; Icon: LucideIcon }[] = [
   { href: "/syllabus", label: "Syllabus", Icon: BookOpen },
   { href: "/pyq", label: "Previous Year Questions", Icon: Library },
   { href: "/mock", label: "Mock Test", Icon: PencilLine },
-  { href: "/leaderboard", label: "Leaderboard", Icon: Trophy },
+  { href: "/leaderboard", label: "My Scores", Icon: Trophy },
   { href: "/profile", label: "My Progress", Icon: BarChart3 },
 ];
 
@@ -39,9 +41,22 @@ export default function AppShell({
   authEnabled?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const pathname = usePathname();
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  // Global ⌘K / Ctrl-K to open search, from anywhere.
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   return (
     <>
@@ -65,6 +80,19 @@ export default function AppShell({
         <Link href="/" className="text-[17px] font-extrabold tracking-tight text-primary">
           UGC<span className="text-primary-l">NET</span> Prep
         </Link>
+
+        {/* Search trigger */}
+        <button
+          onClick={() => setSearchOpen(true)}
+          aria-label="Search"
+          className="ml-auto flex items-center gap-2 rounded-lg border border-line bg-bg px-2.5 py-1.5 text-muted transition hover:border-primary-l hover:text-ink sm:px-3"
+        >
+          <Search size={15} strokeWidth={2.2} />
+          <span className="hidden text-[12.5px] font-medium sm:inline">Search</span>
+          <kbd className="hidden items-center rounded border border-line bg-card px-1.5 py-0.5 font-sans text-[10px] font-semibold sm:inline-flex">
+            ⌘K
+          </kbd>
+        </button>
       </header>
 
       {/* Overlay */}
@@ -140,6 +168,8 @@ export default function AppShell({
 
       {/* Main */}
       <main className="mx-auto mt-14 max-w-[820px] px-4 py-6 sm:px-5">{children}</main>
+
+      <SearchPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }
